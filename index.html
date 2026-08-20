@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Anchorline: an integrated design system, UX research hub, and solution application concept for an AI-guided retail banking product, with a live, fully interactive iOS / web / tablet prototype.">
+<meta name="description" content="Anchorline: an agentic money-guidance layer inside Borealis, a full-service Canadian retail banking app. Interactive iOS / web / tablet prototype with design system and UX research hub.">
 <title>Anchorline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -485,6 +485,370 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
   .topchips a{ flex:none; font-size:12px; color:var(--ink-soft); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:99px; }
   .wrap, .wrap-full{ padding:0 18px; }
 }
+
+/* ============================================================
+   BOREALIS BANK — app chrome
+   Bank surfaces are teal. Anchorline (the AI) is the only brass
+   element in the entire app, so the agentic layer is always
+   identifiable at a glance.
+   ============================================================ */
+:root{
+  --brand:#0E5A51;
+  --brand-deep:#0A443D;
+  --brand-soft:#DCEAE7;
+  --on-brand:#FFFFFF;
+  --bk-line:var(--line);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --brand:#2F7D72;
+    --brand-deep:#1B4C45;
+    --brand-soft:#12312C;
+    --on-brand:#F2FBF8;
+  }
+}
+:root[data-theme="dark"]{
+  --brand:#2F7D72;
+  --brand-deep:#1B4C45;
+  --brand-soft:#12312C;
+  --on-brand:#F2FBF8;
+}
+
+/* device sizing for the app */
+.frame.ios{ width:var(--ios-w, 390px); transition:width 200ms ease; }
+.frame.ios .screen{ height:720px; display:flex; flex-direction:column; }
+.frame.web{ width:100%; max-width:1440px; }
+.frame.web .screen{ height:660px; display:block; }
+.frame.tablet{ width:100%; max-width:1200px; }
+.frame.tablet .screen{ height:660px; display:block; }
+
+/* ---------- shared app shell ---------- */
+.bk{ display:flex; flex-direction:column; height:100%; min-height:0; background:var(--paper-sunken); position:relative; }
+.bk-scroll{ flex:1; min-height:0; overflow-y:auto; scrollbar-width:thin; }
+.bk-scroll::-webkit-scrollbar{ width:6px; }
+.bk-scroll::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:4px; }
+.bk-pad{ padding:14px 16px 22px; display:flex; flex-direction:column; gap:14px; }
+
+/* header */
+.bk-head{ background:var(--brand); color:var(--on-brand); padding:12px 16px 15px; flex:none; }
+.bk-head .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.bk-head .who{ display:flex; align-items:center; gap:9px; min-width:0; }
+.bk-head .avatar{
+  width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.16);
+  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex:none;
+}
+.bk-head .hello{ display:block; font-size:11px; opacity:.78; line-height:1.2; }
+.bk-head .name{ display:block; font-family:var(--font-display); font-size:16px; line-height:1.2; }
+.bk-head .acts{ display:flex; align-items:center; gap:4px; }
+.bk-icon-btn{
+  width:30px; height:30px; border-radius:8px; border:none; background:rgba(255,255,255,.12);
+  color:var(--on-brand); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative;
+}
+.bk-icon-btn svg{ width:15px; height:15px; }
+.bk-icon-btn .dot{
+  position:absolute; top:5px; right:5px; width:6px; height:6px; border-radius:50%;
+  background:var(--accent); border:1.5px solid var(--brand);
+}
+.bk-back{
+  display:inline-flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer;
+  color:var(--on-brand); font-family:var(--font-body); font-size:12.5px; padding:0; opacity:.9;
+}
+.bk-back svg{ width:14px; height:14px; }
+.bk-head h3{ font-family:var(--font-display); font-size:18px; color:var(--on-brand); margin-top:9px; font-weight:500; }
+.bk-head .sub{ font-size:11.5px; opacity:.76; margin-top:2px; }
+
+/* section headings inside the app */
+.bk-sec{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:-4px; }
+.bk-sec h4{
+  font-family:var(--font-body); font-weight:600; font-size:11px; text-transform:uppercase;
+  letter-spacing:.07em; color:var(--ink-faint); margin:0;
+}
+.bk-sec button{
+  background:none; border:none; padding:0; cursor:pointer; font-family:var(--font-body);
+  font-size:11.5px; color:var(--brand); font-weight:600;
+}
+:root[data-theme="dark"] .bk-sec button, @media (prefers-color-scheme:dark){}
+
+/* cards & rows */
+.bk-card{ background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:12px; overflow:hidden; }
+.bk-card.pad{ padding:14px 15px; }
+.bk-row{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  padding:13px 15px; background:none; border:none; border-bottom:1px solid var(--bk-line);
+  cursor:pointer; font-family:var(--font-body); color:var(--ink);
+}
+.bk-row:last-child{ border-bottom:none; }
+.bk-row:hover{ background:var(--paper-sunken); }
+.bk-row .ico{
+  width:32px; height:32px; border-radius:9px; background:var(--brand-soft); color:var(--brand);
+  display:flex; align-items:center; justify-content:center; flex:none;
+}
+.bk-row .ico svg{ width:16px; height:16px; }
+.bk-row .body{ display:block; flex:1; min-width:0; }
+.bk-row .t{ display:block; font-size:13.5px; font-weight:600; line-height:1.3; }
+.bk-row .s{ display:block; font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.bk-row .amt{ font-family:var(--font-mono); font-size:13.5px; font-variant-numeric:tabular-nums; text-align:right; flex:none; }
+.bk-row .amt .sub{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
+.bk-row .chev{ color:var(--ink-faint); flex:none; }
+.bk-row .chev svg{ width:14px; height:14px; }
+.bk-row.neg .amt{ color:var(--status-risk); }
+.bk-row.pos .amt{ color:var(--status-good); }
+
+/* quick actions */
+.bk-quick{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.bk-quick button{
+  background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:12px;
+  padding:12px 6px 10px; display:flex; flex-direction:column; align-items:center; gap:6px;
+  cursor:pointer; font-family:var(--font-body); font-size:10.5px; color:var(--ink-soft); font-weight:600;
+}
+.bk-quick button:hover{ border-color:var(--brand); color:var(--ink); }
+.bk-quick button .ico{
+  width:34px; height:34px; border-radius:10px; background:var(--brand-soft); color:var(--brand);
+  display:flex; align-items:center; justify-content:center;
+}
+.bk-quick button .ico svg{ width:17px; height:17px; }
+
+/* balance hero on account detail */
+.bk-balance{ background:var(--brand); color:var(--on-brand); border-radius:14px; padding:17px 18px; }
+.bk-balance .l{ font-size:11px; opacity:.8; text-transform:uppercase; letter-spacing:.06em; }
+.bk-balance .v{ font-family:var(--font-mono); font-size:27px; margin-top:5px; font-variant-numeric:tabular-nums; }
+.bk-balance .meta{ display:flex; gap:18px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.18); }
+.bk-balance .meta div{ font-size:11px; opacity:.85; }
+.bk-balance .meta b{ display:block; font-family:var(--font-mono); font-size:13px; opacity:1; margin-top:2px; }
+
+/* progress meter */
+.bk-meter{ height:7px; border-radius:99px; background:var(--paper-sunken); overflow:hidden; margin-top:7px; }
+.bk-meter i{ display:block; height:100%; border-radius:99px; background:var(--brand); }
+.bk-meter.warn i{ background:var(--status-watch); }
+
+/* ============ ANCHORLINE (AI) — the only brass in the app ============ */
+.ai-module{
+  border:1.5px solid var(--accent); border-radius:14px; overflow:hidden;
+  background:linear-gradient(180deg, var(--accent-soft) 0%, var(--paper-raised) 62%);
+}
+.ai-module .top{ display:flex; align-items:center; gap:8px; padding:12px 15px 0; }
+.ai-mark{
+  display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px;
+  text-transform:uppercase; letter-spacing:.09em; color:var(--accent-strong); font-weight:600;
+}
+.ai-mark svg{ width:12px; height:12px; }
+.ai-module .count{
+  margin-left:auto; font-family:var(--font-mono); font-size:10px; background:var(--accent);
+  color:var(--paper); padding:2px 7px; border-radius:99px;
+}
+.ai-module .bd{ padding:9px 15px 14px; }
+.ai-module h5{ font-family:var(--font-display); font-size:17px; font-weight:500; margin:0 0 5px; }
+.ai-module p{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+.ai-module .cta-row{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+
+/* inline contextual AI card, used inside product screens */
+.ai-inline{
+  border:1px solid var(--accent); border-left-width:3px; border-radius:10px;
+  background:var(--paper-raised); padding:11px 13px;
+}
+.ai-inline .ai-mark{ margin-bottom:5px; }
+.ai-inline p{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+.ai-inline .cta-row{ display:flex; gap:8px; margin-top:9px; flex-wrap:wrap; }
+
+/* floating action button — reachable from every screen */
+.ai-fab{
+  position:absolute; right:16px; bottom:78px; z-index:6;
+  display:flex; align-items:center; gap:7px; padding:11px 15px; border-radius:99px;
+  background:var(--accent); color:var(--paper); border:none; cursor:pointer;
+  font-family:var(--font-body); font-size:12.5px; font-weight:700;
+  box-shadow:0 6px 20px -6px rgba(0,0,0,.45);
+}
+.ai-fab svg{ width:15px; height:15px; }
+.ai-fab .badge{
+  background:var(--paper); color:var(--accent-strong); border-radius:99px;
+  font-family:var(--font-mono); font-size:10px; padding:1px 6px;
+}
+.frame.web .ai-fab, .frame.tablet .ai-fab{ bottom:20px; right:22px; }
+
+/* ---------- iOS tab bar ---------- */
+.bk-tabbar{
+  display:flex; justify-content:space-around; align-items:flex-end;
+  padding:8px 6px 14px; border-top:1px solid var(--bk-line);
+  background:var(--paper-raised); flex:none; position:relative; z-index:5;
+}
+.bk-tabbar button{
+  display:flex; flex-direction:column; align-items:center; gap:3px; flex:1;
+  background:none; border:none; cursor:pointer; font-family:var(--font-body);
+  font-size:9.5px; color:var(--ink-faint); padding:3px 2px; position:relative;
+}
+.bk-tabbar button svg{ width:18px; height:18px; }
+.bk-tabbar button.on{ color:var(--brand); font-weight:600; }
+.bk-tabbar button .nb{
+  position:absolute; top:0; right:22%; min-width:14px; height:14px; border-radius:99px;
+  background:var(--accent); color:var(--paper); font-family:var(--font-mono); font-size:9px;
+  display:flex; align-items:center; justify-content:center; padding:0 3px;
+}
+/* the AI tab is brass, and lifted */
+.bk-tabbar button.ai{ color:var(--accent-strong); }
+.bk-tabbar button.ai .cap{
+  width:38px; height:38px; border-radius:12px; background:var(--accent); color:var(--paper);
+  display:flex; align-items:center; justify-content:center; margin-top:-14px;
+  box-shadow:0 4px 12px -4px rgba(0,0,0,.4);
+}
+.bk-tabbar button.ai.on .cap{ background:var(--accent-strong); }
+.bk-tabbar button.ai svg{ width:19px; height:19px; }
+
+/* ---------- web shell ---------- */
+.bk-web{ display:grid; grid-template-columns:236px 1fr; height:100%; min-height:0; }
+.bk-web.has-aside{ grid-template-columns:236px minmax(420px,1fr) 320px; }
+.bk-side{ background:var(--brand-deep); color:var(--on-brand); padding:16px 12px; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
+.bk-nav .brand{ display:flex; align-items:center; gap:8px; padding:0 8px 14px; }
+.bk-nav .brand svg{ width:18px; height:18px; }
+.bk-nav .brand span{ font-family:var(--font-display); font-size:16px; }
+.bk-nav .grp{
+  font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.1em;
+  opacity:.55; padding:12px 8px 5px;
+}
+.bk-nav button{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:none; border:none; cursor:pointer; font-family:var(--font-body); font-size:12.5px;
+  color:rgba(255,255,255,.82); padding:8px 9px; border-radius:8px;
+}
+.bk-nav button svg{ width:15px; height:15px; flex:none; }
+.bk-nav button:hover{ background:rgba(255,255,255,.09); color:#fff; }
+.bk-nav button.on{ background:rgba(255,255,255,.15); color:#fff; font-weight:600; }
+.bk-nav button.ai{ color:var(--accent); }
+.bk-nav button.ai.on{ background:var(--accent); color:var(--paper); }
+.bk-nav .nb{
+  margin-left:auto; background:var(--accent); color:var(--paper); border-radius:99px;
+  font-family:var(--font-mono); font-size:9.5px; padding:1px 6px;
+}
+.bk-nav button.ai.on .nb{ background:var(--paper); color:var(--accent-strong); }
+.bk-main{ display:flex; flex-direction:column; min-width:0; background:var(--paper-sunken); }
+.bk-topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px 22px; border-bottom:1px solid var(--bk-line); background:var(--paper-raised); flex:none;
+}
+.bk-topbar .ttl{ font-family:var(--font-display); font-size:17px; }
+.bk-topbar .rt{ display:flex; align-items:center; gap:8px; }
+.bk-topbar .bk-icon-btn{ background:var(--paper-sunken); color:var(--ink-soft); }
+.bk-topbar .bk-icon-btn .dot{ border-color:var(--paper-raised); }
+.bk-aside{
+  border-left:1px solid var(--bk-line); background:var(--paper-raised);
+  padding:18px 18px; overflow-y:auto; font-size:12px;
+}
+.bk-aside h5{
+  font-family:var(--font-body); font-weight:600; font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.07em; color:var(--ink-faint); margin-bottom:10px;
+}
+.bk-aside .row{ display:flex; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--bk-line); font-size:11.5px; }
+.bk-aside .row:last-of-type{ border-bottom:none; }
+.bk-aside .row span:first-child{ color:var(--ink-faint); flex:none; }
+.bk-aside .row span:last-child{ font-family:var(--font-mono); text-align:right; }
+.bk-aside p{ font-size:11.5px; color:var(--ink-soft); line-height:1.55; }
+
+/* two-column content grid on wide shells */
+.bk-cols{ display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+.bk-cols > *{ min-width:0; }
+@media (max-width:900px){ .bk-cols{ grid-template-columns:1fr; } }
+
+/* ---------- tablet shell ---------- */
+.bk-tab{ display:grid; grid-template-columns:280px 1fr; height:100%; min-height:0; }
+.bk-tabnav{ background:var(--brand-deep); color:var(--on-brand); padding:16px 12px; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
+
+/* ---------- multi-step flows ---------- */
+.bk-steps{ display:flex; align-items:center; gap:6px; margin-top:11px; }
+.bk-steps .st{ flex:1; height:3px; border-radius:99px; background:rgba(255,255,255,.25); }
+.bk-steps .st.done{ background:var(--on-brand); }
+.bk-field{ display:flex; flex-direction:column; gap:5px; }
+.bk-field label{ font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); font-weight:600; }
+.bk-input{
+  border:1px solid var(--line-strong); border-radius:10px; background:var(--paper-raised);
+  padding:11px 13px; font-family:var(--font-mono); font-size:16px; color:var(--ink); width:100%;
+}
+.bk-input:focus{ outline:2px solid var(--brand); outline-offset:1px; }
+.bk-select{
+  border:1px solid var(--line-strong); border-radius:10px; background:var(--paper-raised);
+  padding:11px 13px; font-family:var(--font-body); font-size:13px; color:var(--ink); width:100%;
+}
+.bk-amounts{ display:flex; gap:7px; flex-wrap:wrap; }
+.bk-amounts button{
+  border:1px solid var(--line-strong); background:var(--paper-raised); border-radius:99px;
+  padding:6px 12px; font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); cursor:pointer;
+}
+.bk-amounts button.on{ background:var(--brand); color:var(--on-brand); border-color:var(--brand); }
+.bk-review{ background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:12px; overflow:hidden; }
+.bk-review .r{ display:flex; justify-content:space-between; gap:12px; padding:11px 15px; border-bottom:1px solid var(--bk-line); font-size:12.5px; }
+.bk-review .r:last-child{ border-bottom:none; }
+.bk-review .r span:first-child{ color:var(--ink-faint); }
+.bk-review .r span:last-child{ font-family:var(--font-mono); text-align:right; font-variant-numeric:tabular-nums; }
+.bk-review .r.big span:last-child{ font-size:16px; }
+
+.bk-done{ text-align:center; padding:22px 10px 8px; }
+.bk-done .tick{
+  width:48px; height:48px; border-radius:50%; background:var(--status-good-bg); color:var(--status-good);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 13px;
+}
+.bk-done .tick svg{ width:24px; height:24px; }
+.bk-done h5{ font-family:var(--font-display); font-size:20px; font-weight:500; margin-bottom:6px; }
+.bk-done p{ font-size:12.5px; color:var(--ink-soft); line-height:1.55; max-width:38ch; margin:0 auto; }
+
+.bk-cta{ display:flex; gap:9px; margin-top:4px; }
+.bk-cta .btn{ flex:1; justify-content:center; text-align:center; padding:12px 16px; font-size:13px; }
+.btn.brand{ background:var(--brand); color:var(--on-brand); border-color:var(--brand); }
+.btn.block{ width:100%; text-align:center; }
+
+/* disclosure / legal footnote */
+.bk-fine{ font-size:10.5px; color:var(--ink-faint); line-height:1.5; }
+.bk-fine.cdic{ display:flex; gap:7px; align-items:flex-start; }
+.bk-fine.cdic svg{ width:13px; height:13px; flex:none; margin-top:1px; color:var(--brand); }
+
+/* toast */
+.bk-toast{
+  position:absolute; left:50%; transform:translateX(-50%); bottom:86px; z-index:8;
+  background:var(--ink); color:var(--paper); padding:9px 15px; border-radius:99px;
+  font-size:12px; box-shadow:var(--shadow); white-space:nowrap;
+}
+.frame.web .bk-toast, .frame.tablet .bk-toast{ bottom:22px; }
+
+/* card art for credit card screen */
+.bk-plastic{
+  border-radius:14px; padding:16px 17px; color:#fff; min-height:118px;
+  background:linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 70%);
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.bk-plastic .top{ display:flex; justify-content:space-between; align-items:flex-start; }
+.bk-plastic .top svg{ width:26px; height:26px; opacity:.75; flex:none; }
+.bk-plastic .nm{ font-size:12px; opacity:.85; }
+.bk-plastic .num{ font-family:var(--font-mono); font-size:14px; letter-spacing:.08em; margin-top:16px; }
+.bk-plastic .bot{ display:flex; justify-content:space-between; align-items:flex-end; font-size:10.5px; opacity:.85; }
+
+/* score dial */
+.bk-score{ display:flex; align-items:center; gap:16px; }
+.bk-score .num{ font-family:var(--font-mono); font-size:34px; line-height:1; color:var(--status-good); }
+.bk-score .of{ font-size:11px; color:var(--ink-faint); }
+
+/* empty / stub screens */
+.bk-stub{ text-align:center; padding:34px 20px; }
+.bk-stub .ico{
+  width:44px; height:44px; border-radius:12px; background:var(--brand-soft); color:var(--brand);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 12px;
+}
+.bk-stub .ico svg{ width:21px; height:21px; }
+.bk-stub h5{ font-family:var(--font-display); font-size:17px; font-weight:500; margin-bottom:6px; }
+.bk-stub p{ font-size:12.5px; color:var(--ink-soft); line-height:1.55; max-width:34ch; margin:0 auto 4px; }
+.bk-stub .tagline{ font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); margin-top:10px; }
+
+/* bench notes below the device */
+.bench-notes{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:20px; }
+.bench-note{ border:1px solid var(--line); border-radius:10px; padding:13px 15px; background:var(--paper-raised); }
+.bench-note b{ display:block; font-size:12.5px; margin-bottom:4px; }
+.bench-note b .ai-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-right:6px; }
+.bench-note p{ font-size:12px; color:var(--ink-soft); line-height:1.5; }
+
+/* explanation rows reused outside the web aside (e.g. tablet detail pane) */
+.explain h5{ font-family:var(--font-body); font-weight:600; font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-faint); margin-bottom:10px; }
+.explain .row{ display:flex; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid var(--bk-line); font-size:11.5px; }
+.explain .row:last-of-type{ border-bottom:none; }
+.explain .row span:first-child{ color:var(--ink-faint); flex:none; }
+.explain .row span:last-child{ font-family:var(--font-mono); text-align:right; }
+.explain p{ font-size:11.5px; color:var(--ink-soft); line-height:1.55; }
+
 </style>
 </head>
 <body>
@@ -501,6 +865,27 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
   <symbol id="i-research" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="16.2" y1="16.2" x2="21" y2="21"/></symbol>
   <symbol id="i-support" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><path d="M4 15a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2Z"/><path d="M20 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2Z"/></symbol>
   <symbol id="i-anchor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="21"/><path d="M5 13a7 7 0 0 0 14 0"/><line x1="4" y1="13" x2="7" y2="13"/><line x1="17" y1="13" x2="20" y2="13"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 10.5 13.5"/><path d="M21 3l-6.8 18-3.7-7.5L3 9.8z"/></symbol>
+  <symbol id="i-bill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><line x1="9.5" y1="8" x2="14.5" y2="8"/><line x1="9.5" y1="12" x2="14.5" y2="12"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></symbol>
+  <symbol id="i-deposit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M12 4v6m0 0 2.5-2.5M12 10 9.5 7.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><line x1="2.5" y1="10" x2="21.5" y2="10"/></symbol>
+  <symbol id="i-invest" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5 9 11l4 4 8-8.5"/><path d="M16 6.5h5v5"/></symbol>
+  <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.7V20h13V9.7"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-score" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3.5 16a9 9 0 1 1 17 0"/><path d="M12 16l4-4.5"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="9" width="18" height="11" rx="1.5"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="12" y1="9" x2="12" y2="20"/><path d="M12 9C9 9 7 8 7 6.5S9 4.5 12 9zM12 9c3 0 5-1 5-2.5S15 4.5 12 9z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 8 7 9 4-1 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 15V10a6 6 0 0 0-12 0v5l-1.5 2.5h15z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-umbrella" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="i-arrowl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="21" y2="21"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18v3"/><rect x="3" y="7.5" width="18" height="12" rx="2"/><circle cx="16.5" cy="13.5" r="1.2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></symbol>
 </svg>
 
 <div class="page">
@@ -514,137 +899,177 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       <div class="rail-group">
         <div class="rail-group-label">Start here</div>
         <a href="#overview"><span class="num">00</span>Overview</a>
-        <a href="#strategy"><span class="num">01</span>Product-Owner Strategy</a>
-        <a href="#archetypes"><span class="num">02</span>User Archetypes</a>
-      </div>
-      <div class="rail-group">
-        <div class="rail-group-label">Foundations</div>
-        <a href="#design-system"><span class="num">03</span>Design System</a>
-        <a href="#research-hub"><span class="num">04</span>Research Hub</a>
       </div>
       <div class="rail-group">
         <div class="rail-group-label">The product</div>
-        <a href="#solution"><span class="num">05</span>Solution Application</a>
-        <a href="#platform"><span class="num">06</span>Platform Toggle</a>
-        <a href="#ai-logic"><span class="num">07</span>AI Logic Model</a>
-        <a href="#trust"><span class="num">08</span>Trust &amp; Governance</a>
+        <a href="#prototype"><span class="num">01</span>The Application</a>
+        <a href="#ai-logic"><span class="num">02</span>AI Logic Model</a>
+        <a href="#trust"><span class="num">03</span>Trust &amp; Governance</a>
       </div>
       <div class="rail-group">
-        <div class="rail-group-label">Structure</div>
-        <a href="#journeys"><span class="num">09</span>Key Journeys</a>
-        <a href="#architecture"><span class="num">10</span>Information Architecture</a>
-        <a href="#components"><span class="num">11</span>Component System</a>
-        <a href="#screens"><span class="num">12</span>Screen Inventory</a>
+        <div class="rail-group-label">Foundations</div>
+        <a href="#design-system"><span class="num">04</span>Design System</a>
+        <a href="#research-hub"><span class="num">05</span>Research Hub</a>
       </div>
       <div class="rail-group">
-        <div class="rail-group-label">Appendix</div>
-        <a href="#metrics"><span class="num">13</span>Metrics</a>
-        <a href="#risks"><span class="num">14</span>Risks &amp; Validation</a>
+        <div class="rail-group-label">Strategy</div>
+        <a href="#strategy"><span class="num">06</span>Product-Owner Strategy</a>
+        <a href="#archetypes"><span class="num">07</span>User Archetypes</a>
+        <a href="#journeys"><span class="num">08</span>Key Journeys</a>
+      </div>
+      <div class="rail-group">
+        <div class="rail-group-label">Reference</div>
+        <a href="#architecture"><span class="num">09</span>Information Architecture</a>
+        <a href="#components"><span class="num">10</span>Component System</a>
+        <a href="#screens"><span class="num">11</span>Screen Inventory</a>
+        <a href="#metrics"><span class="num">12</span>Metrics</a>
+        <a href="#risks"><span class="num">13</span>Risks &amp; Validation</a>
       </div>
     </nav>
-    <div class="rail-foot">Concept package<br>v1.0 — internal review draft</div>
+    <div class="rail-foot">Borealis Bank · Anchorline<br>Concept package v2.0</div>
   </aside>
 
   <!-- ================= MOBILE TOP CHIPS ================= -->
   <div class="topchips" id="topchips">
-    <a href="#overview">Overview</a><a href="#strategy">Strategy</a><a href="#archetypes">Archetypes</a>
-    <a href="#design-system">Design System</a><a href="#research-hub">Research</a><a href="#solution">Solution</a>
-    <a href="#platform">Platform</a><a href="#ai-logic">AI Logic</a><a href="#trust">Trust</a>
-    <a href="#journeys">Journeys</a><a href="#architecture">IA</a><a href="#components">Components</a>
-    <a href="#screens">Screens</a><a href="#metrics">Metrics</a><a href="#risks">Risks</a>
+    <a href="#overview">Overview</a><a href="#prototype">The App</a><a href="#ai-logic">AI Logic</a>
+    <a href="#trust">Trust</a><a href="#design-system">Design System</a><a href="#research-hub">Research</a>
+    <a href="#strategy">Strategy</a><a href="#archetypes">Archetypes</a><a href="#journeys">Journeys</a>
+    <a href="#architecture">IA</a><a href="#components">Components</a><a href="#screens">Screens</a>
+    <a href="#metrics">Metrics</a><a href="#risks">Risks</a>
   </div>
 
   <main>
     <!-- ================= HERO / OVERVIEW ================= -->
-    <section class="section" id="overview" style="border-bottom:1px solid var(--line);">
+    <section class="section" id="overview">
       <div class="wrap hero">
-        <div class="kicker">Product concept · Retail banking · Internal design &amp; research package</div>
+        <div class="kicker">Product concept · Canadian retail banking · Internal design &amp; research package</div>
         <h1>Anchorline</h1>
         <div class="tagline">Money, explained before it moves.</div>
         <p class="lede">
-          Anchorline is an agentic guidance layer inside retail banking that tells an average customer,
-          in plain terms, where their next dollar should go — and never moves it without their say-so.
-          It replaces the guesswork of budgeting apps with a bounded, explainable AI that recommends,
-          simulates, and prepares; the customer approves. One system, three instruments: a design
-          language that keeps every screen calm and legible, a research hub that keeps every
-          recommendation accountable to evidence, and a live application that puts both to work.
+          Anchorline is an agentic guidance layer built inside <b>Borealis</b>, a full-service Canadian
+          retail bank. Everything a customer does day to day is here — Interac e-Transfers, bills,
+          registered investing, credit, mortgage — and running through all of it is an AI that tells
+          them where their next dollar should go, explains why, and never moves it without approval.
         </p>
         <dl class="meta-row">
-          <div><dt>Primary user</dt><dd>Mass retail customer, low–medium financial confidence</dd></div>
-          <div><dt>Core job</dt><dd>Help me make better money decisions without expert knowledge</dd></div>
-          <div><dt>Trust rule</dt><dd>AI suggests and explains. The user confirms and controls.</dd></div>
-          <div><dt>v1 emphasis</dt><dd>Save &amp; debt first. Investing second.</dd></div>
+          <div><dt>The bank</dt><dd>Borealis — chequing, savings, TFSA/RRSP/RESP, cards, mortgage</dd></div>
+          <div><dt>The feature</dt><dd>Anchorline — agentic allocation guidance</dd></div>
+          <div><dt>Trust rule</dt><dd>The AI suggests and explains. The customer confirms and controls.</dd></div>
+          <div><dt>How you spot it</dt><dd>The bank is teal. Anchorline is the only brass in the app.</dd></div>
           <div><dt>Platforms</dt><dd>iOS first · Responsive web · Tablet</dd></div>
         </dl>
-
-        <div class="triad">
-          <a href="#design-system">
-            <div class="idx">01 · LANGUAGE</div>
-            <h3>Design System</h3>
-            <p>The visual and verbal rules that make restraint, trust, and clarity legible on every screen.</p>
-            <div class="rel">informs → the Solution Application</div>
-          </a>
-          <a href="#research-hub">
-            <div class="idx">02 · EVIDENCE</div>
-            <h3>UX Research Hub</h3>
-            <p>The archetypes, hypotheses, and traceable evidence that justify every product decision below.</p>
-            <div class="rel">justifies → the Solution Application</div>
-          </a>
-          <a href="#solution">
-            <div class="idx">03 · PRODUCT</div>
-            <h3>Solution Application</h3>
-            <p>The working experience — guided setup, recommendations, approvals, progress — across iOS, web, and tablet.</p>
-            <div class="rel">demonstrates → the Design System</div>
-          </a>
-        </div>
       </div>
     </section>
 
-    <!-- ================= 01 STRATEGY ================= -->
-    <section class="section" id="strategy">
+    <!-- ================= 01 THE APPLICATION ================= -->
+    <section class="section" id="prototype">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">01 — Product-Owner Strategy</div>
-          <h2>Trust is the growth strategy</h2>
-          <p class="dek">Anchorline is framed as a trust-led engagement product, not a feature. Every downstream
-          decision — what the AI is allowed to do, what it must explain, what ships in v1 — traces back to this framing.</p>
+          <div class="kicker">01 — The Application</div>
+          <h2>A whole bank, with an opinion</h2>
+          <p class="dek">This is the working product, not a picture of one. Move real money between real
+          accounts, send an Interac e-Transfer, pay a bill, contribute to a TFSA, pay down the Visa —
+          every balance on every screen updates as you go. Anchorline sits inside all of it, and the
+          same decision follows you when you switch instruments.</p>
         </div>
+      </div>
 
-        <div class="grid grid-2">
-          <div class="card">
-            <h4 class="minihead">Strategic frame</h4>
-            <ul class="dash">
-              <li><b>Primary user</b> — mass retail banking customer, low-to-medium financial confidence, broad age range.</li>
-              <li><b>Core job to be done</b> — "Help me make better money decisions without needing expert knowledge."</li>
-              <li><b>Core user value</b> — clear recommendations, visible progress, low effort, confidence, control.</li>
-              <li><b>Core bank value</b> — stronger digital engagement, retention, trust, selective product penetration.</li>
-              <li><b>Experience tone</b> — a smart financial coach. Never a salesperson. Never an overbearing autopilot.</li>
-            </ul>
+      <div class="wrap-full">
+        <div class="bench">
+          <div class="bench-head">
+            <div class="toggle" role="tablist" aria-label="Platform preview">
+              <button type="button" role="tab" data-plat="ios" aria-pressed="true"><svg><use href="#i-ios"/></svg>iOS</button>
+              <button type="button" role="tab" data-plat="web" aria-pressed="false"><svg><use href="#i-web"/></svg>Responsive Web</button>
+              <button type="button" role="tab" data-plat="tablet" aria-pressed="false"><svg><use href="#i-tablet"/></svg>Tablet</button>
+            </div>
+            <div class="bench-head-right">
+              <span class="pill accent">Anchorline is the only brass in the app</span>
+              <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
+            </div>
           </div>
-          <div class="card">
-            <h4 class="minihead">v1 scope discipline</h4>
-            <ul class="dash">
-              <li><b>In scope</b> — savings behaviour, debt payoff efficiency, cash buffer health, goal-based reallocation.</li>
-              <li><b>Secondary layer</b> — investment intelligence, introduced only once saving &amp; debt posture is stable.</li>
-              <li><b>Always required</b> — explicit approval before any meaningful money movement.</li>
-              <li><b>Always available</b> — a manual, non-AI route for every guided action.</li>
-              <li><b>Out of v1</b> — autonomous execution, product opening, trading, action on low-confidence data.</li>
-            </ul>
+          <div class="phone-toggle" data-phone-toggle role="tablist" aria-label="Device size">
+            <span class="phone-toggle-label">Device:</span>
+            <button type="button" data-phone="360">Galaxy S23 · 360</button>
+            <button type="button" data-phone="375">iPhone SE · 375</button>
+            <button type="button" data-phone="390" aria-pressed="true">iPhone 14 · 390</button>
+            <button type="button" data-phone="430">14 Pro Max · 430</button>
+          </div>
+          <p class="bench-hint">Try it end to end: send an e-Transfer, pay the Visa, contribute to the
+          TFSA — or approve what Anchorline is recommending. Balances update everywhere, and switching
+          instruments keeps your place.</p>
+
+          <div class="bench-stage">
+            <div class="frame ios" data-view="ios">
+              <div class="screen">
+                <div class="notch"></div>
+                <div class="ios-status"><span>9:41</span><span>●●●</span></div>
+                <div data-app="ios" style="flex:1;min-height:0;display:flex;"></div>
+              </div>
+            </div>
+
+            <div class="frame web" data-view="web" hidden>
+              <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">borealis.ca/online-banking</span></div>
+              <div class="screen"><div data-app="web" style="height:100%;"></div></div>
+            </div>
+
+            <div class="frame tablet" data-view="tablet" hidden>
+              <div class="screen"><div data-app="tablet" style="height:100%;"></div></div>
+            </div>
+          </div>
+
+          <div class="bench-notes">
+            <div class="bench-note">
+              <b><span class="ai-dot"></span>Always one tap away</b>
+              <p>Anchorline holds the centre tab on mobile and a pinned sidebar slot on web, plus a floating button that follows you onto every screen in the bank.</p>
+            </div>
+            <div class="bench-note">
+              <b><span class="ai-dot"></span>Where the decision is</b>
+              <p>Contextual brass cards appear inside Accounts, Cards, Investments and Borrow — the AI shows up next to the money it's talking about, not in a separate silo.</p>
+            </div>
+            <div class="bench-note">
+              <b><span class="ai-dot"></span>Top of the dashboard</b>
+              <p>The home hub is the first thing a customer sees: what's recommended this week, what it's worth, and the approve / adjust / not-now choice.</p>
+            </div>
+            <div class="bench-note">
+              <b><span class="ai-dot"></span>Proactive, never pushy</b>
+              <p>Badges and "needs your approval" pills mark the tiles that warrant attention — and disappear the moment the customer decides, including when they decide to hold.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="subblock">
+          <h4 class="minihead">What the prototype actually does</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Area</th><th>Flow</th><th>Depth</th><th>Canadian specifics modelled</th></tr></thead>
+              <tbody>
+                <tr><td>Anchorline</td><td>Recommend → explain → approve / adjust / decline → receipt → progress</td><td><span class="pill accent">Full flow</span></td><td>Buffer-first allocation, high-interest debt priority</td></tr>
+                <tr><td>Move money</td><td>Interac e-Transfer — recipient, amount, account, review, confirm</td><td><span class="pill accent">Full flow</span></td><td>Autodeposit vs. security question, $0 fee, transfer limits</td></tr>
+                <tr><td>Move money</td><td>Pay a bill — payee, amount, date, review, confirm</td><td><span class="pill accent">Full flow</span></td><td>Canadian billers, post-dated payments</td></tr>
+                <tr><td>Move money</td><td>Between accounts · Deposit a cheque</td><td><span class="pill accent">Full flow</span> · Entry point</td><td>Same-day settlement, mobile cheque hold periods</td></tr>
+                <tr><td>Invest</td><td>Contribute to TFSA / RRSP / RESP — account, amount, review, confirm</td><td><span class="pill accent">Full flow</span></td><td>Contribution room tracking, CESG grant on RESP, RRSP deadline</td></tr>
+                <tr><td>Cards</td><td>Credit card detail → make a payment (min / statement / custom)</td><td><span class="pill accent">Full flow</span></td><td>Minimum payment, statement balance, 22.9% APR, due date</td></tr>
+                <tr><td>Borrow</td><td>Mortgage · HELOC · Credit score</td><td><span class="pill accent">Full flow</span></td><td>Fixed-rate renewal date, HELOC room, TransUnion score</td></tr>
+                <tr><td>More</td><td>Rewards · Statements · Security · Alerts · Branch/ATM · Insurance</td><td>Entry point</td><td>CDIC deposit insurance notice, void cheque / direct deposit</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
         <div class="subblock">
-          <h4 class="minihead">KPI framework</h4>
+          <h4 class="minihead">What's invariant vs. what adapts</h4>
           <div class="table-wrap">
             <table class="data">
-              <thead><tr><th>Tier</th><th>Metric</th><th>What it tells the business</th><th>What it tells the user</th></tr></thead>
+              <thead><tr><th>Dimension</th><th>iOS</th><th>Responsive Web</th><th>Tablet</th></tr></thead>
               <tbody>
-                <tr><td><span class="pill accent">North Star</span></td><td>Trust-led engagement</td><td>Customers return because they believe the guidance, not because they're nudged.</td><td>"I trust what this tells me."</td></tr>
-                <tr><td>Secondary</td><td>Plan acceptance rate</td><td>Recommendation quality &amp; explanation clarity are working.</td><td>"This actually fits my situation."</td></tr>
-                <tr><td>Secondary</td><td>Repeat usage (weekly check-in return rate)</td><td>The habit loop is forming without being coercive.</td><td>"Checking in feels worth it."</td></tr>
-                <tr><td>Secondary</td><td>Recommendation follow-through</td><td>Advice converts to real financial behaviour change.</td><td>"I did the thing, and it helped."</td></tr>
-                <tr><td>Secondary</td><td>Satisfaction &amp; reduced effort</td><td>The product is lowering cognitive load, not adding to it.</td><td>"I didn't have to think hard about this."</td></tr>
-                <tr><td>Secondary</td><td>Selective product adoption</td><td>Trust converts into deeper banking relationships, earned not pushed.</td><td>"This felt like the right next step, not a pitch."</td></tr>
+                <tr><td>Navigation model</td><td>5-tab bar, Anchorline raised in the centre</td><td>Grouped sidebar, Anchorline pinned in brass</td><td>Master-detail — nav list + full detail pane</td></tr>
+                <tr><td>Dashboard density</td><td>Low — one decision in view at a time</td><td>High — two-column, plus a persistent explain rail</td><td>Medium — nav and content together, no scroll-hunting</td></tr>
+                <tr><td>Approval experience</td><td>Thumb-reachable card, full anatomy inline</td><td>Inline card + always-open "why" rail</td><td>Inline card + explain block in the detail pane</td></tr>
+                <tr><td>Multi-step flows</td><td>One step per screen, progress bar in the header</td><td>One step per screen, wider review table</td><td>One step per screen, wider review table</td></tr>
+                <tr><td>Escalation to a human</td><td colspan="3">Identical on all three — a "Talk to someone" link inside every recommendation and every at-risk state</td></tr>
+                <tr><td>The trust rule</td><td colspan="3">Identical on all three — the AI prepares, the customer approves. Nothing moves on its own.</td></tr>
               </tbody>
             </table>
           </div>
@@ -652,95 +1077,136 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 02 ARCHETYPES ================= -->
-    <section class="section" id="archetypes">
+
+<section class="section" id="ai-logic">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">02 — User Archetypes</div>
-          <h2>Five people, one trust model</h2>
-          <p class="dek">Anchorline's guidance logic flexes by life stage and confidence level, but the trust
-          rule never does. These five archetypes anchor every design and AI-logic decision in the rest of this package.</p>
+          <div class="kicker">02 — AI Logic Model</div>
+          <h2>A bounded decision-support system</h2>
+          <p class="dek">Anchorline's AI is not described as magic — it is a responsible, explainable system with
+          clear inputs, a fixed prioritisation order, explicit approval boundaries, and a defined behaviour for
+          when it doesn't know enough. Every rule below is what makes the trust rule enforceable in code, not just in copy.</p>
         </div>
 
-        <div class="grid grid-2">
-          <div class="card archetype">
-            <div class="who"><h3>The Starter</h3><span class="meta">Maya · 24 · Junior analyst</span></div>
-            <div class="pill watch">Trust sensitivity: High — fears judgment</div>
-            <dl>
-              <dt>Context</dt><dd>First full-time income, $6.2k student debt, $310 average balance, irregular saving.</dd>
-              <dt>Pain</dt><dd>Doesn't know what "good" looks like; associates budgeting apps with being told off.</dd>
-              <dt>Goals</dt><dd><b>Build a starter buffer</b>, stop overdraft anxiety, understand her own spending.</dd>
-              <dt>Guidance</dt><dd><b>Guided</b> — wants the app to decide the mechanics, not the values.</dd>
-              <dt>Behaviour</dt><dd>Checks balance often, avoids anything that feels like a lecture, responds to small wins.</dd>
-            </dl>
-            <div class="emph">AI should emphasize: tiny, low-risk first moves and visible momentum.</div>
-            <div class="avoid">Must avoid: shaming language, debt comparisons, any tone of judgment.</div>
+        <div class="subblock">
+          <h4 class="minihead">Recommendation priority order</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Protect the buffer</h4><p>A minimum safety cushion is defended before any other move is proposed.</p></div>
+            <div class="step"><div class="n"></div><h4>High-interest debt</h4><p>Proposed whenever its rate outweighs the near-term value of any savings goal.</p></div>
+            <div class="step"><div class="n"></div><h4>Goal-priority saving</h4><p>Allocated by the user's stated order once buffer and debt are healthy.</p></div>
+            <div class="step"><div class="n"></div><h4>Investment (secondary)</h4><p>Proposed only once the above are stable — always prepared, never executed autonomously.</p></div>
           </div>
+        </div>
 
-          <div class="card archetype">
-            <div class="who"><h3>The Stabilizer</h3><span class="meta">Devon · 31 · Product manager</span></div>
-            <div class="pill good">Trust sensitivity: Medium — wants efficiency, not hand-holding</div>
-            <dl>
-              <dt>Context</dt><dd>Stable income, growing savings across 3 uncoordinated goals (trip, house, buffer).</dd>
-              <dt>Pain</dt><dd>Money is scattered across goals with no logic; unsure if allocation is optimal.</dd>
-              <dt>Goals</dt><dd>Coordinate goal priority, house down payment on a clear timeline.</dd>
-              <dt>Guidance</dt><dd><b>Balanced</b> — wants recommendations, but expects to adjust the logic.</dd>
-              <dt>Behaviour</dt><dd>Uses payday reallocation heavily; compares scenarios before approving.</dd>
-            </dl>
-            <div class="emph">AI should emphasize: trade-off clarity between competing goals, timelines.</div>
-            <div class="avoid">Must avoid: oversimplifying — Devon will distrust a "just trust us" answer.</div>
+        <div class="grid grid-2 subblock">
+          <div class="card">
+            <h4 class="minihead">Guidance vs. control preference</h4>
+            <div class="table-wrap">
+              <table class="data">
+                <thead><tr><th>Mode</th><th>What changes</th></tr></thead>
+                <tbody>
+                  <tr><td><b>Guided</b></td><td>AI prepares full recommendations by default; fewer decisions surfaced per session.</td></tr>
+                  <tr><td><b>Balanced</b></td><td>AI recommends; trade-off framing shown more prominently for the user to weigh.</td></tr>
+                  <tr><td><b>Manual-leaning</b></td><td>AI surfaces analysis and scenarios; the user builds the allocation, AI checks it.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+          <div class="card">
+            <h4 class="minihead">When the AI is assertive, cautious, or abstains</h4>
+            <div class="table-wrap">
+              <table class="data">
+                <thead><tr><th>Posture</th><th>Trigger</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="pill good">Assertive</span></td><td>High-confidence data, clear priority order, no conflicting goals.</td></tr>
+                  <tr><td><span class="pill watch">Cautious</span></td><td>Recent life-stage change, thin data history, or a stressed-state signal.</td></tr>
+                  <tr><td><span class="pill risk">Abstains</span></td><td>Confidence below threshold, or the action falls outside approval boundaries.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
-          <div class="card archetype">
-            <div class="who"><h3>The Anchor</h3><span class="meta">Priya &amp; Sam · 38–42 · Household</span></div>
-            <div class="pill watch">Trust sensitivity: High — low margin for error</div>
-            <dl>
-              <dt>Context</dt><dd>Two kids, mortgage, childcare, RESP contributions; tight monthly slack.</dd>
-              <dt>Pain</dt><dd>No time or energy for financial admin; one mistake feels costly.</dd>
-              <dt>Goals</dt><dd>Protect the buffer, keep RESP on track, avoid new debt.</dd>
-              <dt>Guidance</dt><dd><b>Guided</b> — values reassurance and simplicity over control.</dd>
-              <dt>Behaviour</dt><dd>Engages weekly at most; wants confirmation nothing has gone wrong.</dd>
-            </dl>
-            <div class="emph">AI should emphasize: stability signals — "buffer is safe," "nothing needs you."</div>
-            <div class="avoid">Must avoid: frequent asks, complex trade-off framing, unnecessary urgency.</div>
+        <div class="subblock card">
+          <h4 class="minihead">Confidence &amp; explanation strategy</h4>
+          <div class="grid grid-3">
+            <div><span class="pill good">High (≥85%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Full recommendation with one-line rationale; approve in one step.</p></div>
+            <div><span class="pill watch">Medium (60–84%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Recommendation shown with an explicit caveat on what's uncertain.</p></div>
+            <div><span class="pill risk">Low (&lt;60%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">No specific number proposed — the system explains what data would raise confidence.</p></div>
           </div>
+        </div>
 
-          <div class="card archetype">
-            <div class="who"><h3>The Reset</h3><span class="meta">Marcus · 45 · Recently reduced hours</span></div>
-            <div class="pill risk">Trust sensitivity: Very high — shame &amp; anxiety present</div>
-            <dl>
-              <dt>Context</dt><dd>Income drop, $14k high-interest debt across two cards, depleted buffer.</dd>
-              <dt>Pain</dt><dd>Feels behind and judged by every finance product he's used.</dd>
-              <dt>Goals</dt><dd>Stop the bleeding, rebuild a minimal buffer, a believable debt path out.</dd>
-              <dt>Guidance</dt><dd><b>Guided, cautious</b> — needs stabilization before optimization.</dd>
-              <dt>Behaviour</dt><dd>May avoid the app when anxious; needs re-engagement without guilt.</dd>
-            </dl>
-            <div class="emph">AI should emphasize: non-judgmental stabilization, one clear next step at a time.</div>
-            <div class="avoid">Must avoid: aggressive debt payoff pressure, comparisons, silence when things worsen.</div>
+        <div class="subblock">
+          <h4 class="minihead">Approval boundary rules</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Action</th><th>AI may prepare</th><th>AI may auto-execute</th><th>Approval required</th></tr></thead>
+              <tbody>
+                <tr><td>Transfer between eligible accounts</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Recurring contribution setup / edit</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Goal contribution reallocation</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Savings rule change</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Open a new product</td><td>No</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
+                <tr><td>Execute an investment trade</td><td>Simulation only</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
+                <tr><td>Act on incomplete / low-confidence data</td><td>No</td><td>No</td><td><span class="pill risk">Never</span></td></tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <div class="card archetype" style="grid-column:1/-1;">
-            <div class="who"><h3>The Builder</h3><span class="meta">Elaine · 52 · Operations director</span></div>
-            <div class="pill good">Trust sensitivity: Medium — wants rigor, not reassurance</div>
-            <dl>
-              <dt>Context</dt><dd>Debt-free, healthy buffer, saving basics covered; underusing investment capacity.</dd>
-              <dt>Pain</dt><dd>Unsure if she's "doing enough"; existing tools feel either too basic or too salesy.</dd>
-              <dt>Goals</dt><dd>Confirm she's on track for retirement horizon; grow beyond savings.</dd>
-              <dt>Guidance</dt><dd><b>Manual-leaning</b> — wants scenario tools and explainability more than automation.</dd>
-              <dt>Behaviour</dt><dd>Uses web/tablet for deeper planning; low tolerance for oversimplified advice.</dd>
-            </dl>
-            <div class="emph">AI should emphasize: rigorous explanation, scenario comparison, the "why" behind confidence levels.</div>
-            <div class="avoid">Must avoid: pushing products, treating her like a novice, hiding the reasoning behind a recommendation.</div>
-          </div>
+        <div class="subblock card">
+          <h4 class="minihead">Auditability</h4>
+          <p style="font-size:13.5px;color:var(--ink-soft);max-width:70ch;">Every recommendation, its confidence score, the data snapshot behind it, and the user's
+          decision (approve / adjust / decline) are logged as one traceable record — the same record structure a compliance reviewer, a
+          support agent, and the user's own approval-history screen all read from.</p>
         </div>
       </div>
     </section>
 
-    <!-- ================= 03 DESIGN SYSTEM ================= -->
-    <section class="section" id="design-system">
+<section class="section" id="trust">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">03 — Design System</div>
+          <div class="kicker">03 — Trust &amp; Governance</div>
+          <h2>Trust as architecture, not messaging</h2>
+          <p class="dek">These patterns are built into the interface itself — not stated as values in a
+          marketing page. Each one maps to a specific, always-present piece of UI.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card"><h4 class="minihead">AI disclosure</h4><p style="font-size:13px;color:var(--ink-soft);">A persistent "Recommended by Anchorline AI" mark on every AI-authored element — never blended into system copy.</p></div>
+          <div class="card"><h4 class="minihead">Explanation pattern</h4><p style="font-size:13px;color:var(--ink-soft);">What, why, data used, benefit, trade-off — the same six fields, every time, in the same order.</p></div>
+          <div class="card"><h4 class="minihead">Confidence communication</h4><p style="font-size:13px;color:var(--ink-soft);">A visible chip and, where relevant, a percentage — never confidence implied only by tone.</p></div>
+          <div class="card"><h4 class="minihead">Fairness &amp; bias awareness</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation logic reviewed across archetypes for disparate impact before each release; flagged in the research hub's stakeholder view.</p></div>
+          <div class="card"><h4 class="minihead">Privacy signalling</h4><p style="font-size:13px;color:var(--ink-soft);">"Data used" is shown at the point of every recommendation — not buried in a separate privacy centre.</p></div>
+          <div class="card"><h4 class="minihead">Human escalation</h4><p style="font-size:13px;color:var(--ink-soft);">"Talk to someone" inside every approval panel and low-confidence state, carrying full context to the agent.</p></div>
+          <div class="card"><h4 class="minihead">Customer control</h4><p style="font-size:13px;color:var(--ink-soft);">Guidance level, data inputs, and any standing rule can be paused or reversed by the user at any time.</p></div>
+          <div class="card"><h4 class="minihead">Post-action transparency</h4><p style="font-size:13px;color:var(--ink-soft);">Every approved action produces a plain-language receipt — what happened, why, and how to undo or adjust it.</p></div>
+          <div class="card"><h4 class="minihead">Audit trail</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation, confidence, data snapshot, and decision logged as one traceable record per action.</p></div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">What the product says when it's unsure</h4>
+          <p style="font-family:var(--font-display);font-size:19px;font-style:italic;color:var(--accent-ink);max-width:60ch;">
+          "We don't have enough recent data to recommend confidently yet. We're missing a clear view of your regular bills.
+          You can add them now, or hold steady — nothing needs to move today."
+          </p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Failure handling</h4>
+          <ul class="dash">
+            <li>A failed transfer never retries silently — the user sees exactly what didn't complete and why.</li>
+            <li>If a recommendation was based on data later found to be wrong, the user is proactively told, not left to notice.</li>
+            <li>System outages fall back to the last-known-good state; no approval is ever inferred from stale data.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+<section class="section" id="design-system">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">04 — Design System</div>
           <h2>An instrument, not an interface</h2>
           <p class="dek">The design language borrows from precision instruments and formal financial documents —
           ledgers, prospectuses, wayfinding — rather than consumer fintech's usual gradients and gamified badges.
@@ -901,11 +1367,10 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 04 RESEARCH HUB ================= -->
-    <section class="section" id="research-hub">
+<section class="section" id="research-hub">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">04 — UX Research Hub</div>
+          <div class="kicker">05 — UX Research Hub</div>
           <h2>A command centre, not a findings deck</h2>
           <p class="dek">The hub is internal-first — built for product, design, research, and compliance
           stakeholders to trace every product decision back to evidence, and to see, at a glance, what is
@@ -1037,216 +1502,50 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 05 SOLUTION APPLICATION ================= -->
-    <section class="section" id="solution">
+<section class="section" id="strategy">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">05 — Solution Application</div>
-          <h2>The system, at work</h2>
-          <p class="dek">One product logic, demonstrated end to end — from entering context, to a recommendation,
-          to an approval, to progress the following week. The design system's rules and the research hub's
-          evidence are both visible in the choices below.</p>
+          <div class="kicker">06 — Product-Owner Strategy</div>
+          <h2>Trust is the growth strategy</h2>
+          <p class="dek">Anchorline is framed as a trust-led engagement product, not a feature. Every downstream
+          decision — what the AI is allowed to do, what it must explain, what ships in v1 — traces back to this framing.</p>
         </div>
 
-        <div class="subblock">
-          <h4 class="minihead">Information architecture</h4>
-          <div class="grid grid-2">
-            <div class="tree card">
-              <ul>
-                <li><span class="lbl">Home</span><span class="note">status, next-best action</span>
-                  <ul><li>Cash buffer</li><li>Active recommendation</li><li>Goal snapshots</li></ul>
-                </li>
-                <li><span class="lbl">Plan</span><span class="note">allocation &amp; scenarios</span>
-                  <ul><li>Goal priorities</li><li>Debt payoff plan</li><li>What-if scenarios</li></ul>
-                </li>
-                <li><span class="lbl">Approvals</span><span class="note">pending &amp; history</span>
-                  <ul><li>Pending actions</li><li>Approved / declined log</li></ul>
-                </li>
-                <li><span class="lbl">Progress</span><span class="note">weekly check-in</span>
-                  <ul><li>On-track / at-risk / ahead</li><li>Spending change summary</li></ul>
-                </li>
-                <li><span class="lbl">Guidance settings</span><span class="note">trust &amp; control</span>
-                  <ul><li>Guided / Balanced / Manual</li><li>Data &amp; explanation preferences</li></ul>
-                </li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4 class="minihead">Minimum inputs before a recommendation is trustworthy</h4>
-              <ul class="dash">
-                <li>Income pattern</li><li>Balances</li><li>Debt obligations</li><li>Spending behaviour</li>
-                <li>Goals &amp; goal priority order</li><li>Time horizon</li><li>Risk comfort</li>
-                <li>Desired level of guidance vs. control</li>
-              </ul>
-              <p style="font-size:12px;color:var(--ink-faint);margin-top:10px;">Below this bar, Anchorline shows a low-confidence state rather than a guess (see §07, §08).</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="subblock">
-          <h4 class="minihead">Core flows</h4>
-          <div class="flow">
-            <div class="step"><div class="n"></div><h4>Guided setup</h4><p>Income, balances, debt, goals, priority order, and a guidance-level choice — five short steps, editable later.</p><div class="plat">All platforms</div></div>
-            <div class="step"><div class="n"></div><h4>Recommendation</h4><p>One next-best action, headline + rationale + confidence, with Approve / Adjust / Not now.</p><div class="plat">Card → sheet (iOS) · inline (web/tablet)</div></div>
-            <div class="step"><div class="n"></div><h4>Approval</h4><p>Full anatomy — what, why, data, benefit, trade-off, next, editable, confidence, escalation.</p><div class="plat">Bottom sheet (iOS) · modal (web) · side panel (tablet)</div></div>
-            <div class="step"><div class="n"></div><h4>Weekly check-in</h4><p>Goal progress, spend change, debt &amp; buffer health, one next-best action, and why it changed.</p><div class="plat">All platforms, depth varies</div></div>
-            <div class="step"><div class="n"></div><h4>Recalibration</h4><p>Payday, a new expense, or a changed goal reopens the plan with a single, explained adjustment.</p><div class="plat">Triggered, all platforms</div></div>
-          </div>
-        </div>
-
-        <div class="grid grid-2 subblock">
+        <div class="grid grid-2">
           <div class="card">
-            <h4 class="minihead">Allocation &amp; what-if planning</h4>
+            <h4 class="minihead">Strategic frame</h4>
             <ul class="dash">
-              <li>Debt vs. savings vs. buffer shown as a single waterfall the user can drag to compare, not edit blind.</li>
-              <li>Every scenario shows the same anatomy as a real recommendation — no separate "toy" mode.</li>
-              <li>Manual editing is always reachable from any AI-prepared view; nothing is guided-only.</li>
+              <li><b>Primary user</b> — mass retail banking customer, low-to-medium financial confidence, broad age range.</li>
+              <li><b>Core job to be done</b> — "Help me make better money decisions without needing expert knowledge."</li>
+              <li><b>Core user value</b> — clear recommendations, visible progress, low effort, confidence, control.</li>
+              <li><b>Core bank value</b> — stronger digital engagement, retention, trust, selective product penetration.</li>
+              <li><b>Experience tone</b> — a smart financial coach. Never a salesperson. Never an overbearing autopilot.</li>
             </ul>
           </div>
           <div class="card">
-            <h4 class="minihead">Debt, savings &amp; the investment layer</h4>
+            <h4 class="minihead">v1 scope discipline</h4>
             <ul class="dash">
-              <li><b>Buffer first</b> — a minimum safety cushion is protected before anything else is proposed.</li>
-              <li><b>High-interest debt next</b> — prioritised whenever its rate outweighs any near-term savings goal.</li>
-              <li><b>Goal-based saving</b> — allocated by the user's stated priority order once buffer and debt are healthy.</li>
-              <li><b>Investment</b> — introduced as a secondary layer only once savings &amp; debt posture is stable, and only ever proposed, never opened, by the AI.</li>
+              <li><b>In scope</b> — savings behaviour, debt payoff efficiency, cash buffer health, goal-based reallocation.</li>
+              <li><b>Secondary layer</b> — investment intelligence, introduced only once saving &amp; debt posture is stable.</li>
+              <li><b>Always required</b> — explicit approval before any meaningful money movement.</li>
+              <li><b>Always available</b> — a manual, non-AI route for every guided action.</li>
+              <li><b>Out of v1</b> — autonomous execution, product opening, trading, action on low-confidence data.</li>
             </ul>
           </div>
         </div>
 
         <div class="subblock">
-          <h4 class="minihead">States that must exist, not just the happy path</h4>
+          <h4 class="minihead">KPI framework</h4>
           <div class="table-wrap">
             <table class="data">
-              <thead><tr><th>State</th><th>What the user sees</th><th>What the AI does</th></tr></thead>
+              <thead><tr><th>Tier</th><th>Metric</th><th>What it tells the business</th><th>What it tells the user</th></tr></thead>
               <tbody>
-                <tr><td>Empty</td><td>"Let's set up your plan — it takes about 4 minutes."</td><td>Nothing yet; offers guided or manual setup entry.</td></tr>
-                <tr><td>Loading</td><td>A calm, static skeleton — no spinner tricks or fake progress.</td><td>Computing against current data; no partial numbers shown.</td></tr>
-                <tr><td>Error</td><td>Plain explanation of what failed and what still works.</td><td>Falls back to last-known-good state; never silently retries an approval.</td></tr>
-                <tr><td>Low confidence</td><td>"We don't have enough recent data to recommend confidently. Here's what's missing."</td><td>Abstains from a specific number; offers the smallest safe action or a data prompt.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="subblock">
-          <h4 class="minihead">Support &amp; escalation</h4>
-          <p style="font-size:13.5px;color:var(--ink-soft);max-width:70ch;">A visible "Talk to someone" option sits inside every approval panel and every
-          low-confidence state — never buried in a settings menu. Escalation carries full context (the recommendation, the data behind it) to the human agent, so the user never re-explains their situation.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 06 PLATFORM TOGGLE ================= -->
-    <section class="section" id="platform">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">06 — Platform Toggle Model</div>
-          <h2>Same plan. Three instruments.</h2>
-          <p class="dek">The same recommendation for the same customer — Devon, mid-payday reallocation —
-          shown as it would actually render on each platform. Switch instruments below; the product logic,
-          the approval anatomy, and the trust rule never change. Only navigation, density, and planning depth do.</p>
-        </div>
-      </div>
-
-      <div class="wrap-full">
-        <div class="bench">
-          <div class="bench-head">
-            <div class="toggle" role="tablist" aria-label="Platform preview">
-              <button type="button" role="tab" data-plat="ios" aria-pressed="true"><svg><use href="#i-ios"/></svg>iOS</button>
-              <button type="button" role="tab" data-plat="web" aria-pressed="false"><svg><use href="#i-web"/></svg>Responsive Web</button>
-              <button type="button" role="tab" data-plat="tablet" aria-pressed="false"><svg><use href="#i-tablet"/></svg>Tablet</button>
-            </div>
-            <div class="bench-head-right">
-              <span class="pill accent">Same recommendation · same trust anatomy</span>
-              <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
-            </div>
-          </div>
-          <div class="phone-toggle" data-phone-toggle role="tablist" aria-label="Device size">
-            <span class="phone-toggle-label">Device:</span>
-            <button type="button" data-phone="375">iPhone SE · 375</button>
-            <button type="button" data-phone="390" aria-pressed="true">iPhone 14 · 390</button>
-            <button type="button" data-phone="430">14 Pro Max · 430</button>
-            <button type="button" data-phone="360">Galaxy S23 · 360</button>
-          </div>
-          <p class="bench-hint">Try it: approve the transfer below, or adjust the split — then switch instruments to see the same decision continue where you left it.</p>
-
-          <div class="bench-stage">
-            <!-- iOS prototype -->
-            <div class="frame ios" data-view="ios">
-              <div class="screen">
-                <div class="notch"></div>
-                <div class="ios-status"><span>9:41</span><span>●●●</span></div>
-                <div class="ios-stage" data-stage="ios" data-plat="ios"></div>
-                <div class="ios-tabbar" data-nav="ios">
-                  <button type="button" class="t" data-action="nav:ios:home"><svg><use href="#i-home"/></svg>Home</button>
-                  <button type="button" class="t" data-action="nav:ios:plan"><svg><use href="#i-plan"/></svg>Plan</button>
-                  <button type="button" class="t" data-action="nav:ios:progress"><svg><use href="#i-progress"/></svg>Progress</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Web prototype -->
-            <div class="frame web" data-view="web" hidden>
-              <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">anchorline.bank/plan</span></div>
-              <div class="screen">
-                <div class="web-nav" data-nav="web">
-                  <div class="brand">Anchorline</div>
-                  <button type="button" data-action="nav:web:home"><svg><use href="#i-home"/></svg>Home</button>
-                  <button type="button" data-action="nav:web:plan"><svg><use href="#i-plan"/></svg>Plan</button>
-                  <button type="button" data-action="nav:web:progress"><svg><use href="#i-progress"/></svg>Progress</button>
-                </div>
-                <div class="web-main-scroll">
-                  <div class="web-main" data-stage="web" data-plat="web"></div>
-                </div>
-                <div class="web-explain" data-explain="web"></div>
-              </div>
-            </div>
-
-            <!-- Tablet prototype -->
-            <div class="frame tablet" data-view="tablet" hidden>
-              <div class="screen">
-                <div class="tab-list">
-                  <h5>Pending &amp; recent</h5>
-                  <div data-nav="tablet">
-                    <button type="button" class="tab-item" data-action="nav:tablet:payday">
-                      <div class="t">Payday reallocation</div><div class="s" data-tablet-item-sub="payday">$2,340 · today</div>
-                    </button>
-                    <button type="button" class="tab-item" data-action="nav:tablet:plan">
-                      <div class="t">Allocation plan</div><div class="s">Buffer, debt &amp; goals</div>
-                    </button>
-                    <button type="button" class="tab-item" data-action="nav:tablet:checkin">
-                      <div class="t">Weekly check-in</div><div class="s">Ready · this week</div>
-                    </button>
-                  </div>
-                </div>
-                <div class="tab-detail" data-stage="tablet" data-plat="tablet"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="legend">
-            <span><b>iOS —</b> bottom-tab, sequential, one decision per screen</span>
-            <span><b>Web —</b> sidebar + persistent explanation panel, deeper planning</span>
-            <span><b>Tablet —</b> master-detail, compare pending items side-by-side</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="wrap">
-        <div class="subblock">
-          <h4 class="minihead">What's invariant vs. what adapts</h4>
-          <div class="table-wrap">
-            <table class="data">
-              <thead><tr><th>Dimension</th><th>iOS</th><th>Responsive Web</th><th>Tablet</th></tr></thead>
-              <tbody>
-                <tr><td>Navigation model</td><td>Bottom tab bar, 3 items</td><td>Persistent left sidebar, 3 items</td><td>Top tab strip + master-detail</td></tr>
-                <tr><td>Dashboard density</td><td>Low — one card in view at a time</td><td>High — stats, plan, and explanation together</td><td>Medium — list + detail, no scroll-hunting</td></tr>
-                <tr><td>Approval experience</td><td>Bottom sheet, thumb-reachable</td><td>Centred modal, full anatomy visible</td><td>Persistent side panel, no context switch</td></tr>
-                <tr><td>Planning depth</td><td>Light — view &amp; approve, edit basics</td><td>Deep — full scenario comparison, manual controls</td><td>Medium-deep — compare 2–3 scenarios side-by-side</td></tr>
-                <tr><td>Escalation / "why"</td><td>Inline in the recommendation card</td><td>Inline card + persistent explain panel</td><td>Inline card + explain block in the detail pane</td></tr>
-                <tr><td>Explanation panel</td><td>Inline within the sheet</td><td>Separate persistent panel</td><td>Inline within the detail pane</td></tr>
-                <tr><td>Component behaviour</td><td>Swipe &amp; tap, native sheets</td><td>Hover states, keyboard navigable</td><td>Touch + split-view drag</td></tr>
-                <tr><td>Layout structure</td><td>Single column</td><td>Three column (nav / content / explain)</td><td>Two column (list / detail)</td></tr>
+                <tr><td><span class="pill accent">North Star</span></td><td>Trust-led engagement</td><td>Customers return because they believe the guidance, not because they're nudged.</td><td>"I trust what this tells me."</td></tr>
+                <tr><td>Secondary</td><td>Plan acceptance rate</td><td>Recommendation quality &amp; explanation clarity are working.</td><td>"This actually fits my situation."</td></tr>
+                <tr><td>Secondary</td><td>Repeat usage (weekly check-in return rate)</td><td>The habit loop is forming without being coercive.</td><td>"Checking in feels worth it."</td></tr>
+                <tr><td>Secondary</td><td>Recommendation follow-through</td><td>Advice converts to real financial behaviour change.</td><td>"I did the thing, and it helped."</td></tr>
+                <tr><td>Secondary</td><td>Satisfaction &amp; reduced effort</td><td>The product is lowering cognitive load, not adding to it.</td><td>"I didn't have to think hard about this."</td></tr>
+                <tr><td>Secondary</td><td>Selective product adoption</td><td>Trust converts into deeper banking relationships, earned not pushed.</td><td>"This felt like the right next step, not a pitch."</td></tr>
               </tbody>
             </table>
           </div>
@@ -1254,138 +1553,93 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 07 AI LOGIC ================= -->
-    <section class="section" id="ai-logic">
+<section class="section" id="archetypes">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">07 — AI Logic Model</div>
-          <h2>A bounded decision-support system</h2>
-          <p class="dek">Anchorline's AI is not described as magic — it is a responsible, explainable system with
-          clear inputs, a fixed prioritisation order, explicit approval boundaries, and a defined behaviour for
-          when it doesn't know enough. Every rule below is what makes the trust rule enforceable in code, not just in copy.</p>
+          <div class="kicker">07 — User Archetypes</div>
+          <h2>Five people, one trust model</h2>
+          <p class="dek">Anchorline's guidance logic flexes by life stage and confidence level, but the trust
+          rule never does. These five archetypes anchor every design and AI-logic decision in the rest of this package.</p>
         </div>
 
-        <div class="subblock">
-          <h4 class="minihead">Recommendation priority order</h4>
-          <div class="flow">
-            <div class="step"><div class="n"></div><h4>Protect the buffer</h4><p>A minimum safety cushion is defended before any other move is proposed.</p></div>
-            <div class="step"><div class="n"></div><h4>High-interest debt</h4><p>Proposed whenever its rate outweighs the near-term value of any savings goal.</p></div>
-            <div class="step"><div class="n"></div><h4>Goal-priority saving</h4><p>Allocated by the user's stated order once buffer and debt are healthy.</p></div>
-            <div class="step"><div class="n"></div><h4>Investment (secondary)</h4><p>Proposed only once the above are stable — always prepared, never executed autonomously.</p></div>
+        <div class="grid grid-2">
+          <div class="card archetype">
+            <div class="who"><h3>The Starter</h3><span class="meta">Maya · 24 · Junior analyst</span></div>
+            <div class="pill watch">Trust sensitivity: High — fears judgment</div>
+            <dl>
+              <dt>Context</dt><dd>First full-time income, $6.2k student debt, $310 average balance, irregular saving.</dd>
+              <dt>Pain</dt><dd>Doesn't know what "good" looks like; associates budgeting apps with being told off.</dd>
+              <dt>Goals</dt><dd><b>Build a starter buffer</b>, stop overdraft anxiety, understand her own spending.</dd>
+              <dt>Guidance</dt><dd><b>Guided</b> — wants the app to decide the mechanics, not the values.</dd>
+              <dt>Behaviour</dt><dd>Checks balance often, avoids anything that feels like a lecture, responds to small wins.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: tiny, low-risk first moves and visible momentum.</div>
+            <div class="avoid">Must avoid: shaming language, debt comparisons, any tone of judgment.</div>
           </div>
-        </div>
 
-        <div class="grid grid-2 subblock">
-          <div class="card">
-            <h4 class="minihead">Guidance vs. control preference</h4>
-            <div class="table-wrap">
-              <table class="data">
-                <thead><tr><th>Mode</th><th>What changes</th></tr></thead>
-                <tbody>
-                  <tr><td><b>Guided</b></td><td>AI prepares full recommendations by default; fewer decisions surfaced per session.</td></tr>
-                  <tr><td><b>Balanced</b></td><td>AI recommends; trade-off framing shown more prominently for the user to weigh.</td></tr>
-                  <tr><td><b>Manual-leaning</b></td><td>AI surfaces analysis and scenarios; the user builds the allocation, AI checks it.</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="card archetype">
+            <div class="who"><h3>The Stabilizer</h3><span class="meta">Devon · 31 · Product manager</span></div>
+            <div class="pill good">Trust sensitivity: Medium — wants efficiency, not hand-holding</div>
+            <dl>
+              <dt>Context</dt><dd>Stable income, growing savings across 3 uncoordinated goals (trip, house, buffer).</dd>
+              <dt>Pain</dt><dd>Money is scattered across goals with no logic; unsure if allocation is optimal.</dd>
+              <dt>Goals</dt><dd>Coordinate goal priority, house down payment on a clear timeline.</dd>
+              <dt>Guidance</dt><dd><b>Balanced</b> — wants recommendations, but expects to adjust the logic.</dd>
+              <dt>Behaviour</dt><dd>Uses payday reallocation heavily; compares scenarios before approving.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: trade-off clarity between competing goals, timelines.</div>
+            <div class="avoid">Must avoid: oversimplifying — Devon will distrust a "just trust us" answer.</div>
           </div>
-          <div class="card">
-            <h4 class="minihead">When the AI is assertive, cautious, or abstains</h4>
-            <div class="table-wrap">
-              <table class="data">
-                <thead><tr><th>Posture</th><th>Trigger</th></tr></thead>
-                <tbody>
-                  <tr><td><span class="pill good">Assertive</span></td><td>High-confidence data, clear priority order, no conflicting goals.</td></tr>
-                  <tr><td><span class="pill watch">Cautious</span></td><td>Recent life-stage change, thin data history, or a stressed-state signal.</td></tr>
-                  <tr><td><span class="pill risk">Abstains</span></td><td>Confidence below threshold, or the action falls outside approval boundaries.</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
-        <div class="subblock card">
-          <h4 class="minihead">Confidence &amp; explanation strategy</h4>
-          <div class="grid grid-3">
-            <div><span class="pill good">High (≥85%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Full recommendation with one-line rationale; approve in one step.</p></div>
-            <div><span class="pill watch">Medium (60–84%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Recommendation shown with an explicit caveat on what's uncertain.</p></div>
-            <div><span class="pill risk">Low (&lt;60%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">No specific number proposed — the system explains what data would raise confidence.</p></div>
+          <div class="card archetype">
+            <div class="who"><h3>The Anchor</h3><span class="meta">Priya &amp; Sam · 38–42 · Household</span></div>
+            <div class="pill watch">Trust sensitivity: High — low margin for error</div>
+            <dl>
+              <dt>Context</dt><dd>Two kids, mortgage, childcare, RESP contributions; tight monthly slack.</dd>
+              <dt>Pain</dt><dd>No time or energy for financial admin; one mistake feels costly.</dd>
+              <dt>Goals</dt><dd>Protect the buffer, keep RESP on track, avoid new debt.</dd>
+              <dt>Guidance</dt><dd><b>Guided</b> — values reassurance and simplicity over control.</dd>
+              <dt>Behaviour</dt><dd>Engages weekly at most; wants confirmation nothing has gone wrong.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: stability signals — "buffer is safe," "nothing needs you."</div>
+            <div class="avoid">Must avoid: frequent asks, complex trade-off framing, unnecessary urgency.</div>
           </div>
-        </div>
 
-        <div class="subblock">
-          <h4 class="minihead">Approval boundary rules</h4>
-          <div class="table-wrap">
-            <table class="data">
-              <thead><tr><th>Action</th><th>AI may prepare</th><th>AI may auto-execute</th><th>Approval required</th></tr></thead>
-              <tbody>
-                <tr><td>Transfer between eligible accounts</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
-                <tr><td>Recurring contribution setup / edit</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
-                <tr><td>Goal contribution reallocation</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
-                <tr><td>Savings rule change</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
-                <tr><td>Open a new product</td><td>No</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
-                <tr><td>Execute an investment trade</td><td>Simulation only</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
-                <tr><td>Act on incomplete / low-confidence data</td><td>No</td><td>No</td><td><span class="pill risk">Never</span></td></tr>
-              </tbody>
-            </table>
+          <div class="card archetype">
+            <div class="who"><h3>The Reset</h3><span class="meta">Marcus · 45 · Recently reduced hours</span></div>
+            <div class="pill risk">Trust sensitivity: Very high — shame &amp; anxiety present</div>
+            <dl>
+              <dt>Context</dt><dd>Income drop, $14k high-interest debt across two cards, depleted buffer.</dd>
+              <dt>Pain</dt><dd>Feels behind and judged by every finance product he's used.</dd>
+              <dt>Goals</dt><dd>Stop the bleeding, rebuild a minimal buffer, a believable debt path out.</dd>
+              <dt>Guidance</dt><dd><b>Guided, cautious</b> — needs stabilization before optimization.</dd>
+              <dt>Behaviour</dt><dd>May avoid the app when anxious; needs re-engagement without guilt.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: non-judgmental stabilization, one clear next step at a time.</div>
+            <div class="avoid">Must avoid: aggressive debt payoff pressure, comparisons, silence when things worsen.</div>
           </div>
-        </div>
 
-        <div class="subblock card">
-          <h4 class="minihead">Auditability</h4>
-          <p style="font-size:13.5px;color:var(--ink-soft);max-width:70ch;">Every recommendation, its confidence score, the data snapshot behind it, and the user's
-          decision (approve / adjust / decline) are logged as one traceable record — the same record structure a compliance reviewer, a
-          support agent, and the user's own approval-history screen all read from.</p>
+          <div class="card archetype" style="grid-column:1/-1;">
+            <div class="who"><h3>The Builder</h3><span class="meta">Elaine · 52 · Operations director</span></div>
+            <div class="pill good">Trust sensitivity: Medium — wants rigor, not reassurance</div>
+            <dl>
+              <dt>Context</dt><dd>Debt-free, healthy buffer, saving basics covered; underusing investment capacity.</dd>
+              <dt>Pain</dt><dd>Unsure if she's "doing enough"; existing tools feel either too basic or too salesy.</dd>
+              <dt>Goals</dt><dd>Confirm she's on track for retirement horizon; grow beyond savings.</dd>
+              <dt>Guidance</dt><dd><b>Manual-leaning</b> — wants scenario tools and explainability more than automation.</dd>
+              <dt>Behaviour</dt><dd>Uses web/tablet for deeper planning; low tolerance for oversimplified advice.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: rigorous explanation, scenario comparison, the "why" behind confidence levels.</div>
+            <div class="avoid">Must avoid: pushing products, treating her like a novice, hiding the reasoning behind a recommendation.</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 08 TRUST & GOVERNANCE ================= -->
-    <section class="section" id="trust">
+<section class="section" id="journeys">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">08 — Trust &amp; Governance</div>
-          <h2>Trust as architecture, not messaging</h2>
-          <p class="dek">These patterns are built into the interface itself — not stated as values in a
-          marketing page. Each one maps to a specific, always-present piece of UI.</p>
-        </div>
-
-        <div class="grid grid-3">
-          <div class="card"><h4 class="minihead">AI disclosure</h4><p style="font-size:13px;color:var(--ink-soft);">A persistent "Recommended by Anchorline AI" mark on every AI-authored element — never blended into system copy.</p></div>
-          <div class="card"><h4 class="minihead">Explanation pattern</h4><p style="font-size:13px;color:var(--ink-soft);">What, why, data used, benefit, trade-off — the same six fields, every time, in the same order.</p></div>
-          <div class="card"><h4 class="minihead">Confidence communication</h4><p style="font-size:13px;color:var(--ink-soft);">A visible chip and, where relevant, a percentage — never confidence implied only by tone.</p></div>
-          <div class="card"><h4 class="minihead">Fairness &amp; bias awareness</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation logic reviewed across archetypes for disparate impact before each release; flagged in the research hub's stakeholder view.</p></div>
-          <div class="card"><h4 class="minihead">Privacy signalling</h4><p style="font-size:13px;color:var(--ink-soft);">"Data used" is shown at the point of every recommendation — not buried in a separate privacy centre.</p></div>
-          <div class="card"><h4 class="minihead">Human escalation</h4><p style="font-size:13px;color:var(--ink-soft);">"Talk to someone" inside every approval panel and low-confidence state, carrying full context to the agent.</p></div>
-          <div class="card"><h4 class="minihead">Customer control</h4><p style="font-size:13px;color:var(--ink-soft);">Guidance level, data inputs, and any standing rule can be paused or reversed by the user at any time.</p></div>
-          <div class="card"><h4 class="minihead">Post-action transparency</h4><p style="font-size:13px;color:var(--ink-soft);">Every approved action produces a plain-language receipt — what happened, why, and how to undo or adjust it.</p></div>
-          <div class="card"><h4 class="minihead">Audit trail</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation, confidence, data snapshot, and decision logged as one traceable record per action.</p></div>
-        </div>
-
-        <div class="subblock card">
-          <h4 class="minihead">What the product says when it's unsure</h4>
-          <p style="font-family:var(--font-display);font-size:19px;font-style:italic;color:var(--accent-ink);max-width:60ch;">
-          "We don't have enough recent data to recommend confidently yet. We're missing a clear view of your regular bills.
-          You can add them now, or hold steady — nothing needs to move today."
-          </p>
-        </div>
-
-        <div class="subblock">
-          <h4 class="minihead">Failure handling</h4>
-          <ul class="dash">
-            <li>A failed transfer never retries silently — the user sees exactly what didn't complete and why.</li>
-            <li>If a recommendation was based on data later found to be wrong, the user is proactively told, not left to notice.</li>
-            <li>System outages fall back to the last-known-good state; no approval is ever inferred from stale data.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 09 JOURNEYS ================= -->
-    <section class="section" id="journeys">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">09 — Key Journeys</div>
+          <div class="kicker">08 — Key Journeys</div>
           <h2>Three journeys, optimised deliberately</h2>
           <p class="dek">These are the only three journeys the v1 product is designed to be excellent at —
           everything else in the IA supports them.</p>
@@ -1424,14 +1678,15 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 10 ARCHITECTURE ================= -->
+    <!-- ================= 09 INFORMATION ARCHITECTURE ================= -->
     <section class="section" id="architecture">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">10 — Information Architecture</div>
+          <div class="kicker">09 — Information Architecture</div>
           <h2>One system, mapped</h2>
-          <p class="dek">How the three instruments actually connect — not as a metaphor, but as the literal
-          flow of information from evidence to language to live product.</p>
+          <p class="dek">How the bank's own IA is organised, and how the three parts of this package
+          feed each other — not as a metaphor, but as the literal flow of information from evidence
+          to language to live product.</p>
         </div>
 
         <div class="reldiag">
@@ -1439,34 +1694,67 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
           <div class="relarrow">justifies →</div>
           <div class="relnode"><b>Design System</b>tokens · patterns · voice</div>
           <div class="relarrow">informs →</div>
-          <div class="relnode"><b>Solution App</b>flows · screens · platforms</div>
+          <div class="relnode"><b>Borealis App</b>flows · screens · platforms</div>
         </div>
-        <p style="text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:-14px;margin-bottom:36px;">…and the Solution Application's real usage data feeds back into the Research Hub as new evidence — closing the loop.</p>
+        <p style="text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:-14px;margin-bottom:36px;">…and the app's real usage data feeds back into the Research Hub as new evidence — closing the loop.</p>
 
-        <div class="tree card">
-          <ul>
-            <li><span class="lbl"><b>Overview</b></span><span class="note">product framing, promise, the three instruments</span></li>
-            <li><span class="lbl"><b>Design System</b></span><span class="note">principles → tokens → patterns</span>
-              <ul><li>Colour, type, spacing, iconography, motion</li><li>Recommendation &amp; approval anatomy</li><li>Accessibility &amp; content rules</li></ul>
-            </li>
-            <li><span class="lbl"><b>Research Hub</b></span><span class="note">evidence → hypotheses → decisions</span>
-              <ul><li>Archetypes &amp; JTBD</li><li>Hypothesis tracker</li><li>Traceability log</li></ul>
-            </li>
-            <li><span class="lbl"><b>Solution Application</b></span><span class="note">Home · Plan · Approvals · Progress · Guidance settings</span>
-              <ul><li>Platform toggle (iOS / Web / Tablet)</li><li>Guided setup, recommendation, approval, check-in flows</li></ul>
-            </li>
-            <li><span class="lbl"><b>AI Logic</b></span><span class="note">inputs → priority order → boundaries</span></li>
-            <li><span class="lbl"><b>Trust &amp; Governance</b></span><span class="note">disclosure → explanation → escalation → audit</span></li>
-          </ul>
+        <div class="grid grid-2">
+          <div class="tree card">
+            <ul>
+              <li><span class="lbl"><b>Home</b></span><span class="note">overview &amp; next action</span>
+                <ul><li>Anchorline hub <span class="note">always first</span></li><li>Quick actions</li><li>Banking · Credit · Investments · Borrowing</li></ul>
+              </li>
+              <li><span class="lbl"><b>Move money</b></span>
+                <ul><li>Interac e-Transfer</li><li>Pay a bill</li><li>Between my accounts</li><li>Deposit a cheque</li></ul>
+              </li>
+              <li><span class="lbl"><b>Anchorline</b></span><span class="note">the agentic layer</span>
+                <ul><li>Active recommendation</li><li>Allocation plan</li><li>Weekly progress</li><li>Decision history</li></ul>
+              </li>
+              <li><span class="lbl"><b>Investments</b></span>
+                <ul><li>TFSA · RRSP · RESP</li><li>Contribute</li><li>GICs · Portfolios &amp; funds</li></ul>
+              </li>
+            </ul>
+          </div>
+          <div class="tree card">
+            <ul>
+              <li><span class="lbl"><b>Cards</b></span>
+                <ul><li>Card detail &amp; statement</li><li>Make a payment</li><li>Cash back · Lock card</li></ul>
+              </li>
+              <li><span class="lbl"><b>Mortgage &amp; loans</b></span>
+                <ul><li>Mortgage detail · lump sum · renewal</li><li>Home Equity Line</li><li>Credit score</li></ul>
+              </li>
+              <li><span class="lbl"><b>More</b></span>
+                <ul><li>Rewards · Statements · Alerts</li><li>Security centre</li><li>Branch/ATM · Insurance · Contact</li><li>Settings — incl. guidance level</li></ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Where Anchorline attaches to the bank's IA</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Bank surface</th><th>Anchorline's presence</th><th>Why here</th></tr></thead>
+              <tbody>
+                <tr><td>Home</td><td>Full recommendation hub, pinned above everything</td><td>The decision is the point of the session, so it leads.</td></tr>
+                <tr><td>Global navigation</td><td>Centre tab (mobile) · pinned sidebar slot (web) · floating button everywhere</td><td>Never more than one tap from any screen in the bank.</td></tr>
+                <tr><td>Accounts &amp; savings</td><td>Inline card on buffer status</td><td>The buffer is the first thing the priority order defends.</td></tr>
+                <tr><td>Credit cards</td><td>Inline card quantifying interest saved</td><td>Highest-APR debt is the highest-return move available.</td></tr>
+                <tr><td>Investments</td><td>Inline card explaining why investing is gated</td><td>Explaining a withheld suggestion builds more trust than making one.</td></tr>
+                <tr><td>Mortgage &amp; loans</td><td>Inline card explaining why it's untouched</td><td>Low-rate debt should not be prepaid ahead of a 22.9% balance.</td></tr>
+                <tr><td>Credit score</td><td>Inline card on utilisation impact</td><td>Connects an abstract score to the concrete action on the table.</td></tr>
+                <tr><td>Pay-your-Visa flow</td><td>Preset amount + rationale inside the flow</td><td>Guidance where the number is actually chosen, not after.</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 11 COMPONENTS ================= -->
-    <section class="section" id="components">
+<section class="section" id="components">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">11 — Component System</div>
+          <div class="kicker">10 — Component System</div>
           <h2>The families that build every screen</h2>
         </div>
         <div class="table-wrap">
@@ -1488,41 +1776,61 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 12 SCREENS ================= -->
+    <!-- ================= 11 SCREEN INVENTORY ================= -->
     <section class="section" id="screens">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">12 — Screen Inventory</div>
+          <div class="kicker">11 — Screen Inventory</div>
           <h2>What ships in v1</h2>
+          <p class="dek">Every screen below is built and interactive in the prototype unless marked as an
+          entry point. Entry points render a real, labelled destination but stop short of a completing flow.</p>
         </div>
         <div class="table-wrap">
           <table class="data">
-            <thead><tr><th>Screen</th><th>iOS</th><th>Web</th><th>Tablet</th><th>Core states covered</th></tr></thead>
+            <thead><tr><th>Screen</th><th>iOS</th><th>Web</th><th>Tablet</th><th>States covered</th></tr></thead>
             <tbody>
-              <tr><td>Home / dashboard</td><td>✓</td><td>✓</td><td>✓</td><td>Empty, loaded, low-confidence</td></tr>
-              <tr><td>Guided setup</td><td>✓</td><td>✓</td><td>✓</td><td>In-progress, error, complete</td></tr>
-              <tr><td>Recommendation detail</td><td>✓</td><td>✓</td><td>✓</td><td>High/med/low confidence</td></tr>
-              <tr><td>Approval panel</td><td>✓ sheet</td><td>✓ modal</td><td>✓ side panel</td><td>Reviewing, confirmed, escalated</td></tr>
-              <tr><td>Allocation planner</td><td>Light</td><td>✓ full</td><td>✓ full</td><td>Default, scenario compare</td></tr>
-              <tr><td>What-if scenarios</td><td>—</td><td>✓</td><td>✓</td><td>Default, side-by-side compare</td></tr>
-              <tr><td>Weekly progress</td><td>✓</td><td>✓</td><td>✓</td><td>On-track, at-risk, ahead</td></tr>
-              <tr><td>Debt payoff plan</td><td>✓</td><td>✓</td><td>✓</td><td>Default, adjusted</td></tr>
-              <tr><td>Goal management</td><td>✓</td><td>✓</td><td>✓</td><td>Empty, active, completed</td></tr>
-              <tr><td>Investment layer intro</td><td>Preview only</td><td>✓</td><td>✓</td><td>Not-yet-eligible, eligible</td></tr>
-              <tr><td>Approval history / audit</td><td>Light</td><td>✓ full</td><td>✓ full</td><td>Default, filtered</td></tr>
-              <tr><td>Transparency / "how this works"</td><td>Link out</td><td>✓ full</td><td>✓ full</td><td>Default</td></tr>
-              <tr><td>Support / escalation</td><td>✓</td><td>✓</td><td>✓</td><td>Default, handoff-in-progress</td></tr>
+              <tr><td>Home / overview</td><td>✓</td><td>✓</td><td>✓</td><td>Pending · approved · held</td></tr>
+              <tr><td>Anchorline hub</td><td>✓</td><td>✓</td><td>✓</td><td>Recommend · adjust · approved · held · escalated</td></tr>
+              <tr><td>Allocation plan</td><td>✓</td><td>✓</td><td>✓</td><td>Locked / unlocked investing layer</td></tr>
+              <tr><td>Weekly progress</td><td>✓</td><td>✓</td><td>✓</td><td>On-track · at-risk · ahead</td></tr>
+              <tr><td>Accounts list &amp; detail</td><td>✓</td><td>✓</td><td>✓</td><td>Bank · registered · credit · loan</td></tr>
+              <tr><td>Interac e-Transfer</td><td>✓</td><td>✓</td><td>✓</td><td>4 steps · autodeposit vs. security question</td></tr>
+              <tr><td>Pay a bill</td><td>✓</td><td>✓</td><td>✓</td><td>4 steps · today vs. due date</td></tr>
+              <tr><td>Transfer between accounts</td><td>✓</td><td>✓</td><td>✓</td><td>3 steps</td></tr>
+              <tr><td>Contribute (TFSA/RRSP/RESP)</td><td>✓</td><td>✓</td><td>✓</td><td>4 steps · room tracking · CESG</td></tr>
+              <tr><td>Credit card &amp; payment</td><td>✓</td><td>✓</td><td>✓</td><td>3 steps · min / recommended / full</td></tr>
+              <tr><td>Mortgage &amp; loans</td><td>✓</td><td>✓</td><td>✓</td><td>Default</td></tr>
+              <tr><td>Credit score</td><td>✓</td><td>✓</td><td>✓</td><td>Default · utilisation change</td></tr>
+              <tr><td>Activity</td><td>✓</td><td>✓</td><td>✓</td><td>Live — reflects every completed flow</td></tr>
+              <tr><td>Deposit a cheque</td><td>Entry point</td><td>Entry point</td><td>Entry point</td><td>—</td></tr>
+              <tr><td>Rewards · Statements · Alerts · Security</td><td>Entry point</td><td>Entry point</td><td>Entry point</td><td>—</td></tr>
+              <tr><td>Branch/ATM · Insurance · Contact · Settings</td><td>Entry point</td><td>Entry point</td><td>Entry point</td><td>—</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">States that must exist, not just the happy path</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>State</th><th>What the customer sees</th><th>What Anchorline does</th></tr></thead>
+              <tbody>
+                <tr><td>Empty</td><td>"Let's set up your plan — it takes about 4 minutes."</td><td>Nothing yet; offers a guided or manual setup entry.</td></tr>
+                <tr><td>Loading</td><td>A calm, static skeleton — no spinner tricks or fake progress.</td><td>Computing against current data; no partial numbers shown.</td></tr>
+                <tr><td>Error</td><td>Plain explanation of what failed and what still works.</td><td>Falls back to last-known-good; never silently retries an approval.</td></tr>
+                <tr><td>Low confidence</td><td>"We don't have enough recent data to recommend confidently. Here's what's missing."</td><td>Abstains from a number; offers the smallest safe action or a data prompt.</td></tr>
+                <tr><td>Decision held</td><td>"Nothing needs your approval" — with the cost of holding stated plainly.</td><td>Stops asking until the next payday trigger. No nagging.</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 13 METRICS ================= -->
-    <section class="section" id="metrics">
+<section class="section" id="metrics">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">13 — Metrics</div>
+          <div class="kicker">12 — Metrics</div>
           <h2>How success is actually measured</h2>
         </div>
         <div class="table-wrap">
@@ -1542,11 +1850,10 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
       </div>
     </section>
 
-    <!-- ================= 14 RISKS ================= -->
-    <section class="section" id="risks" style="border-bottom:none;">
+<section class="section" id="risks" style="border-bottom:none;">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">14 — Risks, Gaps &amp; Validation Priorities</div>
+          <div class="kicker">13 — Risks, Gaps &amp; Validation Priorities</div>
           <h2>What this concept doesn't yet know</h2>
         </div>
         <div class="table-wrap">
@@ -1568,8 +1875,8 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
     <footer>
       <div class="wrap">
         <div class="fline">
-          <span>Anchorline — a retail banking AI guidance concept</span>
-          <span>Design System · Research Hub · Solution Application — one system</span>
+          <span>Borealis Bank — a fictional Canadian bank built to demonstrate the Anchorline concept</span>
+          <span>Design System · Research Hub · Live Application — one system</span>
         </div>
       </div>
     </footer>
@@ -1578,299 +1885,1028 @@ footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:
 
 <script>
 (function(){
-  /* ---------- platform toggle (frame visibility) ---------- */
+  /* ---------- rail scrollspy ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  function onScroll(){
+    var y = window.scrollY + 120, current = sections[0];
+    sections.forEach(function(s){ if (s.offsetTop <= y) current = s; });
+    links.forEach(function(a){ a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id); });
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* ============================================================
+     BOREALIS BANK — interactive prototype
+     One app model rendered into three device shells.
+     ============================================================ */
+
+  var WEEKLY_ESSENTIALS = 700;
+
+  var ACC = {
+    chq:  { id:'chq',  name:'Everyday Chequing',      num:'4021', bal:3284.10,  kind:'bank' },
+    sav:  { id:'sav',  name:'Momentum Savings',       num:'7738', bal:2100.00,  kind:'bank', target:2240, rate:3.75 },
+    tfsa: { id:'tfsa', name:'TFSA',                   num:'2210', bal:18430.55, kind:'reg',  room:4850 },
+    rrsp: { id:'rrsp', name:'RRSP',                   num:'9104', bal:41206.88, kind:'reg',  room:12400 },
+    resp: { id:'resp', name:'RESP — Maya',            num:'6612', bal:7820.00,  kind:'reg',  room:2500 },
+    visa: { id:'visa', name:'Borealis Cash Back Visa',num:'3391', bal:-3240.00, kind:'credit', limit:8000, apr:22.9, min:35, due:'Sep 3' },
+    mtg:  { id:'mtg',  name:'Mortgage',               num:'5567', bal:-412300,  kind:'loan', rate:4.89, renews:'Mar 2027', payment:2418 },
+    heloc:{ id:'heloc',name:'Home Equity Line',       num:'8890', bal:0,        kind:'loan', limit:75000, rate:6.45 }
+  };
+
+  var RECIPIENTS = [
+    { id:'sam',    name:'Sam Okonkwo',  handle:'sam.okonkwo@email.ca', auto:true },
+    { id:'priya',  name:'Priya Raman',  handle:'(416) 555-0148',       auto:false },
+    { id:'marcus', name:'Marcus Webb',  handle:'m.webb@email.ca',      auto:true },
+    { id:'dana',   name:'Dana Fortin',  handle:'dana.f@email.ca',      auto:true }
+  ];
+
+  var PAYEES = [
+    { id:'hydro', name:'Toronto Hydro',                  num:'••••3312', due:'Aug 28', amt:142.10 },
+    { id:'rogers',name:'Rogers Communications',          num:'••••8890', due:'Sep 1',  amt:98.75 },
+    { id:'tax',   name:'City of Toronto — Property Tax', num:'••••4417', due:'Sep 15', amt:486.00 },
+    { id:'gas',   name:'Enbridge Gas',                   num:'••••2205', due:'Sep 5',  amt:64.20 }
+  ];
+
+  var BASE_ACTIVITY = [
+    { label:'Payroll — Northstar Logistics', amount:2340.00, when:'Today',     cat:'Deposit' },
+    { label:'Loblaws #1042',                 amount:-87.34,  when:'Yesterday', cat:'Groceries' },
+    { label:'Tim Hortons',                   amount:-4.85,   when:'Yesterday', cat:'Dining' },
+    { label:'Toronto Hydro',                 amount:-142.10, when:'Aug 16',    cat:'Utilities' },
+    { label:'PRESTO Autoload',               amount:-40.00,  when:'Aug 15',    cat:'Transit' },
+    { label:'Netflix',                       amount:-20.99,  when:'Aug 15',    cat:'Subscriptions' },
+    { label:'e-Transfer from Sam Okonkwo',   amount:65.00,   when:'Aug 14',    cat:'Transfer' },
+    { label:'Petro-Canada',                  amount:-71.40,  when:'Aug 13',    cat:'Fuel' }
+  ];
+
+  var SPLITS = {
+    recommended:{ label:'Recommended split', visa:260, buffer:140, note:'Balances faster debt payoff with getting the buffer back on target.' },
+    even:       { label:'Even split',        visa:200, buffer:200, note:'Buffer recovers faster; the Visa payoff slows slightly.' },
+    alldebt:    { label:'All to the Visa',   visa:400, buffer:0,   note:'Fastest payoff, but the buffer stays below target this month.' }
+  };
+  var SPLIT_ORDER = ['recommended','even','alldebt'];
+
+  var APP = {
+    plat:'ios', screen:'home', stack:[], sel:null,
+    flow:null, txns:[], toast:null,
+    aiDecision:null, aiSplit:'recommended', aiDraft:null, aiAdjust:false,
+    escalated:false, interacted:false, approvedAt:null
+  };
+
+  /* ---------- helpers ---------- */
+  function money(n){
+    var neg = n < 0;
+    return (neg?'−$':'$') + Math.abs(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function money0(n){ return '$' + Math.abs(Math.round(n)).toLocaleString('en-CA'); }
+  function ico(id,cls){ return '<svg'+(cls?' class="'+cls+'"':'')+'><use href="#'+id+'"/></svg>'; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function balOf(id){
+    var b = ACC[id].bal;
+    APP.txns.forEach(function(t){
+      if (t.from === id) b -= t.amount;
+      if (t.to   === id) b += t.amount;
+    });
+    return b;
+  }
+  function bufferWeeks(){ return balOf('sav') / WEEKLY_ESSENTIALS; }
+  function bufferOnTarget(){ return balOf('sav') >= ACC.sav.target; }
+  function availCredit(){ return ACC.visa.limit + balOf('visa'); }
+  function totalSavings(){ return balOf('chq')+balOf('sav')+balOf('tfsa')+balOf('rrsp')+balOf('resp'); }
+  function totalOwing(){ return Math.abs(balOf('visa')) + Math.abs(balOf('mtg')) + Math.abs(balOf('heloc')); }
+  function aiPending(){ return APP.aiDecision === null ? 1 : 0; }
+  function approvedTime(){ return APP.approvedAt ? APP.approvedAt.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'}) : 'Just now'; }
+
+  /* ---------- Anchorline shared pieces ---------- */
+  function aiMark(text){ return '<span class="ai-mark">'+ico('i-anchor')+(text||'Anchorline')+'</span>'; }
+
+  function talkLink(){
+    if (APP.escalated) return '<div class="talk-link done">✓ A Borealis specialist has your full context — expect a reply shortly.</div>';
+    return '<div class="talk-link"><button type="button" class="linklike" data-action="ai:escalate">Need a person? Talk to someone</button></div>';
+  }
+
+  function explainRows(){
+    var s = SPLITS[APP.aiSplit];
+    return [
+      ['What','Move '+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings'],
+      ['Why','The Visa is your most expensive debt at 22.9%'],
+      ['Data used','Balances, APRs, payroll pattern, buffer target'],
+      ['Expected benefit','About $47 less interest over the payoff'],
+      ['Trade-off','Trip fund pace slows slightly this month'],
+      ['Confidence','92% confidence'],
+      ['Editable later','Yes — anytime in Plan']
+    ].map(function(r){ return '<div class="row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('');
+  }
+
+  /* The main recommendation card. Rendered on Home, in the Anchorline hub, and inline. */
+  function aiRecommendation(compact){
+    var s = SPLITS[APP.aiSplit];
+
+    if (APP.aiDecision === 'approved'){
+      return '<div class="ai-module"><div class="top">'+aiMark('Anchorline · approved')+'</div><div class="bd">'
+        + '<h5>'+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings</h5>'
+        + '<p>Done at '+approvedTime()+' · reference TXN-48213. '
+        + (bufferOnTarget() ? 'Your buffer is back on target.' : 'Your buffer is still a little short of target.')
+        + ' You can undo or change this anytime.</p>'
+        + '<div class="cta-row"><button type="button" class="btn small" data-action="go:aiprogress">See progress</button>'
+        + '<button type="button" class="btn small" data-action="ai:undo">Undo</button></div>'
+        + '</div></div>';
+    }
+
+    if (APP.aiDecision === 'dismissed'){
+      return '<div class="ai-module"><div class="top">'+aiMark('Anchorline · holding steady')+'</div><div class="bd">'
+        + '<h5>Nothing needs your approval</h5>'
+        + '<p>You chose to hold this week. Your buffer stays at '+bufferWeeks().toFixed(1)+' weeks and the Visa keeps to minimum payments. Anchorline will check again after your next payday.</p>'
+        + '<div class="cta-row"><button type="button" class="btn small" data-action="ai:reconsider">Look again</button></div>'
+        + talkLink()
+        + '</div></div>';
+    }
+
+    if (APP.aiAdjust){
+      var draft = APP.aiDraft || APP.aiSplit;
+      return '<div class="ai-module"><div class="top">'+aiMark('Anchorline · adjust the split')+'</div><div class="bd">'
+        + '<div class="chip-select">' + SPLIT_ORDER.map(function(id){
+            var o = SPLITS[id];
+            return '<button type="button" class="chip'+(id===draft?' active':'')+'" data-action="ai:pick:'+id+'">'
+              + '<div class="top">'+o.label+'<span>'+money0(o.visa)+' → Visa · '+money0(o.buffer)+' → savings</span></div>'
+              + '<div class="note">'+o.note+'</div></button>';
+          }).join('') + '</div>'
+        + '<div class="cta-row"><button type="button" class="btn primary" data-action="ai:confirm">Use this split</button>'
+        + '<button type="button" class="btn" data-action="ai:cancel">Cancel</button></div>'
+        + '</div></div>';
+    }
+
+    var pulse = APP.interacted ? '' : ' pulse-cta';
+    return '<div class="ai-module"><div class="top">'+aiMark()+'<span class="count">1 to review</span></div><div class="bd">'
+      + '<h5>Move '+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings</h5>'
+      + '<p>Your pay landed today. The Visa is your most expensive debt at 22.9% — paying it now saves about $47 in interest over the payoff, and the rest gets your buffer back on target.</p>'
+      + '<div style="margin-top:9px;"><span class="pill good">92% confidence</span></div>'
+      + '<div class="cta-row"><button type="button" class="btn primary'+pulse+'" data-action="ai:approve">Approve</button>'
+      + '<button type="button" class="btn" data-action="ai:adjust">Adjust</button>'
+      + '<button type="button" class="btn" data-action="ai:notnow">Not now</button></div>'
+      + (compact ? '' : talkLink())
+      + '</div></div>';
+  }
+
+  /* Small contextual cards that live inside product screens. */
+  function aiInline(text, cta){
+    return '<div class="ai-inline">'+aiMark()
+      + '<p>'+text+'</p>'
+      + '<div class="cta-row">'+(cta||'<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>')+'</div></div>';
+  }
+
+  /* ---------- generic UI pieces ---------- */
+  function row(opts){
+    return '<button type="button" class="bk-row'+(opts.cls?' '+opts.cls:'')+'"'
+      + (opts.action?' data-action="'+opts.action+'"':'')+'>'
+      + (opts.icon ? '<span class="ico">'+ico(opts.icon)+'</span>' : '')
+      + '<span class="body"><span class="t">'+opts.title+'</span>'
+      + (opts.sub ? '<span class="s">'+opts.sub+'</span>' : '')+'</span>'
+      + (opts.amount!=null ? '<span class="amt">'+opts.amount+(opts.amountSub?'<span class="sub">'+opts.amountSub+'</span>':'')+'</span>' : '')
+      + (opts.chev===false ? '' : '<span class="chev">'+ico('i-chev')+'</span>')
+      + '</button>';
+  }
+  function secHead(title, actionLabel, action){
+    return '<div class="bk-sec"><h4>'+title+'</h4>'
+      + (actionLabel ? '<button type="button" data-action="'+action+'">'+actionLabel+'</button>' : '')+'</div>';
+  }
+  function stub(icon, title, text){
+    return '<div class="bk-stub"><div class="ico">'+ico(icon)+'</div><h5>'+title+'</h5><p>'+text+'</p>'
+      + '<div class="tagline">Entry point — not built out in this prototype</div></div>';
+  }
+  function cdicNote(){
+    return '<div class="bk-fine cdic">'+ico('i-shield')+'<span>Eligible deposits held at Borealis Bank are insured by the Canada Deposit Insurance Corporation (CDIC) within limits.</span></div>';
+  }
+
+  /* ============================================================
+     SCREENS — each returns { title, body, aside }
+     ============================================================ */
+  var SCREENS = {};
+
+  SCREENS.home = function(){
+    var chq = balOf('chq'), sav = balOf('sav');
+    return {
+      title:'Overview',
+      body:
+        aiRecommendation()
+        + '<div class="bk-quick">'
+          + '<button type="button" data-action="flow:etransfer"><span class="ico">'+ico('i-send')+'</span>Send</button>'
+          + '<button type="button" data-action="flow:billpay"><span class="ico">'+ico('i-bill')+'</span>Pay bill</button>'
+          + '<button type="button" data-action="flow:transfer"><span class="ico">'+ico('i-swap')+'</span>Transfer</button>'
+          + '<button type="button" data-action="go:deposit"><span class="ico">'+ico('i-deposit')+'</span>Deposit</button>'
+        + '</div>'
+        + secHead('Banking','See all','go:accounts')
+        + '<div class="bk-card">'
+          + row({icon:'i-wallet', title:ACC.chq.name, sub:'Chequing ••••'+ACC.chq.num, amount:money(chq), action:'acct:chq'})
+          + row({icon:'i-wallet', title:ACC.sav.name, sub:(bufferOnTarget()?'Buffer on target':'Buffer below target')+' · '+bufferWeeks().toFixed(1)+' weeks', amount:money(sav), action:'acct:sav'})
+        + '</div>'
+        + secHead('Credit')
+        + '<div class="bk-card">'
+          + row({icon:'i-card', title:ACC.visa.name, sub:'••••'+ACC.visa.num+' · '+money0(availCredit())+' available', amount:money(balOf('visa')), cls:'neg', action:'go:cards'})
+        + '</div>'
+        + secHead('Investments','See all','go:invest')
+        + '<div class="bk-card">'
+          + row({icon:'i-invest', title:'TFSA', sub:money0(ACC.tfsa.room)+' contribution room left', amount:money(balOf('tfsa')), action:'acct:tfsa'})
+          + row({icon:'i-invest', title:'RRSP', sub:money0(ACC.rrsp.room)+' contribution room left', amount:money(balOf('rrsp')), action:'acct:rrsp'})
+        + '</div>'
+        + secHead('Borrowing')
+        + '<div class="bk-card">'
+          + row({icon:'i-house', title:'Mortgage', sub:ACC.mtg.rate+'% fixed · renews '+ACC.mtg.renews, amount:money0(balOf('mtg')), cls:'neg', action:'go:borrow'})
+        + '</div>'
+        + cdicNote(),
+      aside:'<h5>Anchorline · why this recommendation</h5>'+explainRows()
+        + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bk-line);">Every field here is required before an approval can be requested — see the approval panel anatomy in the Design System.</p>'
+    };
+  };
+
+  SCREENS.accounts = function(){
+    return {
+      title:'Accounts', back:'home',
+      body:
+        '<div class="bk-cols">'
+        + '<div style="display:flex;flex-direction:column;gap:14px;">'
+          + secHead('Everyday')
+          + '<div class="bk-card">'
+            + row({icon:'i-wallet', title:ACC.chq.name, sub:'••••'+ACC.chq.num, amount:money(balOf('chq')), action:'acct:chq'})
+            + row({icon:'i-wallet', title:ACC.sav.name, sub:'••••'+ACC.sav.num+' · '+ACC.sav.rate+'% interest', amount:money(balOf('sav')), action:'acct:sav'})
+          + '</div>'
+          + secHead('Registered')
+          + '<div class="bk-card">'
+            + row({icon:'i-invest', title:'TFSA', sub:'••••'+ACC.tfsa.num, amount:money(balOf('tfsa')), action:'acct:tfsa'})
+            + row({icon:'i-invest', title:'RRSP', sub:'••••'+ACC.rrsp.num, amount:money(balOf('rrsp')), action:'acct:rrsp'})
+            + row({icon:'i-invest', title:ACC.resp.name, sub:'••••'+ACC.resp.num+' · CESG grant eligible', amount:money(balOf('resp')), action:'acct:resp'})
+          + '</div>'
+        + '</div>'
+        + '<div style="display:flex;flex-direction:column;gap:14px;">'
+          + secHead('Credit &amp; borrowing')
+          + '<div class="bk-card">'
+            + row({icon:'i-card', title:ACC.visa.name, sub:'••••'+ACC.visa.num, amount:money(balOf('visa')), cls:'neg', action:'go:cards'})
+            + row({icon:'i-house', title:'Mortgage', sub:'••••'+ACC.mtg.num+' · '+ACC.mtg.rate+'% fixed', amount:money0(balOf('mtg')), cls:'neg', action:'go:borrow'})
+            + row({icon:'i-house', title:ACC.heloc.name, sub:money0(ACC.heloc.limit)+' available · '+ACC.heloc.rate+'%', amount:money(balOf('heloc')), action:'go:borrow'})
+          + '</div>'
+          + aiInline('Your savings is '+bufferWeeks().toFixed(1)+' weeks of essentials'+(bufferOnTarget()?' — on target.':' — just under your '+ (ACC.sav.target/WEEKLY_ESSENTIALS).toFixed(1) +'-week target.')+' Anchorline has a recommendation waiting that would close the gap.')
+          + cdicNote()
+        + '</div>'
+        + '</div>'
+    };
+  };
+
+  SCREENS.account = function(){
+    var a = ACC[APP.sel] || ACC.chq, b = balOf(a.id);
+    var meta = '';
+    if (a.id === 'sav'){
+      var pct = Math.min(100, Math.round(b / a.target * 100));
+      meta = '<div class="bk-card pad"><div style="display:flex;justify-content:space-between;font-size:12.5px;"><b>Cash buffer</b><span style="font-family:var(--font-mono);">'+money0(b)+' / '+money0(a.target)+'</span></div>'
+        + '<div class="bk-meter'+(bufferOnTarget()?'':' warn')+'"><i style="width:'+pct+'%;"></i></div>'
+        + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:7px;">'+bufferWeeks().toFixed(1)+' weeks of essentials at about '+money0(WEEKLY_ESSENTIALS)+' a week.</div></div>';
+    }
+    if (a.kind === 'reg'){
+      meta = '<div class="bk-card pad"><div style="display:flex;justify-content:space-between;font-size:12.5px;"><b>Contribution room left</b><span style="font-family:var(--font-mono);">'+money0(a.room)+'</span></div>'
+        + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:7px;">'
+        + (a.id==='rrsp' ? 'Contributions for the 2026 tax year can be made until March 2, 2027.'
+          : a.id==='resp' ? 'Contributions attract the Canada Education Savings Grant (20%, up to $500 a year).'
+          : 'Unused room carries forward. Withdrawals are added back the following calendar year.')
+        + '</div></div>';
+    }
+    return {
+      title:a.name, back:'accounts',
+      body:
+        '<div class="bk-balance"><div class="l">'+(b<0?'Balance owing':'Current balance')+'</div><div class="v">'+money(Math.abs(b))+'</div>'
+        + '<div class="meta"><div>Account<b>••••'+a.num+'</b></div>'
+        + (a.rate?'<div>Interest<b>'+a.rate+'%</b></div>':'')
+        + (a.kind==='bank'?'<div>Available<b>'+money0(Math.max(0,b))+'</b></div>':'')
+        + '</div></div>'
+        + meta
+        + (a.kind==='reg'
+            ? '<button type="button" class="btn brand block" data-action="flow:contribute">Contribute to '+(a.id==='resp'?'RESP':a.id.toUpperCase())+'</button>'
+            : '<div class="bk-quick"><button type="button" data-action="flow:etransfer"><span class="ico">'+ico('i-send')+'</span>Send</button>'
+              + '<button type="button" data-action="flow:billpay"><span class="ico">'+ico('i-bill')+'</span>Pay bill</button>'
+              + '<button type="button" data-action="flow:transfer"><span class="ico">'+ico('i-swap')+'</span>Transfer</button>'
+              + '<button type="button" data-action="go:statements"><span class="ico">'+ico('i-doc')+'</span>Statements</button></div>')
+        + (a.id==='sav' && !bufferOnTarget() ? aiInline('Approving this week\'s recommendation would move '+money0(SPLITS[APP.aiSplit].buffer)+' here and bring the buffer back on target.','<button type="button" class="btn small primary" data-action="ai:approve">Approve</button><button type="button" class="btn small" data-action="go:ai">See why</button>') : '')
+        + (a.kind==='reg' ? aiInline('Anchorline holds investing back until your buffer and high-interest debt are both on track. You\'re one approval away from clearing that gate.') : '')
+        + secHead('Recent activity','See all','go:activity')
+        + '<div class="bk-card">'+activityRows(5)+'</div>'
+    };
+  };
+
+  function activityRows(limit){
+    var items = APP.txns.slice().reverse().map(function(t){
+      return { label:t.label, amount:-t.amount, when:'Today', cat:t.src==='ai'?'Anchorline':'Transfer' };
+    }).concat(BASE_ACTIVITY);
+    return items.slice(0, limit||99).map(function(t){
+      return row({
+        title:esc(t.label), sub:t.when+' · '+t.cat, chev:false,
+        amount:(t.amount>0?'+':'')+money(t.amount).replace('−',''),
+        cls:t.amount>0?'pos':''
+      });
+    }).join('');
+  }
+
+  SCREENS.activity = function(){
+    return { title:'Activity', back:'home',
+      body: secHead('Everyday Chequing ••••'+ACC.chq.num) + '<div class="bk-card">'+activityRows(20)+'</div>' };
+  };
+
+  SCREENS.move = function(){
+    return {
+      title:'Move money', back:'home',
+      body:
+        '<div class="bk-card">'
+        + row({icon:'i-send', title:'Interac e-Transfer', sub:'Send money with an email or phone number', action:'flow:etransfer'})
+        + row({icon:'i-bill', title:'Pay a bill', sub:PAYEES.length+' payees · next due '+PAYEES[0].due, action:'flow:billpay'})
+        + row({icon:'i-swap', title:'Between my accounts', sub:'Instant, no fee', action:'flow:transfer'})
+        + row({icon:'i-deposit', title:'Deposit a cheque', sub:'Take a photo of the front and back', action:'go:deposit'})
+        + '</div>'
+        + aiInline('Anchorline has already prepared this week\'s transfer — '+money0(SPLITS[APP.aiSplit].visa)+' to the Visa and '+money0(SPLITS[APP.aiSplit].buffer)+' to savings — but it won\'t move anything until you approve it.',
+            APP.aiDecision===null
+              ? '<button type="button" class="btn small primary" data-action="ai:approve">Approve</button><button type="button" class="btn small" data-action="go:ai">See why</button>'
+              : '<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>')
+        + secHead('Recent activity','See all','go:activity')
+        + '<div class="bk-card">'+activityRows(5)+'</div>'
+    };
+  };
+
+  SCREENS.ai = function(){
+    var s = SPLITS[APP.aiSplit];
+    return {
+      title:'Anchorline', back:'home',
+      body:
+        aiRecommendation()
+        + '<div class="bk-card">'
+        + row({icon:'i-plan', title:'Your allocation plan', sub:'Buffer → debt → goals → investing', action:'go:aiplan'})
+        + row({icon:'i-progress', title:'Weekly progress', sub:'Where each goal stands this week', action:'go:aiprogress'})
+        + '</div>'
+        + '<div class="bk-card pad"><h4 class="minihead" style="margin-bottom:9px;">How Anchorline decides</h4>'
+        + '<ul class="dash" style="font-size:12.5px;">'
+        + '<li><b>Protect the buffer</b> — a minimum cushion is defended before anything else is proposed.</li>'
+        + '<li><b>Then the most expensive debt</b> — your Visa at 22.9% outranks any savings goal.</li>'
+        + '<li><b>Then your goals, in your order</b> — you set the priority, not the model.</li>'
+        + '<li><b>Investing last</b> — it stays locked until the first two are stable.</li>'
+        + '</ul></div>'
+        + secHead('Decision history')
+        + '<div class="bk-card">'
+        + (APP.aiDecision==='approved'
+            ? row({title:'Payday reallocation approved', sub:approvedTime()+' · '+money0(s.visa)+' Visa, '+money0(s.buffer)+' savings', chev:false, amount:'<span class="pill good">Approved</span>'})
+            : APP.aiDecision==='dismissed'
+            ? row({title:'Payday reallocation held', sub:'You chose to hold steady this week', chev:false, amount:'<span class="pill watch">No action</span>'})
+            : row({title:'Payday reallocation', sub:'Waiting on your approval', chev:false, amount:'<span class="pill accent">Pending</span>'}))
+        + row({title:'Buffer target reviewed', sub:'Aug 12 · no action needed', chev:false, amount:'<span class="pill good">Held</span>'})
+        + '</div>',
+      aside:'<h5>Anchorline · why this recommendation</h5>'+explainRows()
+        + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bk-line);">Anchorline prepares and explains. It cannot move money, open a product, or place a trade without an explicit approval from you.</p>'
+    };
+  };
+
+  SCREENS.aiplan = function(){
+    var approved = APP.aiDecision === 'approved';
+    var sav = balOf('sav'), visa = Math.abs(balOf('visa'));
+    var savPct = Math.min(100, Math.round(sav/ACC.sav.target*100));
+    var visaPct = Math.round((4000 - visa)/4000*100);
+    function wf(label,val,pct,locked,note){
+      return '<div class="wf-row'+(locked?' locked':'')+'"><div class="top"><b>'+label+'</b><span>'+val+'</span></div>'
+        + '<div class="wf-bar"><i style="width:'+pct+'%;"></i></div>'
+        + (note?'<div class="wf-note">'+note+'</div>':'')+'</div>';
+    }
+    return {
+      title:'Allocation plan', back:'ai',
+      body:'<div class="bk-card pad"><div class="stack-title">Where your money goes, in order</div>'
+        + '<div class="stack-sub">Anchorline works down this list. Nothing lower gets funded until everything above it is healthy.</div>'
+        + '<div class="waterfall">'
+        + wf('1 · Cash buffer', money0(sav)+' / '+money0(ACC.sav.target), savPct, false, bufferOnTarget()?'On target — '+bufferWeeks().toFixed(1)+' weeks of essentials.':'Below target by '+money0(ACC.sav.target-sav)+'.')
+        + wf('2 · Visa · 22.9% APR', money0(visa)+' owing', visaPct, false, approved?'Extra payment applied — payoff moves up about two weeks.':'Minimum payments only until you approve extra.')
+        + wf('3 · Trip fund', '$860 / $1,200', 72, false, 'Ahead of pace by $80 — unaffected by this decision.')
+        + wf('4 · Investing', bufferOnTarget()&&approved ? 'Ready to unlock' : 'Locked', bufferOnTarget()&&approved?18:0, !(bufferOnTarget()&&approved), bufferOnTarget()&&approved?'Buffer and debt are both on track — Anchorline can start proposing TFSA contributions.':'Unlocks once buffer and high-interest debt are both on track.')
+        + '</div></div>'
+        + (bufferOnTarget()&&approved ? aiInline('Your buffer and debt are both on track, so the investing layer is now open. Anchorline can propose a TFSA contribution against your '+money0(ACC.tfsa.room)+' of room whenever you want.','<button type="button" class="btn small primary" data-action="flow:contribute">Contribute to TFSA</button>') : '')
+    };
+  };
+
+  SCREENS.aiprogress = function(){
+    var approved = APP.aiDecision==='approved';
+    var next = approved ? 'Nothing needs your approval this week — holding steady is right.'
+      : APP.aiDecision==='dismissed' ? 'Your buffer stays at '+bufferWeeks().toFixed(1)+' weeks. Revisit the payday recommendation whenever you\'re ready.'
+      : 'Approve the payday reallocation to get your buffer back on target.';
+    return {
+      title:'Weekly progress', back:'ai',
+      body: secHead('Devon · week of Aug 17')
+        + '<div class="bk-card">'
+        + row({title:'Cash buffer', sub:bufferOnTarget()?bufferWeeks().toFixed(1)+' weeks — on target':bufferWeeks().toFixed(1)+' weeks — below target', chev:false, amount:'<span class="pill '+(bufferOnTarget()?'good':'watch')+'">'+(bufferOnTarget()?'Healthy':'At risk')+'</span>'})
+        + row({title:'Visa payoff', sub:approved?'Extra payment applied this week':'Minimum payments only', chev:false, amount:'<span class="pill good">On track</span>'})
+        + row({title:'Trip fund', sub:'Ahead of pace by $80 this month', chev:false, amount:'<span class="pill accent">Ahead</span>'})
+        + row({title:'Spending', sub:'Down $64 vs. your 3-month average', chev:false, amount:'<span class="pill good">Improved</span>'})
+        + '</div>'
+        + '<div class="ai-inline">'+aiMark('Next best action')+'<p>'+next+'</p>'
+        + (approved?'':'<div class="cta-row"><button type="button" class="btn small primary" data-action="ai:approve">Approve</button></div>')
+        + (approved?'':talkLink())+'</div>'
+    };
+  };
+
+  SCREENS.invest = function(){
+    var total = balOf('tfsa')+balOf('rrsp')+balOf('resp');
+    return {
+      title:'Investments', back:'home',
+      body:
+        '<div class="bk-balance"><div class="l">Total invested</div><div class="v">'+money(total)+'</div>'
+        + '<div class="meta"><div>Today<b>+$182.40</b></div><div>Return (1 yr)<b>+7.4%</b></div></div></div>'
+        + secHead('Registered accounts')
+        + '<div class="bk-card">'
+        + row({icon:'i-invest', title:'TFSA', sub:money0(ACC.tfsa.room)+' room left · self-directed', amount:money(balOf('tfsa')), action:'acct:tfsa'})
+        + row({icon:'i-invest', title:'RRSP', sub:money0(ACC.rrsp.room)+' room left · deadline Mar 2, 2027', amount:money(balOf('rrsp')), action:'acct:rrsp'})
+        + row({icon:'i-invest', title:ACC.resp.name, sub:'CESG grant eligible · '+money0(ACC.resp.room)+' room left', amount:money(balOf('resp')), action:'acct:resp'})
+        + '</div>'
+        + '<button type="button" class="btn brand block" data-action="flow:contribute">Contribute</button>'
+        + secHead('Explore')
+        + '<div class="bk-card">'
+        + row({icon:'i-invest', title:'GICs', sub:'Guaranteed rates from 4.10%', action:'go:stub-gic'})
+        + row({icon:'i-grid', title:'Portfolios &amp; funds', sub:'Managed and self-directed options', action:'go:stub-funds'})
+        + '</div>'
+        + aiInline(bufferOnTarget()&&APP.aiDecision==='approved'
+            ? 'Your buffer and high-interest debt are both on track, so investing is unlocked. With '+money0(ACC.tfsa.room)+' of TFSA room left, this is where Anchorline would put the next surplus.'
+            : 'Anchorline is holding investment suggestions back on purpose. Paying 22.9% on the Visa beats any expected return, so debt and buffer come first.'),
+      aside:'<h5>Why investing is gated</h5>'
+        + '<p>Anchorline will not propose an investment while a 22.9% balance is outstanding — the guaranteed cost of that debt exceeds any reasonable expected return.</p>'
+        + '<div class="row" style="margin-top:12px;"><span>Visa APR</span><span>22.9%</span></div>'
+        + '<div class="row"><span>Buffer status</span><span>'+(bufferOnTarget()?'On target':'Below target')+'</span></div>'
+        + '<div class="row"><span>Investing layer</span><span>'+(bufferOnTarget()&&APP.aiDecision==='approved'?'Unlocked':'Locked')+'</span></div>'
+    };
+  };
+
+  SCREENS.cards = function(){
+    var b = balOf('visa'), owing = Math.abs(b);
+    return {
+      title:'Credit cards', back:'home',
+      body:
+        '<div class="bk-plastic"><div class="top"><span class="nm">Borealis Cash Back Visa</span>'+ico('i-card')+'</div>'
+        + '<div class="num">•••• •••• •••• '+ACC.visa.num+'</div>'
+        + '<div class="bot"><span>DEVON REYES</span><span>'+ACC.visa.apr+'% APR</span></div></div>'
+        + '<div class="bk-cols">'
+        + '<div class="bk-card pad"><div style="font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;">Balance owing</div>'
+        + '<div style="font-family:var(--font-mono);font-size:22px;margin-top:4px;">'+money(owing)+'</div>'
+        + '<div class="bk-meter"><i style="width:'+Math.round(owing/ACC.visa.limit*100)+'%;"></i></div>'
+        + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:7px;">'+money0(availCredit())+' available of '+money0(ACC.visa.limit)+'</div></div>'
+        + '<div class="bk-card pad"><div style="font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;">Minimum due '+ACC.visa.due+'</div>'
+        + '<div style="font-family:var(--font-mono);font-size:22px;margin-top:4px;">'+money(ACC.visa.min)+'</div>'
+        + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:11px;">Paying only the minimum keeps this balance for years at '+ACC.visa.apr+'%.</div></div>'
+        + '</div>'
+        + '<button type="button" class="btn brand block" data-action="flow:cardpay">Make a payment</button>'
+        + (owing>0 ? aiInline('Paying '+money0(SPLITS[APP.aiSplit].visa)+' toward this card now saves about $47 in interest over the payoff — the single highest-return move available to you this week.',
+            APP.aiDecision===null
+              ? '<button type="button" class="btn small primary" data-action="ai:approve">Approve '+money0(SPLITS[APP.aiSplit].visa)+'</button><button type="button" class="btn small" data-action="go:ai">See why</button>'
+              : '<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>') : '')
+        + '<div class="bk-card">'
+        + row({icon:'i-gift', title:'Cash back earned', sub:'This year', amount:'$214.88', action:'go:rewards'})
+        + row({icon:'i-score', title:'Credit score', sub:'TransUnion · updated monthly', amount:'742', action:'go:score'})
+        + row({icon:'i-shield', title:'Lock card', sub:'Freeze purchases instantly', action:'go:stub-lock'})
+        + '</div>',
+      aside:'<h5>Anchorline · why this card first</h5>'+explainRows()
+    };
+  };
+
+  SCREENS.borrow = function(){
+    return {
+      title:'Mortgage &amp; loans', back:'home',
+      body:
+        secHead('Mortgage')
+        + '<div class="bk-card pad">'
+        + '<div style="display:flex;justify-content:space-between;align-items:baseline;"><b style="font-size:13.5px;">Principal remaining</b><span style="font-family:var(--font-mono);font-size:18px;">'+money0(Math.abs(balOf('mtg')))+'</span></div>'
+        + '<div class="bk-meter"><i style="width:31%;"></i></div>'
+        + '<div style="display:flex;gap:20px;margin-top:12px;font-size:11.5px;color:var(--ink-faint);">'
+        + '<div>Rate<b style="display:block;font-family:var(--font-mono);color:var(--ink);font-size:13px;">'+ACC.mtg.rate+'% fixed</b></div>'
+        + '<div>Payment<b style="display:block;font-family:var(--font-mono);color:var(--ink);font-size:13px;">'+money0(ACC.mtg.payment)+'/mo</b></div>'
+        + '<div>Renews<b style="display:block;font-family:var(--font-mono);color:var(--ink);font-size:13px;">'+ACC.mtg.renews+'</b></div></div></div>'
+        + '<div class="bk-card">'
+        + row({icon:'i-house', title:'Make a lump-sum payment', sub:'Up to 15% of original principal each year', action:'go:stub-lump'})
+        + row({icon:'i-doc', title:'Renewal options', sub:'Rates available from Jan 2027', action:'go:stub-renew'})
+        + '</div>'
+        + secHead('Lines of credit')
+        + '<div class="bk-card">'
+        + row({icon:'i-wallet', title:ACC.heloc.name, sub:money0(ACC.heloc.limit)+' available · '+ACC.heloc.rate+'% variable', amount:money(balOf('heloc')), action:'go:stub-heloc'})
+        + row({icon:'i-score', title:'Credit score', sub:'TransUnion · updated monthly', amount:'742', action:'go:score'})
+        + '</div>'
+        + aiInline('Anchorline leaves your mortgage alone. At '+ACC.mtg.rate+'% it is far cheaper than your Visa at '+ACC.visa.apr+'%, so extra dollars go to the card first — a lump sum here would cost you more in interest overall.')
+    };
+  };
+
+  SCREENS.score = function(){
+    return {
+      title:'Credit score', back:'borrow',
+      body:'<div class="bk-card pad"><div class="bk-score"><div><div class="num">742</div><div class="of">of 900 · TransUnion</div></div>'
+        + '<div style="flex:1;"><div class="bk-meter"><i style="width:82%;"></i></div>'
+        + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:7px;">Very good · up 8 points since July</div></div></div></div>'
+        + '<div class="bk-card">'
+        + row({title:'Payment history', sub:'No missed payments in 24 months', chev:false, amount:'<span class="pill good">Excellent</span>'})
+        + row({title:'Credit utilisation', sub:money0(Math.abs(balOf('visa')))+' of '+money0(ACC.visa.limit)+' used', chev:false, amount:'<span class="pill '+(Math.abs(balOf('visa'))/ACC.visa.limit>0.3?'watch':'good')+'">'+Math.round(Math.abs(balOf('visa'))/ACC.visa.limit*100)+'%</span>'})
+        + row({title:'Credit age', sub:'Average 7 years 4 months', chev:false, amount:'<span class="pill good">Strong</span>'})
+        + '</div>'
+        + aiInline('Utilisation is the lever you can move fastest. Paying '+money0(SPLITS[APP.aiSplit].visa)+' to the Visa would take you from '+Math.round(Math.abs(balOf('visa'))/ACC.visa.limit*100)+'% to '+Math.round((Math.abs(balOf('visa'))-SPLITS[APP.aiSplit].visa)/ACC.visa.limit*100)+'% utilisation, which typically helps this score.')
+        + '<div class="bk-fine">Checking your score here is a soft inquiry and does not affect it. Provided by TransUnion Canada.</div>'
+    };
+  };
+
+  SCREENS.more = function(){
+    return {
+      title:'More', back:'home',
+      body:
+        '<div class="bk-card">'
+        + row({icon:'i-gift',     title:'Rewards &amp; cash back',   sub:'$214.88 earned this year', action:'go:rewards'})
+        + row({icon:'i-doc',      title:'Statements &amp; documents',sub:'Tax slips, void cheque, eStatements', action:'go:statements'})
+        + row({icon:'i-bell',     title:'Alerts &amp; notifications',sub:'Balance, payment and security alerts', action:'go:alerts'})
+        + row({icon:'i-shield',   title:'Security centre',           sub:'2-step verification is on', action:'go:security'})
+        + '</div>'
+        + '<div class="bk-card">'
+        + row({icon:'i-pin',      title:'Find a branch or ATM',      sub:'2,400+ locations across Canada', action:'go:locations'})
+        + row({icon:'i-umbrella', title:'Insurance',                 sub:'Home, auto, travel and creditor', action:'go:insurance'})
+        + row({icon:'i-phone',    title:'Contact us',                sub:'Message, call or book an appointment', action:'go:contact'})
+        + row({icon:'i-gear',     title:'Settings',                  sub:'Profile, limits and preferences', action:'go:settings'})
+        + '</div>'
+        + aiInline('Anchorline\'s guidance level lives in Settings. Whatever you choose there, the approval rule never changes — nothing moves without you.')
+        + cdicNote()
+    };
+  };
+
+  /* entry-point-only screens */
+  var STUBS = {
+    deposit:    ['i-deposit','Deposit a cheque','Photograph the front and back of your cheque. Funds are typically available the next business day, subject to a hold.'],
+    rewards:    ['i-gift','Rewards &amp; cash back','Track cash back earned across your Borealis cards, and redeem to a statement credit or a deposit account.'],
+    statements: ['i-doc','Statements &amp; documents','eStatements, T5 and RRSP tax slips, and a downloadable void cheque for setting up direct deposit.'],
+    alerts:     ['i-bell','Alerts &amp; notifications','Choose the balance, payment, and security alerts you want, and how you want to receive them.'],
+    security:   ['i-shield','Security centre','2-step verification, trusted devices, card locks, and the Borealis fraud protection guarantee.'],
+    locations:  ['i-pin','Find a branch or ATM','Search branches and surcharge-free ATMs across Canada, with hours and accessibility details.'],
+    insurance:  ['i-umbrella','Insurance','Home, auto, travel, and creditor insurance quotes and existing policy management.'],
+    contact:    ['i-phone','Contact us','Secure message, call an advisor, or book a branch appointment at a time that suits you.'],
+    settings:   ['i-gear','Settings','Profile details, transfer limits, statement preferences, and your Anchorline guidance level.'],
+    'stub-gic': ['i-invest','GICs','Guaranteed Investment Certificates with terms from 30 days to 5 years, redeemable and non-redeemable.'],
+    'stub-funds':['i-grid','Portfolios &amp; funds','Managed portfolios and self-directed trading across registered and non-registered accounts.'],
+    'stub-lock':['i-shield','Lock card','Instantly freeze new purchases on this card. Pre-authorised payments can be allowed to continue.'],
+    'stub-lump':['i-house','Lump-sum payment','Pay up to 15% of your original principal each calendar year without a prepayment charge.'],
+    'stub-renew':['i-doc','Renewal options','Compare fixed and variable rates for your renewal, available six months before maturity.'],
+    'stub-heloc':['i-wallet','Home Equity Line','Borrow against your home equity at a variable rate, with interest-only minimum payments.']
+  };
+  Object.keys(STUBS).forEach(function(k){
+    SCREENS[k] = function(){
+      var s = STUBS[k];
+      return { title:s[1].replace(/&amp;/g,'&'), back:'more', body:stub(s[0], s[1], s[2]) };
+    };
+  });
+
+  /* ============================================================
+     MULTI-STEP FLOWS
+     ============================================================ */
+  var FLOW_DEFS = {
+    etransfer:  { title:'Interac e-Transfer', steps:4, icon:'i-send' },
+    billpay:    { title:'Pay a bill',         steps:4, icon:'i-bill' },
+    transfer:   { title:'Transfer',           steps:3, icon:'i-swap' },
+    contribute: { title:'Contribute',         steps:4, icon:'i-invest' },
+    cardpay:    { title:'Pay your Visa',      steps:3, icon:'i-card' }
+  };
+
+  function startFlow(type){
+    var d = { amount:null, from:'chq', to:null, msg:'' };
+    if (type === 'cardpay'){ d.to = 'visa'; d.amount = SPLITS[APP.aiSplit].visa; }
+    if (type === 'transfer'){ d.to = 'sav'; }
+    if (type === 'contribute'){ d.to = (APP.sel && ACC[APP.sel] && ACC[APP.sel].kind==='reg') ? APP.sel : null; }
+    APP.flow = { type:type, step:0, data:d };
+  }
+
+  function acctOptions(sel, exclude){
+    return ['chq','sav','tfsa','rrsp','resp'].filter(function(id){ return id !== exclude; }).map(function(id){
+      return '<option value="'+id+'"'+(id===sel?' selected':'')+'>'+ACC[id].name+' ••••'+ACC[id].num+' — '+money(balOf(id))+'</option>';
+    }).join('');
+  }
+
+  function amountBlock(presets){
+    var d = APP.flow.data;
+    return '<div class="bk-field"><label>Amount</label>'
+      + '<input class="bk-input" data-famt inputmode="decimal" placeholder="0.00" value="'+(d.amount!=null?d.amount:'')+'">'
+      + '<div class="bk-amounts">'+presets.map(function(p){
+          return '<button type="button" data-action="famt:'+p.v+'"'+(Number(d.amount)===p.v?' class="on"':'')+'>'+p.l+'</button>';
+        }).join('')+'</div></div>';
+  }
+
+  function flowBody(){
+    var f = APP.flow, d = f.data, def = FLOW_DEFS[f.type];
+
+    if (f.type === 'etransfer'){
+      if (f.step === 0) return {
+        sub:'Choose who you\'re sending to',
+        body:'<div class="bk-card">'+RECIPIENTS.map(function(r){
+          return row({ icon:'i-send', title:r.name, sub:r.handle+(r.auto?' · Autodeposit':' · Security question'), action:'fset:to:'+r.id });
+        }).join('')+'</div>'
+        + '<div class="bk-card">'+row({icon:'i-grid', title:'Add a new recipient', sub:'Email or Canadian mobile number', action:'noop'})+'</div>'
+        + '<div class="bk-fine">Interac e-Transfer® is a registered trademark of Interac Corp. Daily and weekly sending limits apply.</div>'
+      };
+      var r = RECIPIENTS.filter(function(x){ return x.id===d.to; })[0] || RECIPIENTS[0];
+      if (f.step === 1) return {
+        sub:'Sending to '+r.name,
+        body:amountBlock([{l:'$20',v:20},{l:'$50',v:50},{l:'$100',v:100},{l:'$250',v:250}])
+          + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from)+'</select></div>'
+          + (r.auto ? '<div class="bk-fine cdic">'+ico('i-shield')+'<span>'+r.name+' has Autodeposit turned on, so no security question is needed and the money arrives directly.</span></div>'
+                    : '<div class="bk-field"><label>Security question</label><input class="bk-input" style="font-family:var(--font-body);font-size:13px;" value="What street did we grow up on?"></div>')
+      };
+      if (f.step === 2) return {
+        sub:'Check the details before you send',
+        body:'<div class="bk-review">'
+          + '<div class="r big"><span>Amount</span><span>'+money(d.amount||0)+'</span></div>'
+          + '<div class="r"><span>To</span><span>'+r.name+'</span></div>'
+          + '<div class="r"><span>Contact</span><span>'+r.handle+'</span></div>'
+          + '<div class="r"><span>From</span><span>'+ACC[d.from].name+' ••••'+ACC[d.from].num+'</span></div>'
+          + '<div class="r"><span>Delivery</span><span>'+(r.auto?'Autodeposit — usually instant':'Security question')+'</span></div>'
+          + '<div class="r"><span>Fee</span><span>$0.00</span></div>'
+          + '</div>'
+          + '<div class="bk-fine">Once '+r.name+' accepts this transfer it cannot be reversed. Only send money to people you know and trust.</div>'
+      };
+      return { sub:'', body:doneBlock('Money sent', money(d.amount||0)+' is on its way to '+r.name+'.', 'Reference CA'+(6100000+Math.round((d.amount||0)*7))) };
+    }
+
+    if (f.type === 'billpay'){
+      if (f.step === 0) return {
+        sub:'Choose a payee',
+        body:'<div class="bk-card">'+PAYEES.map(function(p){
+          return row({ icon:'i-bill', title:p.name, sub:p.num+' · '+money(p.amt)+' due '+p.due, action:'fset:to:'+p.id });
+        }).join('')+'</div>'
+        + '<div class="bk-card">'+row({icon:'i-grid', title:'Add a payee', sub:'Search over 8,000 Canadian billers', action:'noop'})+'</div>'
+      };
+      var p = PAYEES.filter(function(x){ return x.id===d.to; })[0] || PAYEES[0];
+      if (f.step === 1) return {
+        sub:'Paying '+p.name,
+        body:amountBlock([{l:'Full '+money0(p.amt),v:p.amt},{l:'$50',v:50},{l:'$100',v:100}])
+          + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from)+'</select></div>'
+          + '<div class="bk-field"><label>Date</label><select class="bk-select"><option>Today — Aug 20, 2026</option><option>On the due date — '+p.due+'</option></select></div>'
+      };
+      if (f.step === 2) return {
+        sub:'Check the details before you pay',
+        body:'<div class="bk-review">'
+          + '<div class="r big"><span>Amount</span><span>'+money(d.amount||0)+'</span></div>'
+          + '<div class="r"><span>Payee</span><span>'+p.name+'</span></div>'
+          + '<div class="r"><span>Account</span><span>'+p.num+'</span></div>'
+          + '<div class="r"><span>From</span><span>'+ACC[d.from].name+' ••••'+ACC[d.from].num+'</span></div>'
+          + '<div class="r"><span>Date</span><span>Today</span></div></div>'
+          + '<div class="bk-fine">Payments made before 10:00 p.m. ET are processed the same business day. Allow up to 3 days for the biller to post it.</div>'
+      };
+      return { sub:'', body:doneBlock('Bill paid', money(d.amount||0)+' has been sent to '+p.name+'.', 'Confirmation BP'+(482000+Math.round((d.amount||0)))) };
+    }
+
+    if (f.type === 'transfer'){
+      if (f.step === 0) return {
+        sub:'Move money between your accounts',
+        body:amountBlock([{l:'$100',v:100},{l:'$250',v:250},{l:'$500',v:500}])
+          + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from, d.to)+'</select></div>'
+          + '<div class="bk-field"><label>To</label><select class="bk-select" data-fsel="to">'+acctOptions(d.to, d.from)+'</select></div>'
+      };
+      if (f.step === 1) return {
+        sub:'Check the details',
+        body:'<div class="bk-review">'
+          + '<div class="r big"><span>Amount</span><span>'+money(d.amount||0)+'</span></div>'
+          + '<div class="r"><span>From</span><span>'+ACC[d.from].name+'</span></div>'
+          + '<div class="r"><span>To</span><span>'+ACC[d.to].name+'</span></div>'
+          + '<div class="r"><span>When</span><span>Immediately</span></div></div>'
+      };
+      return { sub:'', body:doneBlock('Transfer complete', money(d.amount||0)+' moved to '+ACC[d.to].name+'.', 'Both balances are already updated.') };
+    }
+
+    if (f.type === 'contribute'){
+      if (f.step === 0) return {
+        sub:'Which account are you contributing to?',
+        body:'<div class="bk-card">'+['tfsa','rrsp','resp'].map(function(id){
+          return row({ icon:'i-invest', title:ACC[id].name, sub:money0(ACC[id].room)+' contribution room left', amount:money(balOf(id)), action:'fset:to:'+id });
+        }).join('')+'</div>'
+        + '<div class="bk-fine">Over-contributing to a registered account can result in a penalty tax of 1% per month from the Canada Revenue Agency.</div>'
+      };
+      var ra = ACC[d.to] || ACC.tfsa;
+      if (f.step === 1) return {
+        sub:'Contributing to '+ra.name,
+        body:amountBlock([{l:'$100',v:100},{l:'$500',v:500},{l:'Max '+money0(ra.room),v:ra.room}])
+          + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from, d.to)+'</select></div>'
+          + '<div class="bk-fine cdic">'+ico('i-shield')+'<span>Room left after this contribution: '+money0(Math.max(0, ra.room - (Number(d.amount)||0)))+'.</span></div>'
+      };
+      if (f.step === 2) return {
+        sub:'Check the details',
+        body:'<div class="bk-review">'
+          + '<div class="r big"><span>Amount</span><span>'+money(d.amount||0)+'</span></div>'
+          + '<div class="r"><span>To</span><span>'+ra.name+'</span></div>'
+          + '<div class="r"><span>From</span><span>'+ACC[d.from].name+'</span></div>'
+          + '<div class="r"><span>Room remaining after</span><span>'+money0(Math.max(0, ra.room-(Number(d.amount)||0)))+'</span></div>'
+          + (d.to==='resp' ? '<div class="r"><span>Estimated CESG grant</span><span>'+money0(Math.min(500,(Number(d.amount)||0)*0.2))+'</span></div>' : '')
+          + '</div>'
+      };
+      return { sub:'', body:doneBlock('Contribution complete', money(d.amount||0)+' added to your '+ra.name+'.', d.to==='resp'?'The CESG grant is usually applied within 6 weeks.':'Your contribution room has been updated.') };
+    }
+
+    if (f.type === 'cardpay'){
+      var owing = Math.abs(balOf('visa'));
+      if (f.step === 0) return {
+        sub:'Paying the Borealis Cash Back Visa',
+        body:amountBlock([{l:'Minimum '+money0(ACC.visa.min),v:ACC.visa.min},{l:'Anchorline '+money0(SPLITS[APP.aiSplit].visa),v:SPLITS[APP.aiSplit].visa},{l:'Full '+money0(owing),v:owing}])
+          + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from)+'</select></div>'
+          + aiInline('Anchorline recommends '+money0(SPLITS[APP.aiSplit].visa)+' here. Paying only the '+money0(ACC.visa.min)+' minimum keeps this balance alive for years at '+ACC.visa.apr+'%.','')
+      };
+      if (f.step === 1) return {
+        sub:'Check the details',
+        body:'<div class="bk-review">'
+          + '<div class="r big"><span>Payment</span><span>'+money(d.amount||0)+'</span></div>'
+          + '<div class="r"><span>To</span><span>Cash Back Visa ••••'+ACC.visa.num+'</span></div>'
+          + '<div class="r"><span>From</span><span>'+ACC[d.from].name+'</span></div>'
+          + '<div class="r"><span>Balance after</span><span>'+money(Math.max(0, owing-(Number(d.amount)||0)))+'</span></div></div>'
+      };
+      return { sub:'', body:doneBlock('Payment made', money(d.amount||0)+' paid to your Visa.', 'It can take one business day to appear on the card.') };
+    }
+  }
+
+  function doneBlock(title, text, note){
+    return '<div class="bk-done"><div class="tick">'+ico('i-approve')+'</div><h5>'+title+'</h5><p>'+text+'</p>'
+      + '<p style="margin-top:8px;font-size:11.5px;color:var(--ink-faint);">'+note+'</p></div>';
+  }
+
+  function commitFlow(){
+    var f = APP.flow, d = f.data, amt = Number(d.amount)||0;
+    if (!amt) return;
+    if (f.type === 'etransfer'){
+      var r = RECIPIENTS.filter(function(x){ return x.id===d.to; })[0] || RECIPIENTS[0];
+      APP.txns.push({ from:d.from, to:null, amount:amt, label:'e-Transfer to '+r.name });
+    } else if (f.type === 'billpay'){
+      var p = PAYEES.filter(function(x){ return x.id===d.to; })[0] || PAYEES[0];
+      APP.txns.push({ from:d.from, to:null, amount:amt, label:p.name });
+    } else {
+      APP.txns.push({ from:d.from, to:d.to, amount:amt,
+        label:f.type==='cardpay' ? 'Payment — Cash Back Visa'
+             : f.type==='contribute' ? 'Contribution — '+ACC[d.to].name
+             : 'Transfer to '+ACC[d.to].name });
+    }
+  }
+
+  function canContinue(){
+    var f = APP.flow, d = f.data;
+    if (f.type==='etransfer'  && f.step===0) return !!d.to;
+    if (f.type==='billpay'    && f.step===0) return !!d.to;
+    if (f.type==='contribute' && f.step===0) return !!d.to;
+    var amountStep = (f.type==='transfer'||f.type==='cardpay') ? 0 : 1;
+    if (f.step === amountStep) return Number(d.amount) > 0;
+    return true;
+  }
+
+  function renderFlowScreen(){
+    var f = APP.flow, def = FLOW_DEFS[f.type], fb = flowBody();
+    var last = f.step === def.steps - 1;
+    var amountStep = (f.type==='transfer'||f.type==='cardpay') ? 0 : 1;
+    var reviewStep = def.steps - 2;
+    var cta;
+    if (last){
+      cta = '<div class="bk-cta"><button type="button" class="btn brand block" data-action="fclose">Done</button></div>';
+    } else {
+      var label = f.step === reviewStep
+        ? (f.type==='etransfer'?'Send money':f.type==='billpay'?'Pay bill':f.type==='cardpay'?'Make payment':f.type==='contribute'?'Contribute':'Transfer')
+        : 'Continue';
+      cta = '<div class="bk-cta">'
+        + '<button type="button" class="btn'+(canContinue()?' brand':'')+'" data-action="fnext"'+(canContinue()?'':' disabled style="opacity:.45;cursor:not-allowed;"')+'>'+label+'</button>'
+        + '</div>';
+    }
+    return { title:def.title, sub:fb.sub, flow:true, step:f.step, steps:def.steps, body:fb.body + cta };
+  }
+
+  /* ============================================================
+     SHELLS
+     ============================================================ */
+  function current(){
+    if (APP.flow) return renderFlowScreen();
+    var fn = SCREENS[APP.screen] || SCREENS.home;
+    return fn();
+  }
+
+  function fab(){
+    if (APP.screen === 'ai' || APP.flow) return '';
+    return '<button type="button" class="ai-fab" data-action="go:ai">'+ico('i-anchor')+'Anchorline'
+      + (aiPending() ? '<span class="badge">'+aiPending()+'</span>' : '')+'</button>';
+  }
+  function toastEl(){ return APP.toast ? '<div class="bk-toast">'+APP.toast+'</div>' : ''; }
+
+  var IOS_TABS = [
+    { id:'home',  label:'Home',   icon:'i-home' },
+    { id:'move',  label:'Move',   icon:'i-swap' },
+    { id:'ai',    label:'Anchorline', icon:'i-anchor', ai:true },
+    { id:'invest',label:'Invest', icon:'i-invest' },
+    { id:'more',  label:'More',   icon:'i-more' }
+  ];
+
+  function iosTabbar(){
+    return '<div class="bk-tabbar">' + IOS_TABS.map(function(t){
+      var on = APP.screen === t.id;
+      if (t.ai) return '<button type="button" class="ai'+(on?' on':'')+'" data-action="go:'+t.id+'">'
+        + '<span class="cap">'+ico(t.icon)+'</span>'+t.label
+        + (aiPending()?'<span class="nb">'+aiPending()+'</span>':'')+'</button>';
+      return '<button type="button" class="'+(on?'on':'')+'" data-action="go:'+t.id+'">'+ico(t.icon)+t.label+'</button>';
+    }).join('') + '</div>';
+  }
+
+  function iosHeader(s){
+    if (s.flow){
+      return '<div class="bk-head"><button type="button" class="bk-back" data-action="fback">'+ico('i-arrowl')+'Back</button>'
+        + '<h3>'+s.title+'</h3>'+(s.sub?'<div class="sub">'+s.sub+'</div>':'')
+        + '<div class="bk-steps">'+Array.apply(null,{length:s.steps}).map(function(_,i){
+            return '<span class="st'+(i<=s.step?' done':'')+'"></span>'; }).join('')+'</div></div>';
+    }
+    if (s.back){
+      return '<div class="bk-head"><button type="button" class="bk-back" data-action="back">'+ico('i-arrowl')+'Back</button>'
+        + '<h3>'+s.title+'</h3></div>';
+    }
+    return '<div class="bk-head"><div class="row"><div class="who"><span class="avatar">DR</span>'
+      + '<span><span class="hello">Good afternoon</span><span class="name">Devon</span></span></div>'
+      + '<div class="acts"><button type="button" class="bk-icon-btn" data-action="go:alerts">'+ico('i-bell')+'<span class="dot"></span></button>'
+      + '<button type="button" class="bk-icon-btn" data-action="noop">'+ico('i-search')+'</button></div></div></div>';
+  }
+
+  function renderIOS(){
+    var el = document.querySelector('[data-app="ios"]'); if (!el) return;
+    var s = current();
+    el.innerHTML = '<div class="bk">'+iosHeader(s)
+      + '<div class="bk-scroll"><div class="bk-pad">'+s.body+'</div></div>'
+      + fab() + toastEl() + iosTabbar() + '</div>';
+  }
+
+  var WEB_NAV = [
+    { grp:null,          items:[{id:'home',label:'Overview',icon:'i-home'}] },
+    { grp:'Everyday',    items:[{id:'accounts',label:'Accounts',icon:'i-wallet'},{id:'move',label:'Move money',icon:'i-swap'},{id:'activity',label:'Activity',icon:'i-doc'}] },
+    { grp:'Guidance',    items:[{id:'ai',label:'Anchorline',icon:'i-anchor',ai:true}] },
+    { grp:'Grow',        items:[{id:'invest',label:'Investments',icon:'i-invest'}] },
+    { grp:'Borrow',      items:[{id:'cards',label:'Credit cards',icon:'i-card'},{id:'borrow',label:'Mortgage & loans',icon:'i-house'},{id:'score',label:'Credit score',icon:'i-score'}] },
+    { grp:'Support',     items:[{id:'more',label:'More',icon:'i-more'}] }
+  ];
+
+  function sideNav(cls){
+    return '<div class="bk-nav '+cls+'"><div class="brand">'+ico('i-anchor')+'<span>Borealis</span></div>'
+      + WEB_NAV.map(function(g){
+          return (g.grp?'<div class="grp">'+g.grp+'</div>':'') + g.items.map(function(it){
+            var on = APP.screen === it.id;
+            return '<button type="button" class="'+(it.ai?'ai ':'')+(on?'on':'')+'" data-action="go:'+it.id+'">'
+              + ico(it.icon)+'<span>'+it.label+'</span>'
+              + (it.ai && aiPending() ? '<span class="nb">'+aiPending()+'</span>' : '')+'</button>';
+          }).join('');
+        }).join('') + '</div>';
+  }
+
+  function topbar(s){
+    var left = (s.flow || s.back)
+      ? '<button type="button" class="bk-back" style="color:var(--ink-soft);" data-action="'+(s.flow?'fback':'back')+'">'+ico('i-arrowl')+'Back</button>'
+      : '';
+    return '<div class="bk-topbar"><div style="display:flex;align-items:center;gap:12px;min-width:0;">'+left
+      + '<span class="ttl">'+s.title+'</span>'
+      + (s.sub?'<span style="font-size:12px;color:var(--ink-faint);">'+s.sub+'</span>':'')+'</div>'
+      + '<div class="rt"><button type="button" class="bk-icon-btn" data-action="go:alerts">'+ico('i-bell')+'<span class="dot"></span></button>'
+      + '<span class="avatar" style="width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">DR</span></div></div>';
+  }
+
+  function flowStepsBar(s){
+    if (!s.flow) return '';
+    return '<div style="display:flex;gap:6px;padding:0 22px 12px;background:var(--paper-raised);border-bottom:1px solid var(--bk-line);">'
+      + Array.apply(null,{length:s.steps}).map(function(_,i){
+        return '<span style="flex:1;height:3px;border-radius:99px;background:'+(i<=s.step?'var(--brand)':'var(--paper-sunken)')+';"></span>'; }).join('')
+      + '</div>';
+  }
+
+  function renderWeb(){
+    var el = document.querySelector('[data-app="web"]'); if (!el) return;
+    var s = current(), hasAside = !!s.aside;
+    el.innerHTML = '<div class="bk-web'+(hasAside?' has-aside':'')+'">'
+      + sideNav('bk-side')
+      + '<div class="bk-main">'+topbar(s)+flowStepsBar(s)
+      + '<div class="bk-scroll"><div class="bk-pad" style="padding:18px 22px 26px;">'+s.body+'</div></div></div>'
+      + (hasAside ? '<div class="bk-aside">'+s.aside+'</div>' : '')
+      + fab() + toastEl() + '</div>';
+  }
+
+  function renderTablet(){
+    var el = document.querySelector('[data-app="tablet"]'); if (!el) return;
+    var s = current();
+    el.innerHTML = '<div class="bk-tab">'
+      + sideNav('bk-tabnav')
+      + '<div class="bk-main">'+topbar(s)+flowStepsBar(s)
+      + '<div class="bk-scroll"><div class="bk-pad" style="padding:18px 22px 26px;">'
+      + (s.aside && !s.flow
+          ? '<div class="bk-cols"><div style="display:flex;flex-direction:column;gap:14px;min-width:0;">'+s.body+'</div>'
+            + '<div class="bk-card pad explain" style="font-size:12px;">'+s.aside+'</div></div>'
+          : s.body)
+      + '</div></div></div>'
+      + fab() + toastEl() + '</div>';
+  }
+
+  function renderAll(){ renderIOS(); renderWeb(); renderTablet(); }
+
+  /* ============================================================
+     ACTIONS
+     ============================================================ */
+  function showToast(msg){
+    APP.toast = msg;
+    renderAll();
+    setTimeout(function(){ APP.toast = null; renderAll(); }, 2600);
+  }
+
+  function applyAI(){
+    var s = SPLITS[APP.aiSplit];
+    APP.txns = APP.txns.filter(function(t){ return t.src !== 'ai'; });
+    if (s.visa)   APP.txns.push({ from:'chq', to:'visa', amount:s.visa,   label:'Anchorline — Visa payment',  src:'ai' });
+    if (s.buffer) APP.txns.push({ from:'chq', to:'sav',  amount:s.buffer, label:'Anchorline — buffer top-up', src:'ai' });
+  }
+
+  function handle(action){
+    if (!action || action === 'noop') return;
+    var p = action.split(':'), verb = p[0];
+    if (verb !== 'reset-demo') APP.interacted = true;
+
+    if (verb === 'go'){
+      var target = p.slice(1).join(':');
+      if (target !== APP.screen) APP.stack.push(APP.screen);
+      APP.screen = target; APP.flow = null; renderAll(); return;
+    }
+    if (verb === 'acct'){ APP.stack.push(APP.screen); APP.sel = p[1]; APP.screen = 'account'; APP.flow = null; renderAll(); return; }
+    if (verb === 'back'){ APP.screen = APP.stack.pop() || 'home'; APP.flow = null; renderAll(); return; }
+
+    if (verb === 'flow'){ startFlow(p[1]); renderAll(); return; }
+    if (verb === 'fclose'){ APP.flow = null; renderAll(); return; }
+    if (verb === 'fback'){
+      if (!APP.flow) return;
+      if (APP.flow.step === 0){ APP.flow = null; } else { APP.flow.step--; }
+      renderAll(); return;
+    }
+    if (verb === 'fset'){ APP.flow.data[p[1]] = p[2]; APP.flow.step++; renderAll(); return; }
+    if (verb === 'famt'){ APP.flow.data.amount = Number(p[1]); renderAll(); return; }
+    if (verb === 'fnext'){
+      if (!canContinue()) return;
+      var def = FLOW_DEFS[APP.flow.type];
+      if (APP.flow.step === def.steps - 2) commitFlow();
+      APP.flow.step++; renderAll(); return;
+    }
+
+    if (verb === 'ai'){
+      var what = p[1];
+      if (what === 'approve'){ APP.aiDecision='approved'; APP.approvedAt=new Date(); APP.aiAdjust=false; applyAI(); showToast('Approved — '+money0(SPLITS[APP.aiSplit].visa+SPLITS[APP.aiSplit].buffer)+' moved'); return; }
+      if (what === 'adjust'){ APP.aiAdjust = true; APP.aiDraft = APP.aiSplit; renderAll(); return; }
+      if (what === 'pick'){ APP.aiDraft = p[2]; renderAll(); return; }
+      if (what === 'confirm'){ APP.aiSplit = APP.aiDraft || APP.aiSplit; APP.aiAdjust=false; renderAll(); return; }
+      if (what === 'cancel'){ APP.aiAdjust=false; renderAll(); return; }
+      if (what === 'notnow'){ APP.aiDecision='dismissed'; renderAll(); return; }
+      if (what === 'reconsider'){ APP.aiDecision=null; renderAll(); return; }
+      if (what === 'undo'){ APP.aiDecision=null; APP.approvedAt=null; APP.txns = APP.txns.filter(function(t){ return t.src!=='ai'; }); showToast('Reverted'); return; }
+      if (what === 'escalate'){ APP.escalated = true; renderAll(); return; }
+    }
+
+    if (verb === 'reset-demo'){
+      APP.screen='home'; APP.stack=[]; APP.sel=null; APP.flow=null; APP.txns=[]; APP.toast=null;
+      APP.aiDecision=null; APP.aiSplit='recommended'; APP.aiDraft=null; APP.aiAdjust=false;
+      APP.escalated=false; APP.interacted=false; APP.approvedAt=null;
+      renderAll(); return;
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-action]');
+    if (!el || el.disabled) return;
+    e.preventDefault();
+    handle(el.getAttribute('data-action'));
+  });
+
+  /* live inputs — update state without re-rendering, so focus is never lost */
+  document.addEventListener('input', function(e){
+    var t = e.target;
+    if (t.matches('[data-famt]') && APP.flow){
+      APP.flow.data.amount = t.value === '' ? null : Number(t.value.replace(/[^0-9.]/g,''));
+      document.querySelectorAll('[data-action="fnext"]').forEach(function(btn){
+        var ok = canContinue();
+        btn.disabled = !ok;
+        btn.classList.toggle('brand', ok);
+        btn.style.opacity = ok ? '' : '.45';
+        btn.style.cursor  = ok ? '' : 'not-allowed';
+      });
+    }
+  });
+  document.addEventListener('change', function(e){
+    var t = e.target;
+    if (t.matches('[data-fsel]') && APP.flow){ APP.flow.data[t.getAttribute('data-fsel')] = t.value; }
+  });
+
+  /* ---------- platform + device-size toggles ---------- */
   var platButtons = document.querySelectorAll('.toggle button[data-plat]');
   var views = document.querySelectorAll('[data-view]');
   var phoneToggle = document.querySelector('[data-phone-toggle]');
   platButtons.forEach(function(btn){
     btn.addEventListener('click', function(){
       var plat = btn.getAttribute('data-plat');
-      platButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      APP.plat = plat;
+      platButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
       views.forEach(function(v){ v.hidden = v.getAttribute('data-view') !== plat; });
       if (phoneToggle) phoneToggle.hidden = plat !== 'ios';
     });
   });
-
-  /* ---------- device-size presets (mobile only) ---------- */
   if (phoneToggle){
     var iosFrame = document.querySelector('.frame.ios');
     var phoneButtons = phoneToggle.querySelectorAll('button[data-phone]');
     phoneButtons.forEach(function(btn){
       btn.addEventListener('click', function(){
-        phoneButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
-        if (iosFrame) iosFrame.style.setProperty('--ios-w', btn.getAttribute('data-phone') + 'px');
+        phoneButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
+        if (iosFrame) iosFrame.style.setProperty('--ios-w', btn.getAttribute('data-phone')+'px');
       });
     });
   }
-
-  /* ---------- rail scrollspy ---------- */
-  var links = Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
-  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
-  function onScroll(){
-    var y = window.scrollY + 120;
-    var current = sections[0];
-    sections.forEach(function(s){ if (s.offsetTop <= y) current = s; });
-    links.forEach(function(a){
-      a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
-    });
-  }
-  document.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ============================================================
-     Interactive platform prototype — one shared "truth" (Devon's
-     payday reallocation) rendered live into all three device frames.
-     Three screens only, everywhere: Home, Plan, Progress.
-     ============================================================ */
-  var SPLITS = {
-    recommended: { label:'Recommended split', visa:260, buffer:140, note:'Balances faster debt payoff with restoring your buffer.' },
-    even:        { label:'Even split',        visa:200, buffer:200, note:'Builds the buffer a little faster; Visa payoff slows slightly.' },
-    alldebt:     { label:'All to Visa',       visa:400, buffer:0,   note:'Fastest payoff; the buffer stays at its current level this month.' }
-  };
-  var SPLIT_ORDER = ['recommended','even','alldebt'];
-
-  var state = {
-    decision: null,        // null | 'approved' | 'dismissed'
-    approvedAt: null,
-    chosenSplit: 'recommended',
-    draftSplit: null,
-    adjustOpen: { ios:false, web:false, tablet:false },
-    screens: { ios:'home', web:'home', tablet:'payday' },
-    escalated: false,
-    interacted: false
-  };
-
-  function fmt(n){ return '$' + n.toLocaleString('en-US'); }
-  function approvedTimeLabel(){
-    return state.approvedAt ? state.approvedAt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : 'Just now';
-  }
-  function icon(name, size){ return '<svg class="icon" style="width:'+size+'px;height:'+size+'px;"><use href="#'+name+'"/></svg>'; }
-  function screenHeader(label){ return '<div class="screen-kicker">'+label+'</div>'; }
-  function confidencePill(){ return '<span class="pill good">92% confidence</span>'; }
-
-  function fadeSwap(el, html){
-    el.innerHTML = html;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(3px)';
-    requestAnimationFrame(function(){
-      el.style.transition = 'opacity 180ms ease, transform 180ms ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    });
-  }
-
-  function explainRows(){
-    var rows = [
-      ['Data used','Balances, APRs, buffer target'],
-      ['Expected benefit','$47 saved this month'],
-      ['Trade-off','Trip fund pace slows slightly'],
-      ['Confidence','92% confidence'],
-      ['Editable later','Yes']
-    ];
-    return rows.map(function(r){ return '<div class="row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('');
-  }
-
-  // Every approval panel and every at-risk state gets a visible human-escalation path (design system rule).
-  function talkLink(plat){
-    if (state.escalated){
-      return '<div class="talk-link done">✓ A specialist has your context — expect a reply shortly.</div>';
-    }
-    return '<div class="talk-link"><button type="button" class="linklike" data-action="escalate:'+plat+'">Need a person? Talk to someone</button></div>';
-  }
-
-  function homeCardHTML(plat){
-    if (state.decision === 'approved'){
-      var s = SPLITS[state.chosenSplit];
-      return '<div class="receipt">'
-        + '<div class="receipt-icon">'+icon('i-approve',16)+'</div>'
-        + '<h5>Approved</h5>'
-        + '<p>'+fmt(s.visa)+' moved to Visa, '+fmt(s.buffer)+' to buffer'+(state.chosenSplit!=='recommended' ? ' — adjusted from the recommended split.' : '.')+' Your buffer is healthy again.</p>'
-        + '<div class="receipt-meta">'
-        + '<div class="row"><span>Confirmed</span><span>'+approvedTimeLabel()+' · Ref TXN-48213</span></div>'
-        + '<div class="row"><span>Why</span><span>Paying the Visa now saves about $47 in interest this month.</span></div>'
-        + '<div class="row"><span>Editable</span><span>Yes — adjust anytime in Plan</span></div>'
-        + '</div>'
-        + '<div class="cta-row"><button type="button" class="btn small" data-action="reset">Undo (demo)</button></div>'
-        + '</div>';
-    }
-    if (state.decision === 'dismissed'){
-      return '<div class="rec-card"><span class="tag">Holding steady</span>'
-        + '<p style="margin-top:7px;">Holding steady is the right move this week — nothing needs your approval. Your buffer stays 2.1 weeks below target.</p>'
-        + '<div class="cta-row"><button type="button" class="btn small" data-action="reconsider:'+plat+'">Reconsider</button></div>'
-        + talkLink(plat)
-        + '</div>';
-    }
-    if (state.adjustOpen[plat]){
-      var draft = state.draftSplit || state.chosenSplit;
-      return '<div class="rec-card"><span class="tag">'+icon('i-anchor',11)+'Adjust the split</span>'
-        + '<div class="chip-select">' + SPLIT_ORDER.map(function(id){
-            var o = SPLITS[id];
-            return '<button type="button" class="chip'+(id===draft?' active':'')+'" data-action="adjustpick:'+plat+':'+id+'">'
-              + '<div class="top">'+o.label+'<span>'+fmt(o.visa)+' → Visa · '+fmt(o.buffer)+' → buffer</span></div>'
-              + '<div class="note">'+o.note+'</div></button>';
-          }).join('') + '</div>'
-        + '<div class="cta-row"><button type="button" class="btn primary" data-action="adjustconfirm:'+plat+'">Confirm split</button><button type="button" class="btn" data-action="adjustcancel:'+plat+'">Cancel</button></div></div>';
-    }
-    var s = SPLITS[state.chosenSplit];
-    var pulse = state.interacted ? '' : ' pulse-cta';
-    return '<div class="rec-card"><span class="tag">'+icon('i-anchor',11)+'Recommended</span>'
-      + '<h5>Move '+fmt(s.visa)+' to Visa, '+fmt(s.buffer)+' to buffer</h5>'
-      + '<p>Saves ~$47 in interest this month.'+(s.buffer>0 ? ' Buffer was 2.1 weeks below target — this restores it.' : ' Buffer stays at its current level this month.')+'</p>'
-      + '<div style="margin-top:8px;">'+confidencePill()+'</div>'
-      + '<div class="cta-row"><button type="button" class="btn primary'+pulse+'" data-action="approve:'+plat+'">Approve</button><button type="button" class="btn" data-action="adjustopen:'+plat+'">Adjust</button><button type="button" class="btn" data-action="notnow:'+plat+'">Not now</button></div>'
-      + talkLink(plat)
-      + '</div>';
-  }
-
-  function wfRow(label, val, pct, locked, note){
-    return '<div class="wf-row'+(locked?' locked':'')+'"><div class="top"><b>'+label+'</b><span>'+val+'</span></div>'
-      + '<div class="wf-bar"><i style="width:'+pct+'%;"></i></div>'
-      + (note ? '<div class="wf-note">'+note+'</div>' : '') + '</div>';
-  }
-
-  function planHTML(){
-    var approved = state.decision === 'approved';
-    var s = SPLITS[state.chosenSplit];
-    var bufferCur = 2100 + (approved ? s.buffer : 0), bufferTarget = 2400;
-    var bufferPct = Math.min(100, Math.round(bufferCur / bufferTarget * 100));
-    var visaOriginal = 4000, visaBase = 3240;
-    var visaRemaining = visaBase - (approved ? s.visa : 0);
-    var visaPct = Math.round((visaOriginal - visaRemaining) / visaOriginal * 100);
-    return '<div class="stack-title">Allocation plan</div><div class="stack-sub">Buffer, then debt, then goals — investing unlocks once the first two are stable.</div>'
-      + '<div class="waterfall">'
-      + wfRow('1 · Cash buffer', fmt(bufferCur)+' / '+fmt(bufferTarget), bufferPct, false, approved ? 'Restored to target this week.' : 'Restoring this is this week\'s recommended priority.')
-      + wfRow('2 · Visa (22.9% APR)', fmt(visaRemaining)+' remaining', visaPct, false, approved ? 'Payoff date moved up about 2 weeks.' : 'On track at minimum payments until approved.')
-      + wfRow('3 · Trip fund goal', '$860 / $1,200', 72, false, 'Ahead of pace by $80 — unaffected by this decision.')
-      + wfRow('4 · Investment (secondary)', 'Locked', 0, true, 'Unlocks once buffer and debt are both on track.')
-      + '</div>';
-  }
-
-  function listRow(name, meta, right){
-    return '<div class="list-row"><div><div class="name">'+name+'</div><div class="meta">'+meta+'</div></div>'+right+'</div>';
-  }
-
-  function progressHTML(plat){
-    var approved = state.decision === 'approved';
-    var next = approved
-      ? 'Nothing needs your approval this week — holding steady is right.'
-      : state.decision === 'dismissed'
-        ? 'Your buffer stays 2.1 weeks below target. Revisit the payday recommendation when you\'re ready.'
-        : 'Approve the payday reallocation to restore your buffer.';
-    return '<div class="stack-title">Weekly progress</div><div class="stack-sub">Devon · week of Aug 17</div>'
-      + listRow('Cash buffer', approved ? '3.2 weeks of expenses covered.' : '2.1 weeks below target.', '<span class="pill '+(approved?'good':'watch')+'">'+(approved?'Healthy':'At risk')+'</span>')
-      + listRow('Visa payoff', approved ? 'Extra payment applied — payoff date moved up ~2 weeks.' : 'Minimum payments only, for now.', '<span class="pill good">On track</span>')
-      + listRow('Trip fund', 'Ahead of pace by $80 this month.', '<span class="pill accent">Ahead</span>')
-      + '<div class="rec-card" style="margin-top:14px;"><span class="tag">Next best action</span><p style="margin-top:6px;">'+next+'</p>'
-      + (approved ? '' : talkLink(plat))
-      + '</div>';
-  }
-
-  /* ---------- per-platform renderers ---------- */
-  function renderIOS(){
-    var stage = document.querySelector('.ios-stage');
-    if (!stage) return;
-    var screen = state.screens.ios;
-    var html = '';
-    if (screen === 'home'){
-      html = screenHeader('Home')
-        + '<div class="ios-greet"><div class="h">Good afternoon, Devon</div><div class="s">'
-        + (state.decision ? 'Here’s where things stand.' : 'Payday landed — $2,340 in') + '</div></div>'
-        + '<div class="ios-buffer'+(state.decision==='approved' ? '' : ' watch')+'"><div class="row"><span class="lbl">Cash buffer</span><span class="val">'
-        + (state.decision==='approved' ? 'Healthy · 3.2 wks' : 'At risk · 2.1 wks') + '</span></div></div>'
-        + homeCardHTML('ios');
-    } else if (screen === 'plan') html = screenHeader('Plan') + planHTML();
-    else if (screen === 'progress') html = screenHeader('Progress') + progressHTML('ios');
-    fadeSwap(stage, html);
-    document.querySelectorAll('[data-nav="ios"] .t').forEach(function(btn){
-      btn.classList.toggle('on', btn.getAttribute('data-action') === 'nav:ios:'+screen);
-    });
-  }
-
-  function renderWeb(){
-    var stage = document.querySelector('.web-main[data-plat="web"]');
-    var explain = document.querySelector('[data-explain="web"]');
-    if (!stage) return;
-    var screen = state.screens.web;
-    var html = '';
-    if (screen === 'home'){
-      html = screenHeader('Home')
-        + '<h4>'+(state.decision ? 'Here’s where things stand' : 'Payday landed — $2,340 in')+'</h4>'
-        + '<div class="sub">'+(state.decision==='approved' ? 'This week’s transfer is confirmed.' : 'Here’s the recommended split, and why.')+'</div>'
-        + '<div class="web-grid"><div class="stat-tile"><div class="l">Cash buffer</div><div class="v">'+(state.decision==='approved' ? '3.2 wks' : '2.1 wks')+'</div></div>'
-        + '<div class="stat-tile"><div class="l">Visa APR</div><div class="v">22.9%</div></div></div>'
-        + homeCardHTML('web');
-    } else if (screen === 'plan') html = screenHeader('Plan') + planHTML();
-    else if (screen === 'progress') html = screenHeader('Progress') + progressHTML('web');
-    fadeSwap(stage, html);
-    if (explain){
-      var s2 = SPLITS[state.chosenSplit];
-      explain.innerHTML = '<h5>Why this recommendation</h5>'
-        + '<p style="margin-bottom:14px;">'+fmt(s2.visa)+' → Visa · '+fmt(s2.buffer)+' → buffer</p>'
-        + explainRows()
-        + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:11px;">Every field here is required before approval — see the approval panel anatomy in the Design System.</p>';
-    }
-    document.querySelectorAll('[data-nav="web"] button[data-action^="nav:web:"]').forEach(function(btn){
-      btn.classList.toggle('on', btn.getAttribute('data-action') === 'nav:web:'+screen);
-    });
-  }
-
-  function renderTablet(){
-    var stage = document.querySelector('.tab-detail[data-plat="tablet"]');
-    if (!stage) return;
-    var item = state.screens.tablet;
-    var html = '';
-    if (item === 'payday'){
-      html = screenHeader('Home') + homeCardHTML('tablet') + (state.decision===null && !state.adjustOpen.tablet
-        ? '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);"><h5 style="font-family:var(--font-body);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:10px;">Why this recommendation</h5><div class="explain-rows">'+explainRows()+'</div></div>'
-        : '');
-    } else if (item === 'plan') html = screenHeader('Plan') + planHTML();
-    else if (item === 'checkin') html = screenHeader('Progress') + progressHTML('tablet');
-    fadeSwap(stage, html);
-    document.querySelectorAll('[data-nav="tablet"] .tab-item').forEach(function(btn){
-      btn.classList.toggle('on', btn.getAttribute('data-action') === 'nav:tablet:'+item);
-    });
-    var sub = document.querySelector('[data-tablet-item-sub="payday"]');
-    if (sub) sub.textContent = state.decision==='approved' ? 'Approved · '+approvedTimeLabel() : state.decision==='dismissed' ? 'Held steady' : '$2,340 · today';
-  }
-
-  function renderPlat(plat){
-    if (plat === 'ios') renderIOS();
-    else if (plat === 'web') renderWeb();
-    else if (plat === 'tablet') renderTablet();
-    else renderAll();
-  }
-  function renderAll(){ renderIOS(); renderWeb(); renderTablet(); }
-
-  function resetState(){
-    state.decision = null; state.approvedAt = null; state.chosenSplit = 'recommended'; state.draftSplit = null;
-    state.adjustOpen = { ios:false, web:false, tablet:false };
-    state.screens = { ios:'home', web:'home', tablet:'payday' };
-    state.escalated = false;
-    state.interacted = false;
-  }
-
-  function handleAction(action){
-    var parts = action.split(':');
-    var verb = parts[0];
-    if (verb !== 'reset' && verb !== 'reset-demo') state.interacted = true;
-    if (verb === 'nav'){ state.screens[parts[1]] = parts[2]; renderPlat(parts[1]); }
-    else if (verb === 'approve'){ state.decision = 'approved'; state.approvedAt = new Date(); state.adjustOpen = { ios:false, web:false, tablet:false }; renderAll(); }
-    else if (verb === 'adjustopen'){ state.adjustOpen[parts[1]] = true; state.draftSplit = state.chosenSplit; renderPlat(parts[1]); }
-    else if (verb === 'adjustpick'){ state.draftSplit = parts[2]; renderPlat(parts[1]); }
-    else if (verb === 'adjustconfirm'){ state.chosenSplit = state.draftSplit || state.chosenSplit; state.adjustOpen[parts[1]] = false; renderPlat(parts[1]); }
-    else if (verb === 'adjustcancel'){ state.adjustOpen[parts[1]] = false; renderPlat(parts[1]); }
-    else if (verb === 'notnow'){ state.decision = 'dismissed'; renderAll(); }
-    else if (verb === 'reconsider'){ state.decision = null; renderAll(); }
-    else if (verb === 'escalate'){ state.escalated = true; renderPlat(parts[1]); }
-    else if (verb === 'reset' || verb === 'reset-demo'){ resetState(); renderAll(); }
-  }
-
-  document.addEventListener('click', function(e){
-    var el = e.target.closest('[data-action]');
-    if (!el) return;
-    e.preventDefault();
-    handleAction(el.getAttribute('data-action'));
-  });
 
   renderAll();
 })();
