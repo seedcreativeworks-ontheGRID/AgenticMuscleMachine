@@ -1,0 +1,1519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Anchorline: an integrated design system, UX research hub, and solution application concept for an AI-guided retail banking product, with a live iOS / web / tablet platform toggle.">
+<title>Anchorline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===================== TOKENS ===================== */
+:root{
+  --paper:#EEF0EA;
+  --paper-raised:#F8F9F3;
+  --paper-sunken:#E4E7DE;
+  --ink:#151A17;
+  --ink-soft:#4A524B;
+  --ink-faint:#7C877F;
+  --line:#D5D9CC;
+  --line-strong:#BFC5B5;
+  --accent:#8A6A2F;
+  --accent-strong:#6E5424;
+  --accent-soft:#E7DAB9;
+  --accent-ink:#2E4642;
+  --accent-ink-soft:#DCE6E1;
+  --status-good:#3F7A5D;
+  --status-good-bg:#E1EFE6;
+  --status-watch:#96701C;
+  --status-watch-bg:#F1E7CB;
+  --status-risk:#A2452F;
+  --status-risk-bg:#F3DED7;
+  --focus:#2E4642;
+  --shadow: 0 1px 2px rgba(21,26,23,.06), 0 8px 24px -12px rgba(21,26,23,.16);
+  --font-display:'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-body:'IBM Plex Sans', 'Segoe UI', Arial, sans-serif;
+  --font-mono:'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101512;
+    --paper-raised:#181F1B;
+    --paper-sunken:#0C1210;
+    --ink:#E9ECE5;
+    --ink-soft:#AEB8AC;
+    --ink-faint:#78837B;
+    --line:#293127;
+    --line-strong:#38412F;
+    --accent:#D6B569;
+    --accent-strong:#E9CD8C;
+    --accent-soft:#3A311B;
+    --accent-ink:#8FBBAF;
+    --accent-ink-soft:#1B2C27;
+    --status-good:#74C79B;
+    --status-good-bg:#152A20;
+    --status-watch:#DDBB58;
+    --status-watch-bg:#2E2610;
+    --status-risk:#E2917A;
+    --status-risk-bg:#301C16;
+    --focus:#8FBBAF;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101512;
+  --paper-raised:#181F1B;
+  --paper-sunken:#0C1210;
+  --ink:#E9ECE5;
+  --ink-soft:#AEB8AC;
+  --ink-faint:#78837B;
+  --line:#293127;
+  --line-strong:#38412F;
+  --accent:#D6B569;
+  --accent-strong:#E9CD8C;
+  --accent-soft:#3A311B;
+  --accent-ink:#8FBBAF;
+  --accent-ink-soft:#1B2C27;
+  --status-good:#74C79B;
+  --status-good-bg:#152A20;
+  --status-watch:#DDBB58;
+  --status-watch-bg:#2E2610;
+  --status-risk:#E2917A;
+  --status-risk-bg:#301C16;
+  --focus:#8FBBAF;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:var(--accent-soft); color:var(--ink); }
+a{ color:var(--accent-ink); text-decoration-thickness:1px; text-underline-offset:2px; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--focus); outline-offset:2px; border-radius:3px;
+}
+img,svg{ display:block; max-width:100%; }
+h1,h2,h3,h4{ font-family:var(--font-display); font-weight:500; margin:0; text-wrap:balance; color:var(--ink); }
+p{ margin:0; }
+table{ border-collapse:collapse; width:100%; }
+.tabular{ font-variant-numeric:tabular-nums; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+/* ===================== LAYOUT PRIMITIVES ===================== */
+.wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+.wrap-text{ max-width:760px; }
+.page{ display:grid; grid-template-columns:220px 1fr; gap:0; }
+.rail{
+  position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+  padding:26px 18px 40px 28px; border-right:1px solid var(--line);
+  scrollbar-width:thin;
+}
+.rail::-webkit-scrollbar{ width:6px; }
+.rail::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:4px; }
+.rail-brand{ display:flex; align-items:center; gap:8px; margin-bottom:22px; }
+.rail-brand .mark{ width:20px; height:20px; color:var(--accent); flex:none; }
+.rail-brand .name{ font-family:var(--font-display); font-size:17px; letter-spacing:.01em; }
+.rail nav{ display:flex; flex-direction:column; gap:1px; }
+.rail nav a{
+  display:flex; align-items:baseline; gap:8px; padding:6px 8px; border-radius:6px;
+  color:var(--ink-soft); text-decoration:none; font-size:13px; letter-spacing:.01em;
+}
+.rail nav a .num{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); width:14px; flex:none; }
+.rail nav a:hover{ background:var(--paper-sunken); color:var(--ink); }
+.rail nav a.active{ background:var(--accent-soft); color:var(--ink); }
+.rail-foot{ margin-top:22px; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink-faint); line-height:1.5; }
+
+.topchips{ display:none; }
+
+main{ min-width:0; }
+
+.section{ padding:64px 0; border-bottom:1px solid var(--line); }
+.section:last-of-type{ border-bottom:none; }
+.section-head{ max-width:720px; margin-bottom:34px; }
+.kicker{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono);
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+  margin-bottom:10px;
+}
+.kicker::before{ content:""; width:14px; height:1px; background:var(--accent); }
+.section-head h2{ font-size:clamp(26px,3.2vw,36px); line-height:1.15; }
+.dek{ margin-top:12px; color:var(--ink-soft); font-size:16px; max-width:62ch; }
+
+.lede{ font-family:var(--font-display); font-size:19px; line-height:1.6; color:var(--ink-soft); max-width:64ch; }
+
+h3.subhead{ font-size:20px; margin:0 0 12px; }
+h4.minihead{ font-family:var(--font-body); font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); margin:0 0 10px; }
+
+.stack{ display:flex; flex-direction:column; gap:14px; }
+.grid{ display:grid; gap:16px; }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-auto{ grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+@media (max-width:860px){ .grid-2,.grid-3{ grid-template-columns:1fr; } }
+
+.card{
+  background:var(--paper-raised); border:1px solid var(--line); border-radius:10px;
+  padding:20px 22px;
+}
+.card.raise{ box-shadow:var(--shadow); }
+
+.subblock{ margin-top:40px; }
+.subblock:first-child{ margin-top:0; }
+
+/* text lists */
+ul.plain, ol.plain{ margin:0; padding:0; list-style:none; }
+ul.dash{ margin:0; padding:0; list-style:none; }
+ul.dash > li{ position:relative; padding-left:16px; margin:7px 0; color:var(--ink-soft); }
+ul.dash > li::before{ content:"—"; position:absolute; left:0; color:var(--accent); }
+ul.dash > li b, ul.dash > li strong{ color:var(--ink); font-weight:600; }
+
+/* pills */
+.pill{
+  display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600;
+  padding:3px 9px; border-radius:99px; letter-spacing:.02em;
+  border:1px solid var(--line-strong); color:var(--ink-soft);
+}
+.pill.good{ background:var(--status-good-bg); color:var(--status-good); border-color:transparent; }
+.pill.watch{ background:var(--status-watch-bg); color:var(--status-watch); border-color:transparent; }
+.pill.risk{ background:var(--status-risk-bg); color:var(--status-risk); border-color:transparent; }
+.pill.accent{ background:var(--accent-soft); color:var(--accent-strong); border-color:transparent; }
+.pill .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+/* tables */
+.table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+table.data{ font-size:13.5px; min-width:560px; }
+table.data th, table.data td{ text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+table.data thead th{
+  font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--ink-faint); background:var(--paper-sunken); font-weight:500;
+}
+table.data tbody tr:last-child td{ border-bottom:none; }
+table.data td.num{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+table.data tbody tr:hover{ background:var(--paper-sunken); }
+
+/* archetype cards */
+.archetype{ display:flex; flex-direction:column; gap:12px; }
+.archetype .who{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.archetype .who h3{ font-size:19px; }
+.archetype .meta{ font-size:12.5px; color:var(--ink-faint); font-family:var(--font-mono); }
+.archetype dl{ display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin:0; font-size:13.5px; }
+.archetype dt{ color:var(--ink-faint); font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding-top:2px; }
+.archetype dd{ margin:0; color:var(--ink-soft); }
+.archetype dd b{ color:var(--ink); }
+.avoid{ background:var(--status-risk-bg); color:var(--status-risk); border-radius:8px; padding:10px 12px; font-size:12.5px; }
+.emph{ background:var(--accent-ink-soft); color:var(--accent-ink); border-radius:8px; padding:10px 12px; font-size:12.5px; }
+
+/* swatches */
+.swatchrow{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+.swatch{ border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--paper-raised); }
+.swatch .fill{ height:64px; }
+.swatch .label{ padding:9px 11px; font-size:12px; }
+.swatch .label b{ display:block; font-size:12.5px; }
+.swatch .label span{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
+
+/* type scale */
+.type-row{ display:flex; align-items:baseline; gap:18px; padding:10px 0; border-bottom:1px solid var(--line); }
+.type-row:last-child{ border-bottom:none; }
+.type-row .tag{ width:120px; flex:none; font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
+.type-row .sample{ font-family:var(--font-display); color:var(--ink); }
+
+/* anatomy list (numbered, sequence-legit) */
+.anatomy{ counter-reset:an; display:flex; flex-direction:column; }
+.anatomy li{ counter-increment:an; list-style:none; display:grid; grid-template-columns:26px 1fr; gap:12px; padding:12px 0; border-bottom:1px dashed var(--line); }
+.anatomy li:last-child{ border-bottom:none; }
+.anatomy li::before{
+  content:counter(an); font-family:var(--font-mono); font-size:11px; color:var(--accent);
+  border:1px solid var(--accent); border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+}
+.anatomy li b{ display:block; font-size:13.5px; color:var(--ink); }
+.anatomy li span{ font-size:13px; color:var(--ink-soft); }
+
+/* icons */
+.icon{ width:16px; height:16px; }
+
+/* ===== hero ===== */
+.hero{ padding:78px 0 56px; }
+.hero .kicker{ margin-bottom:18px; }
+.hero h1{ font-size:clamp(44px,7vw,78px); line-height:.96; letter-spacing:-.01em; }
+.hero .tagline{ font-family:var(--font-display); font-style:italic; font-size:clamp(19px,2vw,23px); color:var(--accent-ink); margin-top:14px; }
+.hero .lede{ margin-top:22px; }
+.hero .meta-row{ display:flex; gap:22px; flex-wrap:wrap; margin-top:30px; padding-top:22px; border-top:1px solid var(--line); }
+.hero .meta-row div{ font-size:12px; }
+.hero .meta-row dt{ text-transform:uppercase; letter-spacing:.07em; color:var(--ink-faint); font-size:10.5px; margin-bottom:3px; }
+.hero .meta-row dd{ margin:0; color:var(--ink-soft); font-size:13px; }
+
+.triad{ margin-top:52px; display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper-raised); box-shadow:var(--shadow); }
+.triad a{ text-decoration:none; color:inherit; padding:26px 24px; position:relative; border-right:1px solid var(--line); transition:background .15s ease; }
+.triad a:last-child{ border-right:none; }
+.triad a:hover{ background:var(--paper-sunken); }
+.triad .idx{ font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.08em; }
+.triad h3{ font-size:19px; margin:10px 0 8px; }
+.triad p{ font-size:13px; color:var(--ink-soft); line-height:1.5; }
+.triad .rel{ margin-top:14px; font-size:11px; font-family:var(--font-mono); color:var(--ink-faint); }
+@media (max-width:860px){ .triad{ grid-template-columns:1fr; } .triad a{ border-right:none; border-bottom:1px solid var(--line); } .triad a:last-child{border-bottom:none;} }
+
+/* ===== device bench ===== */
+.bench{ border:1px solid var(--line); border-radius:16px; background:var(--paper-sunken); padding:30px; }
+.bench-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+.toggle{ display:inline-flex; background:var(--paper-raised); border:1px solid var(--line); border-radius:99px; padding:4px; gap:2px; }
+.toggle button{
+  display:flex; align-items:center; gap:7px; font-family:var(--font-body); font-size:13px; font-weight:500;
+  padding:8px 16px; border-radius:99px; border:none; background:transparent; color:var(--ink-soft); cursor:pointer;
+}
+.toggle button svg{ width:15px; height:15px; }
+.toggle button[aria-pressed="true"]{ background:var(--ink); color:var(--paper); }
+:root[data-theme="dark"] .toggle button[aria-pressed="true"], @media (prefers-color-scheme:dark){ }
+.toggle button:not([aria-pressed="true"]):hover{ background:var(--paper-sunken); }
+
+.bench-stage{ display:flex; justify-content:center; padding:20px 0 6px; }
+.legend{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-top:18px; font-size:12px; color:var(--ink-faint); }
+.legend b{ color:var(--ink-soft); }
+
+/* device frames */
+.frame{ background:var(--ink); border-radius:34px; padding:10px; box-shadow:var(--shadow); }
+.frame .screen{ background:var(--paper-raised); border-radius:24px; overflow:hidden; position:relative; }
+
+/* iOS */
+.frame.ios{ width:300px; }
+.frame.ios .screen{ height:600px; display:flex; flex-direction:column; }
+.frame.ios .notch{ position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:22px; background:var(--ink); border-radius:0 0 14px 14px; z-index:3; }
+.ios-status{ display:flex; justify-content:space-between; padding:14px 20px 4px; font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
+.ios-body{ flex:1; overflow:hidden; padding:6px 16px 0; display:flex; flex-direction:column; gap:12px; }
+.ios-greet{ margin-top:6px; }
+.ios-greet .h{ font-family:var(--font-display); font-size:20px; }
+.ios-greet .s{ font-size:12px; color:var(--ink-faint); margin-top:2px; }
+.ios-buffer{ background:var(--accent-ink-soft); border-radius:12px; padding:12px 14px; }
+.ios-buffer .row{ display:flex; justify-content:space-between; align-items:baseline; }
+.ios-buffer .lbl{ font-size:11px; color:var(--accent-ink); text-transform:uppercase; letter-spacing:.05em; }
+.ios-buffer .val{ font-family:var(--font-mono); font-size:13px; font-weight:600; color:var(--accent-ink); }
+.rec-card{ border:1px solid var(--line); border-radius:12px; padding:13px 14px; background:var(--paper-raised); }
+.rec-card .tag{ display:inline-flex; align-items:center; gap:5px; font-size:10px; font-family:var(--font-mono); color:var(--accent); text-transform:uppercase; letter-spacing:.06em; }
+.rec-card h5{ font-family:var(--font-display); font-size:16px; font-weight:500; margin:7px 0 5px; }
+.rec-card p{ font-size:12px; color:var(--ink-soft); line-height:1.5; }
+.rec-card .cta-row{ display:flex; gap:8px; margin-top:11px; }
+.btn{ font-family:var(--font-body); font-size:12px; font-weight:600; padding:8px 14px; border-radius:99px; border:1px solid var(--line-strong); background:transparent; color:var(--ink-soft); cursor:pointer; }
+.btn.primary{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.ios-tabbar{ display:flex; justify-content:space-around; padding:10px 8px 16px; border-top:1px solid var(--line); }
+.ios-tabbar .t{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9.5px; color:var(--ink-faint); }
+.ios-tabbar .t.on{ color:var(--ink); }
+.ios-tabbar svg{ width:17px; height:17px; }
+
+/* Web */
+.frame.web{ width:100%; max-width:760px; border-radius:12px; padding:0; background:transparent; }
+.frame.web .chrome{ background:var(--ink); border-radius:12px 12px 0 0; padding:10px 14px; display:flex; align-items:center; gap:8px; }
+.frame.web .chrome .dot{ width:9px; height:9px; border-radius:50%; background:var(--ink-faint); opacity:.5; }
+.frame.web .chrome .addr{ margin-left:10px; background:rgba(255,255,255,.08); color:var(--paper); font-family:var(--font-mono); font-size:11px; padding:4px 12px; border-radius:6px; flex:1; max-width:280px; }
+.frame.web .screen{ height:520px; border-radius:0 0 12px 12px; display:grid; grid-template-columns:180px 1fr 220px; }
+.web-nav{ border-right:1px solid var(--line); padding:18px 14px; display:flex; flex-direction:column; gap:2px; background:var(--paper-sunken); }
+.web-nav .brand{ font-family:var(--font-display); font-size:15px; margin-bottom:16px; }
+.web-nav a{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink-soft); padding:8px 10px; border-radius:7px; text-decoration:none; }
+.web-nav a svg{ width:14px; height:14px; }
+.web-nav a.on{ background:var(--paper-raised); color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.web-main{ padding:22px 24px; overflow:hidden; }
+.web-main h4{ font-family:var(--font-display); font-size:18px; font-weight:500; margin-bottom:4px; }
+.web-main .sub{ font-size:12px; color:var(--ink-faint); margin-bottom:16px; }
+.web-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.stat-tile{ border:1px solid var(--line); border-radius:10px; padding:12px 13px; }
+.stat-tile .l{ font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
+.stat-tile .v{ font-family:var(--font-mono); font-size:16px; margin-top:4px; }
+.web-explain{ border-left:1px solid var(--line); padding:20px 18px; background:var(--paper-sunken); font-size:12px; }
+.web-explain h5{ font-family:var(--font-body); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); margin-bottom:10px; }
+.web-explain .row{ display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--line); }
+.web-explain .row:last-child{ border:none; }
+.web-explain .row span:first-child{ color:var(--ink-faint); }
+.web-explain .row span:last-child{ font-family:var(--font-mono); text-align:right; }
+
+/* Tablet */
+.frame.tablet{ width:100%; max-width:820px; padding:14px; border-radius:26px; }
+.frame.tablet .screen{ height:480px; border-radius:16px; display:grid; grid-template-columns:1fr 1.3fr; }
+.tab-list{ border-right:1px solid var(--line); background:var(--paper-sunken); padding:16px; overflow:hidden; }
+.tab-list h5{ font-family:var(--font-body); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); margin-bottom:10px; }
+.tab-item{ background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:11px 13px; margin-bottom:9px; }
+.tab-item.on{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+.tab-item .t{ font-size:12.5px; font-weight:600; }
+.tab-item .s{ font-size:11px; color:var(--ink-faint); margin-top:2px; }
+.tab-detail{ padding:20px 22px; overflow:hidden; }
+.tab-detail h4{ font-family:var(--font-display); font-size:19px; margin-bottom:6px; }
+.tab-detail .why{ font-size:12.5px; color:var(--ink-soft); line-height:1.55; margin-bottom:14px; }
+.tab-detail .conf{ display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+.conf-bar{ flex:1; height:6px; background:var(--line); border-radius:99px; overflow:hidden; }
+.conf-bar i{ display:block; height:100%; background:var(--status-good); width:88%; }
+
+@media (max-width:640px){
+  .frame.web .screen{ grid-template-columns:1fr; }
+  .web-nav, .web-explain{ display:none; }
+  .frame.tablet .screen{ grid-template-columns:1fr; }
+  .tab-list{ display:none; }
+}
+
+/* flows */
+.flow{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:0; counter-reset:step; }
+.flow .step{ counter-increment:step; position:relative; padding:20px 18px 18px 0; border-right:1px dashed var(--line-strong); }
+.flow .step:last-child{ border-right:none; }
+.flow .step .n{ font-family:var(--font-mono); font-size:11px; color:var(--accent); }
+.flow .step .n::before{ content:"STEP " counter(step) " — "; }
+.flow .step h4{ font-size:15.5px; margin:8px 0 6px; }
+.flow .step p{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+.flow .step .plat{ margin-top:10px; font-size:11px; color:var(--ink-faint); font-family:var(--font-mono); }
+@media (max-width:900px){ .flow{ grid-template-columns:1fr; } .flow .step{ border-right:none; border-left:1px dashed var(--line-strong); padding:0 0 22px 18px; } }
+
+/* IA tree */
+.tree{ font-size:13.5px; }
+.tree ul{ list-style:none; margin:0; padding-left:22px; border-left:1px dashed var(--line-strong); }
+.tree > ul{ padding-left:0; border-left:none; }
+.tree li{ position:relative; padding:5px 0 5px 16px; }
+.tree li::before{ content:""; position:absolute; left:0; top:15px; width:12px; height:1px; background:var(--line-strong); }
+.tree .lbl{ color:var(--ink); }
+.tree .note{ color:var(--ink-faint); font-size:11.5px; margin-left:8px; }
+
+/* diagram triangle */
+.reldiag{ display:flex; align-items:center; justify-content:center; gap:0; margin:36px 0; flex-wrap:wrap; }
+.relnode{ background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 18px; font-size:13px; text-align:center; min-width:150px; }
+.relnode b{ display:block; font-family:var(--font-display); font-size:15px; margin-bottom:3px; }
+.relarrow{ font-family:var(--font-mono); font-size:10.5px; color:var(--accent); padding:0 14px; text-align:center; white-space:nowrap; }
+
+/* footer */
+footer{ padding:50px 0 90px; }
+footer .fline{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; color:var(--ink-faint); font-size:12px; padding-top:20px; border-top:1px solid var(--line); }
+
+@media (max-width:980px){
+  .page{ grid-template-columns:1fr; }
+  .rail{ display:none; }
+  .topchips{
+    display:flex; gap:6px; overflow-x:auto; position:sticky; top:0; z-index:5;
+    background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px;
+  }
+  .topchips a{ flex:none; font-size:12px; color:var(--ink-soft); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:99px; }
+  .wrap{ padding:0 18px; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-ios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="10" y1="19" x2="14" y2="19"/></symbol>
+  <symbol id="i-web" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="15" rx="1.5"/><line x1="2" y1="8" x2="22" y2="8"/><line x1="9" y1="22" x2="15" y2="22"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+  <symbol id="i-tablet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2.2"/><line x1="16" y1="7" x2="19" y2="7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M12 20V4M20 20v-7"/></symbol>
+  <symbol id="i-approve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12.5 9.5 18 20 6"/></symbol>
+  <symbol id="i-progress" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="i-research" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="16.2" y1="16.2" x2="21" y2="21"/></symbol>
+  <symbol id="i-support" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><path d="M4 15a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2Z"/><path d="M20 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2Z"/></symbol>
+  <symbol id="i-anchor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="21"/><path d="M5 13a7 7 0 0 0 14 0"/><line x1="4" y1="13" x2="7" y2="13"/><line x1="17" y1="13" x2="20" y2="13"/></symbol>
+</svg>
+
+<div class="page">
+  <!-- ================= LEFT INDEX RAIL ================= -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <svg class="mark" viewBox="0 0 24 24"><use href="#i-anchor"/></svg>
+      <span class="name">Anchorline</span>
+    </div>
+    <nav id="railnav">
+      <a href="#overview"><span class="num">00</span>Overview</a>
+      <a href="#strategy"><span class="num">01</span>Product-Owner Strategy</a>
+      <a href="#archetypes"><span class="num">02</span>User Archetypes</a>
+      <a href="#design-system"><span class="num">03</span>Design System</a>
+      <a href="#research-hub"><span class="num">04</span>Research Hub</a>
+      <a href="#solution"><span class="num">05</span>Solution Application</a>
+      <a href="#platform"><span class="num">06</span>Platform Toggle</a>
+      <a href="#ai-logic"><span class="num">07</span>AI Logic Model</a>
+      <a href="#trust"><span class="num">08</span>Trust &amp; Governance</a>
+      <a href="#journeys"><span class="num">09</span>Key Journeys</a>
+      <a href="#architecture"><span class="num">10</span>Information Architecture</a>
+      <a href="#components"><span class="num">11</span>Component System</a>
+      <a href="#screens"><span class="num">12</span>Screen Inventory</a>
+      <a href="#metrics"><span class="num">13</span>Metrics</a>
+      <a href="#risks"><span class="num">14</span>Risks &amp; Validation</a>
+    </nav>
+    <div class="rail-foot">Concept package<br>v1.0 — internal review draft</div>
+  </aside>
+
+  <!-- ================= MOBILE TOP CHIPS ================= -->
+  <div class="topchips" id="topchips">
+    <a href="#overview">Overview</a><a href="#strategy">Strategy</a><a href="#archetypes">Archetypes</a>
+    <a href="#design-system">Design System</a><a href="#research-hub">Research</a><a href="#solution">Solution</a>
+    <a href="#platform">Platform</a><a href="#ai-logic">AI Logic</a><a href="#trust">Trust</a>
+    <a href="#journeys">Journeys</a><a href="#architecture">IA</a><a href="#components">Components</a>
+    <a href="#screens">Screens</a><a href="#metrics">Metrics</a><a href="#risks">Risks</a>
+  </div>
+
+  <main>
+    <!-- ================= HERO / OVERVIEW ================= -->
+    <section class="section" id="overview" style="border-bottom:1px solid var(--line);">
+      <div class="wrap hero">
+        <div class="kicker">Product concept · Retail banking · Internal design &amp; research package</div>
+        <h1>Anchorline</h1>
+        <div class="tagline">Money, explained before it moves.</div>
+        <p class="lede">
+          Anchorline is an agentic guidance layer inside retail banking that tells an average customer,
+          in plain terms, where their next dollar should go — and never moves it without their say-so.
+          It replaces the guesswork of budgeting apps with a bounded, explainable AI that recommends,
+          simulates, and prepares; the customer approves. One system, three instruments: a design
+          language that keeps every screen calm and legible, a research hub that keeps every
+          recommendation accountable to evidence, and a live application that puts both to work.
+        </p>
+        <dl class="meta-row">
+          <div><dt>Primary user</dt><dd>Mass retail customer, low–medium financial confidence</dd></div>
+          <div><dt>Core job</dt><dd>Help me make better money decisions without expert knowledge</dd></div>
+          <div><dt>Trust rule</dt><dd>AI suggests and explains. The user confirms and controls.</dd></div>
+          <div><dt>v1 emphasis</dt><dd>Save &amp; debt first. Investing second.</dd></div>
+          <div><dt>Platforms</dt><dd>iOS first · Responsive web · Tablet</dd></div>
+        </dl>
+
+        <div class="triad">
+          <a href="#design-system">
+            <div class="idx">01 · LANGUAGE</div>
+            <h3>Design System</h3>
+            <p>The visual and verbal rules that make restraint, trust, and clarity legible on every screen.</p>
+            <div class="rel">informs → the Solution Application</div>
+          </a>
+          <a href="#research-hub">
+            <div class="idx">02 · EVIDENCE</div>
+            <h3>UX Research Hub</h3>
+            <p>The archetypes, hypotheses, and traceable evidence that justify every product decision below.</p>
+            <div class="rel">justifies → the Solution Application</div>
+          </a>
+          <a href="#solution">
+            <div class="idx">03 · PRODUCT</div>
+            <h3>Solution Application</h3>
+            <p>The working experience — guided setup, recommendations, approvals, progress — across iOS, web, and tablet.</p>
+            <div class="rel">demonstrates → the Design System</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 01 STRATEGY ================= -->
+    <section class="section" id="strategy">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">01 — Product-Owner Strategy</div>
+          <h2>Trust is the growth strategy</h2>
+          <p class="dek">Anchorline is framed as a trust-led engagement product, not a feature. Every downstream
+          decision — what the AI is allowed to do, what it must explain, what ships in v1 — traces back to this framing.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h4 class="minihead">Strategic frame</h4>
+            <ul class="dash">
+              <li><b>Primary user</b> — mass retail banking customer, low-to-medium financial confidence, broad age range.</li>
+              <li><b>Core job to be done</b> — "Help me make better money decisions without needing expert knowledge."</li>
+              <li><b>Core user value</b> — clear recommendations, visible progress, low effort, confidence, control.</li>
+              <li><b>Core bank value</b> — stronger digital engagement, retention, trust, selective product penetration.</li>
+              <li><b>Experience tone</b> — a smart financial coach. Never a salesperson. Never an overbearing autopilot.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4 class="minihead">v1 scope discipline</h4>
+            <ul class="dash">
+              <li><b>In scope</b> — savings behaviour, debt payoff efficiency, cash buffer health, goal-based reallocation.</li>
+              <li><b>Secondary layer</b> — investment intelligence, introduced only once saving &amp; debt posture is stable.</li>
+              <li><b>Always required</b> — explicit approval before any meaningful money movement.</li>
+              <li><b>Always available</b> — a manual, non-AI route for every guided action.</li>
+              <li><b>Out of v1</b> — autonomous execution, product opening, trading, action on low-confidence data.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">KPI framework</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Tier</th><th>Metric</th><th>What it tells the business</th><th>What it tells the user</th></tr></thead>
+              <tbody>
+                <tr><td><span class="pill accent">North Star</span></td><td>Trust-led engagement</td><td>Customers return because they believe the guidance, not because they're nudged.</td><td>"I trust what this tells me."</td></tr>
+                <tr><td>Secondary</td><td>Plan acceptance rate</td><td>Recommendation quality &amp; explanation clarity are working.</td><td>"This actually fits my situation."</td></tr>
+                <tr><td>Secondary</td><td>Repeat usage (weekly check-in return rate)</td><td>The habit loop is forming without being coercive.</td><td>"Checking in feels worth it."</td></tr>
+                <tr><td>Secondary</td><td>Recommendation follow-through</td><td>Advice converts to real financial behaviour change.</td><td>"I did the thing, and it helped."</td></tr>
+                <tr><td>Secondary</td><td>Satisfaction &amp; reduced effort</td><td>The product is lowering cognitive load, not adding to it.</td><td>"I didn't have to think hard about this."</td></tr>
+                <tr><td>Secondary</td><td>Selective product adoption</td><td>Trust converts into deeper banking relationships, earned not pushed.</td><td>"This felt like the right next step, not a pitch."</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 02 ARCHETYPES ================= -->
+    <section class="section" id="archetypes">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">02 — User Archetypes</div>
+          <h2>Five people, one trust model</h2>
+          <p class="dek">Anchorline's guidance logic flexes by life stage and confidence level, but the trust
+          rule never does. These five archetypes anchor every design and AI-logic decision in the rest of this package.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card archetype">
+            <div class="who"><h3>The Starter</h3><span class="meta">Maya · 24 · Junior analyst</span></div>
+            <div class="pill watch">Trust sensitivity: High — fears judgment</div>
+            <dl>
+              <dt>Context</dt><dd>First full-time income, $6.2k student debt, $310 average balance, irregular saving.</dd>
+              <dt>Pain</dt><dd>Doesn't know what "good" looks like; associates budgeting apps with being told off.</dd>
+              <dt>Goals</dt><dd><b>Build a starter buffer</b>, stop overdraft anxiety, understand her own spending.</dd>
+              <dt>Guidance</dt><dd><b>Guided</b> — wants the app to decide the mechanics, not the values.</dd>
+              <dt>Behaviour</dt><dd>Checks balance often, avoids anything that feels like a lecture, responds to small wins.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: tiny, low-risk first moves and visible momentum.</div>
+            <div class="avoid">Must avoid: shaming language, debt comparisons, any tone of judgment.</div>
+          </div>
+
+          <div class="card archetype">
+            <div class="who"><h3>The Stabilizer</h3><span class="meta">Devon · 31 · Product manager</span></div>
+            <div class="pill good">Trust sensitivity: Medium — wants efficiency, not hand-holding</div>
+            <dl>
+              <dt>Context</dt><dd>Stable income, growing savings across 3 uncoordinated goals (trip, house, buffer).</dd>
+              <dt>Pain</dt><dd>Money is scattered across goals with no logic; unsure if allocation is optimal.</dd>
+              <dt>Goals</dt><dd>Coordinate goal priority, house down payment on a clear timeline.</dd>
+              <dt>Guidance</dt><dd><b>Balanced</b> — wants recommendations, but expects to adjust the logic.</dd>
+              <dt>Behaviour</dt><dd>Uses payday reallocation heavily; compares scenarios before approving.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: trade-off clarity between competing goals, timelines.</div>
+            <div class="avoid">Must avoid: oversimplifying — Devon will distrust a "just trust us" answer.</div>
+          </div>
+
+          <div class="card archetype">
+            <div class="who"><h3>The Anchor</h3><span class="meta">Priya &amp; Sam · 38–42 · Household</span></div>
+            <div class="pill watch">Trust sensitivity: High — low margin for error</div>
+            <dl>
+              <dt>Context</dt><dd>Two kids, mortgage, childcare, RESP contributions; tight monthly slack.</dd>
+              <dt>Pain</dt><dd>No time or energy for financial admin; one mistake feels costly.</dd>
+              <dt>Goals</dt><dd>Protect the buffer, keep RESP on track, avoid new debt.</dd>
+              <dt>Guidance</dt><dd><b>Guided</b> — values reassurance and simplicity over control.</dd>
+              <dt>Behaviour</dt><dd>Engages weekly at most; wants confirmation nothing has gone wrong.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: stability signals — "buffer is safe," "nothing needs you."</div>
+            <div class="avoid">Must avoid: frequent asks, complex trade-off framing, unnecessary urgency.</div>
+          </div>
+
+          <div class="card archetype">
+            <div class="who"><h3>The Reset</h3><span class="meta">Marcus · 45 · Recently reduced hours</span></div>
+            <div class="pill risk">Trust sensitivity: Very high — shame &amp; anxiety present</div>
+            <dl>
+              <dt>Context</dt><dd>Income drop, $14k high-interest debt across two cards, depleted buffer.</dd>
+              <dt>Pain</dt><dd>Feels behind and judged by every finance product he's used.</dd>
+              <dt>Goals</dt><dd>Stop the bleeding, rebuild a minimal buffer, a believable debt path out.</dd>
+              <dt>Guidance</dt><dd><b>Guided, cautious</b> — needs stabilization before optimization.</dd>
+              <dt>Behaviour</dt><dd>May avoid the app when anxious; needs re-engagement without guilt.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: non-judgmental stabilization, one clear next step at a time.</div>
+            <div class="avoid">Must avoid: aggressive debt payoff pressure, comparisons, silence when things worsen.</div>
+          </div>
+
+          <div class="card archetype" style="grid-column:1/-1;">
+            <div class="who"><h3>The Builder</h3><span class="meta">Elaine · 52 · Operations director</span></div>
+            <div class="pill good">Trust sensitivity: Medium — wants rigor, not reassurance</div>
+            <dl>
+              <dt>Context</dt><dd>Debt-free, healthy buffer, saving basics covered; underusing investment capacity.</dd>
+              <dt>Pain</dt><dd>Unsure if she's "doing enough"; existing tools feel either too basic or too salesy.</dd>
+              <dt>Goals</dt><dd>Confirm she's on track for retirement horizon; grow beyond savings.</dd>
+              <dt>Guidance</dt><dd><b>Manual-leaning</b> — wants scenario tools and explainability more than automation.</dd>
+              <dt>Behaviour</dt><dd>Uses web/tablet for deeper planning; low tolerance for oversimplified advice.</dd>
+            </dl>
+            <div class="emph">AI should emphasize: rigorous explanation, scenario comparison, the "why" behind confidence levels.</div>
+            <div class="avoid">Must avoid: pushing products, treating her like a novice, hiding the reasoning behind a recommendation.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 DESIGN SYSTEM ================= -->
+    <section class="section" id="design-system">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">03 — Design System</div>
+          <h2>An instrument, not an interface</h2>
+          <p class="dek">The design language borrows from precision instruments and formal financial documents —
+          ledgers, prospectuses, wayfinding — rather than consumer fintech's usual gradients and gamified badges.
+          Every rule here exists to make an AI recommendation feel considered, not persuasive.</p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Design principles</h4>
+          <div class="grid grid-3">
+            <div class="card"><b>Trust before automation</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">Nothing moves until the user says so — the interface never implies otherwise.</p></div>
+            <div class="card"><b>Clarity before density</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">One recommendation at a time. Depth is available, never defaulted to.</p></div>
+            <div class="card"><b>Recommendation before execution</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">The AI's voice is always proposing, never announcing something done.</p></div>
+            <div class="card"><b>Explainability before persuasion</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">Reasoning is shown, not sold. No urgency copy, no artificial scarcity.</p></div>
+            <div class="card"><b>Progress before gamification</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">Momentum is shown as real trend lines, not points, streaks, or badges.</p></div>
+            <div class="card"><b>Premium restraint</b><p style="margin-top:6px;font-size:13px;color:var(--ink-soft);">Quiet typography and hairlines over gradients, glow, and heavy shadow.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Brand &amp; product adjectives</h4>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span class="pill accent">Composed</span><span class="pill accent">Precise</span><span class="pill accent">Candid</span>
+            <span class="pill accent">Grounded</span><span class="pill accent">Fluent</span><span class="pill accent">Unhurried</span>
+          </div>
+        </div>
+
+        <div class="subblock grid grid-2">
+          <div>
+            <h4 class="minihead">Colour strategy</h4>
+            <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;">A stone-paper neutral carries the system; brass marks anything the AI proposed;
+            deep ink-teal carries links, charts, and instrumentation. Status colour is a separate, semantic layer — never the accent.</p>
+            <div class="swatchrow">
+              <div class="swatch"><div class="fill" style="background:var(--paper);"></div><div class="label"><b>Paper</b><span>Ground — calm, warm-neutral</span></div></div>
+              <div class="swatch"><div class="fill" style="background:var(--ink);"></div><div class="label"><b>Ink</b><span>Primary text, dark surfaces</span></div></div>
+              <div class="swatch"><div class="fill" style="background:var(--accent);"></div><div class="label"><b>Brass</b><span>AI-proposed content, CTAs</span></div></div>
+              <div class="swatch"><div class="fill" style="background:var(--accent-ink);"></div><div class="label"><b>Ink-teal</b><span>Links, charts, instrumentation</span></div></div>
+              <div class="swatch"><div class="fill" style="background:var(--status-good);"></div><div class="label"><b>Signal — good</b><span>On-track, ahead</span></div></div>
+              <div class="swatch"><div class="fill" style="background:var(--status-watch);"></div><div class="label"><b>Signal — watch</b><span>At-risk, needs review</span></div></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="minihead">Typography strategy</h4>
+            <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;">Three roles, three faces. Newsreader carries editorial weight at
+            decision moments; IBM Plex Sans runs the interface; IBM Plex Mono sets every figure so numbers always read as data, not decoration.</p>
+            <div class="type-row"><span class="tag">Display / Newsreader</span><span class="sample" style="font-size:26px;">We recommend moving $260</span></div>
+            <div class="type-row"><span class="tag">UI / Plex Sans 600</span><span class="sample" style="font-family:var(--font-body);font-weight:600;font-size:16px;">Approve this transfer</span></div>
+            <div class="type-row"><span class="tag">Body / Plex Sans 400</span><span class="sample" style="font-family:var(--font-body);font-size:14px;">Paying the Visa now saves about $47 in interest this month.</span></div>
+            <div class="type-row"><span class="tag">Data / Plex Mono</span><span class="sample" style="font-family:var(--font-mono);font-size:16px;">$1,940.00 · 92% confidence</span></div>
+          </div>
+        </div>
+
+        <div class="subblock grid grid-2">
+          <div class="card">
+            <h4 class="minihead">Spacing, layout &amp; iconography</h4>
+            <ul class="dash">
+              <li><b>Base unit</b> — 4px grid, 8px rhythm for component spacing, 24px for section rhythm.</li>
+              <li><b>One idea per screen</b> — a recommendation, a check-in, a decision. Depth sits behind "why" and "details," never inline by default.</li>
+              <li><b>Iconography</b> — single-weight line icons only (1.5–1.6px stroke); no filled glyphs, no coins, rockets, or lightning bolts.</li>
+              <li><b>Corner language</b> — 8–12px radii on cards and controls, 24–34px on device-level surfaces; nothing fully pill-shaped except real actions and toggles.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4 class="minihead">Motion &amp; component philosophy</h4>
+            <ul class="dash">
+              <li><b>Motion communicates state</b>, not delight — a number settling, a status changing, a panel opening. 150–220ms, standard easing.</li>
+              <li><b>No celebratory animation</b> on money movement; confirmation is calm, not confetti.</li>
+              <li><b>Components are composable "instruments"</b> — cards, panels, and tiles share one elevation language: hairline border first, shadow only at the topmost layer (modals, approval sheets).</li>
+              <li><b>prefers-reduced-motion</b> is honoured everywhere; nothing depends on animation to be understood.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Trust-signalling &amp; accessibility rules</h4>
+          <div class="grid grid-2">
+            <div class="card">
+              <ul class="dash">
+                <li>Every AI-authored element carries a small <span class="pill accent">Recommended</span> mark — never presented as a neutral system statement.</li>
+                <li>An explanation ("why") is always adjacent to a recommendation, never hidden behind extra taps.</li>
+                <li>Confidence is always visible where an approval is requested — never only in a details screen.</li>
+                <li>Status is never colour-only: every pill pairs colour with a word and a dot glyph.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <ul class="dash">
+                <li>Text contrast holds WCAG AA minimum (4.5:1 body, 3:1 large text) in both themes.</li>
+                <li>Tap targets ≥44×44pt on iOS and tablet; ≥40×40px on web with visible focus rings.</li>
+                <li>Approval flows are fully operable and announced via screen reader — amount, action, and consequence read in one pass.</li>
+                <li>No information is conveyed by animation or hover alone; every state has a static equivalent.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Content tone &amp; microcopy rules</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Situation</th><th>Instead of</th><th>Anchorline says</th></tr></thead>
+              <tbody>
+                <tr><td>Debt recommendation</td><td>"You're wasting money on interest!"</td><td>"Paying the Visa now saves about $47 in interest this month."</td></tr>
+                <tr><td>Low confidence</td><td>"We couldn't calculate this."</td><td>"We don't have enough recent spending data to recommend confidently yet."</td></tr>
+                <tr><td>Approval CTA</td><td>"Optimize now"</td><td>"Approve this transfer"</td></tr>
+                <tr><td>Nothing to do</td><td>(silence, or a forced tip)</td><td>"Holding steady is the right move this week — nothing needs your approval."</td></tr>
+                <tr><td>Missed goal</td><td>"You failed to reach your goal."</td><td>"You're a little behind pace. Here's one adjustment that gets you back on track."</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock grid grid-2">
+          <div class="card">
+            <h4 class="minihead">Recommendation card — anatomy</h4>
+            <ol class="anatomy">
+              <li><b>Recommended tag</b><span>Marks this as AI-proposed, not a system fact.</span></li>
+              <li><b>Headline action</b><span>One sentence, plain language, the amount and destination.</span></li>
+              <li><b>One-line rationale</b><span>The "why," always present, never a tap away.</span></li>
+              <li><b>Confidence chip</b><span>High / Medium / Low, shown at a glance.</span></li>
+              <li><b>Primary actions</b><span>Approve · Adjust · Not now — three ways out, never one.</span></li>
+            </ol>
+          </div>
+          <div class="card">
+            <h4 class="minihead">Approval panel — anatomy</h4>
+            <ol class="anatomy">
+              <li><b>What</b><span>The exact action and amount, stated plainly.</span></li>
+              <li><b>Why</b><span>The reasoning, in the user's terms.</span></li>
+              <li><b>Data used</b><span>What inputs influenced this — balances, goals, spend pattern.</span></li>
+              <li><b>Expected benefit / trade-off</b><span>What improves, and what the honest cost is.</span></li>
+              <li><b>What happens next &amp; what's editable</b><span>Confirms this isn't a one-way door.</span></li>
+              <li><b>Confidence &amp; escalation</b><span>Confidence level, plus a visible path to a human.</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Progress &amp; status visualisation language</h4>
+          <div class="grid grid-3">
+            <div class="card"><span class="pill good">On track</span><p style="margin-top:8px;font-size:13px;color:var(--ink-soft);">Real trend line vs. target line — never a badge or streak count.</p></div>
+            <div class="card"><span class="pill watch">At risk</span><p style="margin-top:8px;font-size:13px;color:var(--ink-soft);">Shown with the one action that would restore pace — never alarm-coloured alone.</p></div>
+            <div class="card"><span class="pill accent">Ahead of pace</span><p style="margin-top:8px;font-size:13px;color:var(--ink-soft);">Framed as an option to redirect surplus, not pressure to "optimize more."</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Cross-platform behaviour rules</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Stays constant</th><th>Adapts by platform</th></tr></thead>
+              <tbody>
+                <tr><td>Colour tokens, type roles, iconography, motion timing</td><td>Navigation model (tab bar / sidebar / split view)</td></tr>
+                <tr><td>Recommendation &amp; approval panel anatomy (all fields, every field order)</td><td>Panel presentation (sheet / modal / inline)</td></tr>
+                <tr><td>The trust rule — recommend, explain, approve</td><td>Control density and how much planning depth is shown by default</td></tr>
+                <tr><td>Microcopy voice and terminology</td><td>Layout structure (single column / multi-column / master-detail)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 04 RESEARCH HUB ================= -->
+    <section class="section" id="research-hub">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">04 — UX Research Hub</div>
+          <h2>A command centre, not a findings deck</h2>
+          <p class="dek">The hub is internal-first — built for product, design, research, and compliance
+          stakeholders to trace every product decision back to evidence, and to see, at a glance, what is
+          known, what is assumed, and what still needs validating.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h4 class="minihead">Research objectives</h4>
+            <ul class="dash">
+              <li>Establish what "trustworthy financial guidance" means to a low-confidence retail customer.</li>
+              <li>Determine the guidance-vs-control preference distribution across life stages.</li>
+              <li>Identify the exact moments explanation is required for approval, vs. optional.</li>
+              <li>Validate that trust-led engagement predicts recommendation follow-through better than urgency-based nudging.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4 class="minihead">Critical unknowns</h4>
+            <ul class="dash">
+              <li>Does explanation depth increase approval speed, or slow it past a usable threshold?</li>
+              <li>How much does trust decay after one incorrect or poorly-timed recommendation?</li>
+              <li>What's the right re-engagement pattern for a user like Marcus who disengages under stress?</li>
+              <li>Where is the line between "helpful nudge" and "pressure," in this specific product's voice?</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">Problem framing &amp; jobs to be done</h4>
+          <p class="lede" style="font-size:17px;">"Help me know where my next dollar should go, without needing to become
+          a finance expert to trust the answer."</p>
+          <div class="grid grid-3" style="margin-top:16px;">
+            <div><b style="font-size:13px;">Main JTBD</b><p style="font-size:13px;color:var(--ink-soft);margin-top:4px;">When money moves (payday, a bill, a windfall), tell me the smartest next step and let me approve it in seconds.</p></div>
+            <div><b style="font-size:13px;">Related JTBD</b><p style="font-size:13px;color:var(--ink-soft);margin-top:4px;">When my situation changes, help me re-plan without starting over.</p></div>
+            <div><b style="font-size:13px;">Related JTBD</b><p style="font-size:13px;color:var(--ink-soft);margin-top:4px;">Show me I'm making progress in a way I can believe, not just a number that moved.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Behavioural tensions &amp; trust barriers</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Tension</th><th>What's happening</th><th>Design response</th></tr></thead>
+              <tbody>
+                <tr><td>Wants help / fears judgment</td><td>Users avoid tools that feel like a scorecard on their choices.</td><td>Non-evaluative language; momentum framing over comparison.</td></tr>
+                <tr><td>Wants automation / fears losing control</td><td>Auto-pilot budgeting apps have burned users with silent changes.</td><td>Recommend-then-approve as an absolute rule, always visible.</td></tr>
+                <tr><td>Wants simplicity / needs to trust the math</td><td>Oversimplified advice reads as untrustworthy to confident users (Elaine, Devon).</td><td>"Why" always available, depth on demand, never forced.</td></tr>
+                <tr><td>Engages when stable / avoids when stressed</td><td>Debt-stressed users (Marcus) disengage exactly when guidance matters most.</td><td>Low-pressure re-entry points; no guilt-based nudges.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Evidence types &amp; confidence weighting</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Evidence type</th><th>Example</th><th>Confidence weight</th></tr></thead>
+              <tbody>
+                <tr><td>Behavioural / transactional data</td><td>Actual transfer &amp; approval logs from pilot cohort</td><td><span class="pill good">High</span></td></tr>
+                <tr><td>Moderated usability testing</td><td>Task-based sessions on approval &amp; explanation comprehension</td><td><span class="pill good">High</span></td></tr>
+                <tr><td>Diary studies</td><td>Weekly check-in reactions over 6–8 weeks per archetype</td><td><span class="pill watch">Medium</span></td></tr>
+                <tr><td>Survey / attitudinal</td><td>Trust and satisfaction self-report</td><td><span class="pill watch">Medium</span></td></tr>
+                <tr><td>Expert / heuristic review</td><td>Compliance &amp; accessibility audit</td><td><span class="pill watch">Medium</span></td></tr>
+                <tr><td>Internal stakeholder assumption</td><td>Unvalidated product hypothesis</td><td><span class="pill risk">Low — flagged</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Hypothesis tracking</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>ID</th><th>Hypothesis</th><th>Status</th><th>Evidence</th><th>Linked decision</th></tr></thead>
+              <tbody>
+                <tr><td class="num">H-01</td><td>Explaining "why" at the point of approval increases approval rate vs. a bare CTA.</td><td><span class="pill good">Supported</span></td><td>Moderated testing, n=24</td><td>Approval panel anatomy (§03)</td></tr>
+                <tr><td class="num">H-02</td><td>A visible guidance-level toggle increases trust for high-confidence users (Builder, Stabilizer).</td><td><span class="pill watch">Partially supported</span></td><td>Diary study, 2 archetypes</td><td>Guidance-vs-control model (§07)</td></tr>
+                <tr><td class="num">H-03</td><td>Debt-stressed users disengage after a single "you're behind" framing.</td><td><span class="pill good">Supported</span></td><td>Diary study + support transcripts</td><td>Reset archetype copy rules (§02)</td></tr>
+                <tr><td class="num">H-04</td><td>Investment layer visibility before debt payoff reduces trust in the recommendation engine.</td><td><span class="pill risk">Unvalidated</span></td><td>None yet — planned study</td><td>v1 scope: save/debt first (§01)</td></tr>
+                <tr><td class="num">H-05</td><td>A confidence chip alone (without a number) is sufficient for approval comprehension.</td><td><span class="pill risk">Unvalidated</span></td><td>None yet — planned study</td><td>Confidence &amp; explanation strategy (§07)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Research → decision → solution traceability</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Insight</th><th>Product decision</th><th>Solution area</th><th>Design system rule</th></tr></thead>
+              <tbody>
+                <tr><td>Silent auto-changes destroy trust</td><td>All meaningful actions require explicit approval</td><td>Approval &amp; confirmation flow</td><td>Approval panel anatomy</td></tr>
+                <tr><td>Shame language causes disengagement</td><td>Non-evaluative, coach-toned microcopy</td><td>Weekly progress flow</td><td>Content tone rules</td></tr>
+                <tr><td>Confident users distrust oversimplification</td><td>"Why" always present, depth on demand</td><td>Recommendation flow</td><td>Recommendation card anatomy</td></tr>
+                <tr><td>Guidance preference varies widely by archetype</td><td>Guided / Balanced / Manual modes</td><td>Guided setup + AI logic</td><td>Cross-platform control density</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-2 subblock">
+          <div class="card">
+            <h4 class="minihead">Prioritisation framework</h4>
+            <p style="font-size:13px;color:var(--ink-soft);">Research and design backlog scored on: <b>Trust Impact</b> × <b>Reach</b> ×
+            <b>Evidence Confidence</b>, divided by <b>Effort</b>. Anything touching approval, explanation, or
+            money-movement trust is weighted 2× regardless of score — it is treated as a compliance-adjacent surface, not a growth lever.</p>
+          </div>
+          <div class="card">
+            <h4 class="minihead">Internal stakeholder views</h4>
+            <ul class="dash">
+              <li><b>Product</b> — plan acceptance &amp; follow-through by archetype, prioritisation backlog.</li>
+              <li><b>Design</b> — component-level usability findings, accessibility audit trail.</li>
+              <li><b>Compliance &amp; risk</b> — approval-boundary adherence, audit log completeness, fairness review status.</li>
+              <li><b>Research</b> — hypothesis status, evidence confidence, open validation queue.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">Open questions for future validation</h4>
+          <ul class="dash">
+            <li>What confidence threshold should suppress a recommendation entirely rather than show it as "low confidence"?</li>
+            <li>Does tablet's side-by-side planning view change approval speed or comprehension vs. mobile's sequential flow?</li>
+            <li>How should the product reintroduce itself to a user who disengaged for 60+ days during a financial setback?</li>
+            <li>What's the right disclosure moment for investment-layer eligibility without it reading as a sales trigger?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 05 SOLUTION APPLICATION ================= -->
+    <section class="section" id="solution">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">05 — Solution Application</div>
+          <h2>The system, at work</h2>
+          <p class="dek">One product logic, demonstrated end to end — from entering context, to a recommendation,
+          to an approval, to progress the following week. The design system's rules and the research hub's
+          evidence are both visible in the choices below.</p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Information architecture</h4>
+          <div class="grid grid-2">
+            <div class="tree card">
+              <ul>
+                <li><span class="lbl">Home</span><span class="note">status, next-best action</span>
+                  <ul><li>Cash buffer</li><li>Active recommendation</li><li>Goal snapshots</li></ul>
+                </li>
+                <li><span class="lbl">Plan</span><span class="note">allocation &amp; scenarios</span>
+                  <ul><li>Goal priorities</li><li>Debt payoff plan</li><li>What-if scenarios</li></ul>
+                </li>
+                <li><span class="lbl">Approvals</span><span class="note">pending &amp; history</span>
+                  <ul><li>Pending actions</li><li>Approved / declined log</li></ul>
+                </li>
+                <li><span class="lbl">Progress</span><span class="note">weekly check-in</span>
+                  <ul><li>On-track / at-risk / ahead</li><li>Spending change summary</li></ul>
+                </li>
+                <li><span class="lbl">Guidance settings</span><span class="note">trust &amp; control</span>
+                  <ul><li>Guided / Balanced / Manual</li><li>Data &amp; explanation preferences</li></ul>
+                </li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 class="minihead">Minimum inputs before a recommendation is trustworthy</h4>
+              <ul class="dash">
+                <li>Income pattern</li><li>Balances</li><li>Debt obligations</li><li>Spending behaviour</li>
+                <li>Goals &amp; goal priority order</li><li>Time horizon</li><li>Risk comfort</li>
+                <li>Desired level of guidance vs. control</li>
+              </ul>
+              <p style="font-size:12px;color:var(--ink-faint);margin-top:10px;">Below this bar, Anchorline shows a low-confidence state rather than a guess (see §07, §08).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Core flows</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Guided setup</h4><p>Income, balances, debt, goals, priority order, and a guidance-level choice — five short steps, editable later.</p><div class="plat">All platforms</div></div>
+            <div class="step"><div class="n"></div><h4>Recommendation</h4><p>One next-best action, headline + rationale + confidence, with Approve / Adjust / Not now.</p><div class="plat">Card → sheet (iOS) · inline (web/tablet)</div></div>
+            <div class="step"><div class="n"></div><h4>Approval</h4><p>Full anatomy — what, why, data, benefit, trade-off, next, editable, confidence, escalation.</p><div class="plat">Bottom sheet (iOS) · modal (web) · side panel (tablet)</div></div>
+            <div class="step"><div class="n"></div><h4>Weekly check-in</h4><p>Goal progress, spend change, debt &amp; buffer health, one next-best action, and why it changed.</p><div class="plat">All platforms, depth varies</div></div>
+            <div class="step"><div class="n"></div><h4>Recalibration</h4><p>Payday, a new expense, or a changed goal reopens the plan with a single, explained adjustment.</p><div class="plat">Triggered, all platforms</div></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 subblock">
+          <div class="card">
+            <h4 class="minihead">Allocation &amp; what-if planning</h4>
+            <ul class="dash">
+              <li>Debt vs. savings vs. buffer shown as a single waterfall the user can drag to compare, not edit blind.</li>
+              <li>Every scenario shows the same anatomy as a real recommendation — no separate "toy" mode.</li>
+              <li>Manual editing is always reachable from any AI-prepared view; nothing is guided-only.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4 class="minihead">Debt, savings &amp; the investment layer</h4>
+            <ul class="dash">
+              <li><b>Buffer first</b> — a minimum safety cushion is protected before anything else is proposed.</li>
+              <li><b>High-interest debt next</b> — prioritised whenever its rate outweighs any near-term savings goal.</li>
+              <li><b>Goal-based saving</b> — allocated by the user's stated priority order once buffer and debt are healthy.</li>
+              <li><b>Investment</b> — introduced as a secondary layer only once savings &amp; debt posture is stable, and only ever proposed, never opened, by the AI.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">States that must exist, not just the happy path</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>State</th><th>What the user sees</th><th>What the AI does</th></tr></thead>
+              <tbody>
+                <tr><td>Empty</td><td>"Let's set up your plan — it takes about 4 minutes."</td><td>Nothing yet; offers guided or manual setup entry.</td></tr>
+                <tr><td>Loading</td><td>A calm, static skeleton — no spinner tricks or fake progress.</td><td>Computing against current data; no partial numbers shown.</td></tr>
+                <tr><td>Error</td><td>Plain explanation of what failed and what still works.</td><td>Falls back to last-known-good state; never silently retries an approval.</td></tr>
+                <tr><td>Low confidence</td><td>"We don't have enough recent data to recommend confidently. Here's what's missing."</td><td>Abstains from a specific number; offers the smallest safe action or a data prompt.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Support &amp; escalation</h4>
+          <p style="font-size:13.5px;color:var(--ink-soft);max-width:70ch;">A visible "Talk to someone" option sits inside every approval panel and every
+          low-confidence state — never buried in a settings menu. Escalation carries full context (the recommendation, the data behind it) to the human agent, so the user never re-explains their situation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 06 PLATFORM TOGGLE ================= -->
+    <section class="section" id="platform">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">06 — Platform Toggle Model</div>
+          <h2>Same plan. Three instruments.</h2>
+          <p class="dek">The same recommendation for the same customer — Devon, mid-payday reallocation —
+          shown as it would actually render on each platform. Switch instruments below; the product logic,
+          the approval anatomy, and the trust rule never change. Only navigation, density, and planning depth do.</p>
+        </div>
+
+        <div class="bench">
+          <div class="bench-head">
+            <div class="toggle" role="tablist" aria-label="Platform preview">
+              <button type="button" role="tab" data-plat="ios" aria-pressed="true"><svg><use href="#i-ios"/></svg>iOS</button>
+              <button type="button" role="tab" data-plat="web" aria-pressed="false"><svg><use href="#i-web"/></svg>Responsive Web</button>
+              <button type="button" role="tab" data-plat="tablet" aria-pressed="false"><svg><use href="#i-tablet"/></svg>Tablet</button>
+            </div>
+            <div class="pill accent">Same recommendation · same trust anatomy</div>
+          </div>
+
+          <div class="bench-stage">
+            <!-- iOS mockup -->
+            <div class="frame ios" data-view="ios">
+              <div class="screen">
+                <div class="notch"></div>
+                <div class="ios-status"><span>9:41</span><span>●●●</span></div>
+                <div class="ios-body">
+                  <div class="ios-greet"><div class="h">Good afternoon, Devon</div><div class="s">Payday landed — $2,340 in</div></div>
+                  <div class="ios-buffer"><div class="row"><span class="lbl">Cash buffer</span><span class="val">Healthy · 3.2 wks</span></div></div>
+                  <div class="rec-card">
+                    <span class="tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-anchor"/></svg>Recommended</span>
+                    <h5>Move $260 to Visa, $140 to buffer</h5>
+                    <p>Saves ~$47 in interest this month. Buffer was 2.1 weeks below target — this restores it.</p>
+                    <div style="margin-top:8px;"><span class="pill good">High confidence</span></div>
+                    <div class="cta-row"><button class="btn primary">Approve</button><button class="btn">Adjust</button></div>
+                  </div>
+                </div>
+                <div class="ios-tabbar">
+                  <div class="t on"><svg><use href="#i-home"/></svg>Home</div>
+                  <div class="t"><svg><use href="#i-plan"/></svg>Plan</div>
+                  <div class="t"><svg><use href="#i-approve"/></svg>Approvals</div>
+                  <div class="t"><svg><use href="#i-progress"/></svg>Progress</div>
+                  <div class="t"><svg><use href="#i-more"/></svg>More</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Web mockup -->
+            <div class="frame web" data-view="web" hidden>
+              <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">anchorline.bank/plan</span></div>
+              <div class="screen">
+                <div class="web-nav">
+                  <div class="brand">Anchorline</div>
+                  <a class="on"><svg><use href="#i-home"/></svg>Home</a>
+                  <a><svg><use href="#i-plan"/></svg>Plan</a>
+                  <a><svg><use href="#i-approve"/></svg>Approvals</a>
+                  <a><svg><use href="#i-progress"/></svg>Progress</a>
+                  <a><svg><use href="#i-research"/></svg>Transparency</a>
+                  <a><svg><use href="#i-support"/></svg>Support</a>
+                </div>
+                <div class="web-main">
+                  <h4>Payday landed — $2,340 in</h4>
+                  <div class="sub">Here's the recommended split, and why.</div>
+                  <div class="web-grid">
+                    <div class="stat-tile"><div class="l">Cash buffer</div><div class="v">3.2 wks</div></div>
+                    <div class="stat-tile"><div class="l">Visa APR</div><div class="v">22.9%</div></div>
+                  </div>
+                  <div class="rec-card">
+                    <span class="tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-anchor"/></svg>Recommended</span>
+                    <h5>Move $260 to Visa, $140 to buffer</h5>
+                    <p>Saves ~$47 in interest this month. Buffer was 2.1 weeks below target — this restores it. Remaining $1,940 stays for regular bills.</p>
+                    <div class="cta-row"><button class="btn primary">Approve transfer</button><button class="btn">Adjust split</button><button class="btn">Not now</button></div>
+                  </div>
+                </div>
+                <div class="web-explain">
+                  <h5>Why this recommendation</h5>
+                  <div class="row"><span>Data used</span><span>Balances, APRs, buffer target</span></div>
+                  <div class="row"><span>Expected benefit</span><span>$47 saved</span></div>
+                  <div class="row"><span>Trade-off</span><span>Slower trip fund pace</span></div>
+                  <div class="row"><span>Confidence</span><span>92%</span></div>
+                  <div class="row"><span>Editable later</span><span>Yes</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tablet mockup -->
+            <div class="frame tablet" data-view="tablet" hidden>
+              <div class="screen">
+                <div class="tab-list">
+                  <h5>Pending &amp; recent</h5>
+                  <div class="tab-item on"><div class="t">Payday reallocation</div><div class="s">$2,340 · today</div></div>
+                  <div class="tab-item"><div class="t">Weekly check-in</div><div class="s">Ready · this week</div></div>
+                  <div class="tab-item"><div class="t">Trip fund pace</div><div class="s">Ahead by $80</div></div>
+                </div>
+                <div class="tab-detail">
+                  <span class="tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-anchor"/></svg>Recommended</span>
+                  <h4>Move $260 to Visa, $140 to buffer</h4>
+                  <div class="why">Saves ~$47 in interest this month. Your buffer sits 2.1 weeks below target — this restores it while keeping the trip fund moving, just slower.</div>
+                  <div class="conf"><span style="font-size:11px;color:var(--ink-faint);">Confidence</span><div class="conf-bar"><i></i></div><span style="font-family:var(--font-mono);font-size:12px;">92%</span></div>
+                  <div class="cta-row"><button class="btn primary">Approve</button><button class="btn">Adjust split</button><button class="btn">Compare scenario</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend">
+            <span><b>iOS —</b> bottom-tab, sequential, one decision per screen</span>
+            <span><b>Web —</b> sidebar + persistent explanation panel, deeper planning</span>
+            <span><b>Tablet —</b> master-detail, compare pending items side-by-side</span>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">What's invariant vs. what adapts</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Dimension</th><th>iOS</th><th>Responsive Web</th><th>Tablet</th></tr></thead>
+              <tbody>
+                <tr><td>Navigation model</td><td>Bottom tab bar, 5 items</td><td>Persistent left sidebar</td><td>Top tab strip + master-detail</td></tr>
+                <tr><td>Dashboard density</td><td>Low — one card in view at a time</td><td>High — stats, plan, and explanation together</td><td>Medium — list + detail, no scroll-hunting</td></tr>
+                <tr><td>Approval experience</td><td>Bottom sheet, thumb-reachable</td><td>Centred modal, full anatomy visible</td><td>Persistent side panel, no context switch</td></tr>
+                <tr><td>Planning depth</td><td>Light — view &amp; approve, edit basics</td><td>Deep — full scenario comparison, manual controls</td><td>Medium-deep — compare 2–3 scenarios side-by-side</td></tr>
+                <tr><td>Research / transparency visibility</td><td>Hidden behind "Why," one line</td><td>Dedicated Transparency nav item</td><td>Available in detail panel on request</td></tr>
+                <tr><td>Explanation panel</td><td>Inline within the sheet</td><td>Separate persistent panel</td><td>Inline within the detail pane</td></tr>
+                <tr><td>Component behaviour</td><td>Swipe &amp; tap, native sheets</td><td>Hover states, keyboard navigable</td><td>Touch + split-view drag</td></tr>
+                <tr><td>Layout structure</td><td>Single column</td><td>Three column (nav / content / explain)</td><td>Two column (list / detail)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 07 AI LOGIC ================= -->
+    <section class="section" id="ai-logic">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">07 — AI Logic Model</div>
+          <h2>A bounded decision-support system</h2>
+          <p class="dek">Anchorline's AI is not described as magic — it is a responsible, explainable system with
+          clear inputs, a fixed prioritisation order, explicit approval boundaries, and a defined behaviour for
+          when it doesn't know enough. Every rule below is what makes the trust rule enforceable in code, not just in copy.</p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Recommendation priority order</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Protect the buffer</h4><p>A minimum safety cushion is defended before any other move is proposed.</p></div>
+            <div class="step"><div class="n"></div><h4>High-interest debt</h4><p>Proposed whenever its rate outweighs the near-term value of any savings goal.</p></div>
+            <div class="step"><div class="n"></div><h4>Goal-priority saving</h4><p>Allocated by the user's stated order once buffer and debt are healthy.</p></div>
+            <div class="step"><div class="n"></div><h4>Investment (secondary)</h4><p>Proposed only once the above are stable — always prepared, never executed autonomously.</p></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 subblock">
+          <div class="card">
+            <h4 class="minihead">Guidance vs. control preference</h4>
+            <div class="table-wrap">
+              <table class="data">
+                <thead><tr><th>Mode</th><th>What changes</th></tr></thead>
+                <tbody>
+                  <tr><td><b>Guided</b></td><td>AI prepares full recommendations by default; fewer decisions surfaced per session.</td></tr>
+                  <tr><td><b>Balanced</b></td><td>AI recommends; trade-off framing shown more prominently for the user to weigh.</td></tr>
+                  <tr><td><b>Manual-leaning</b></td><td>AI surfaces analysis and scenarios; the user builds the allocation, AI checks it.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h4 class="minihead">When the AI is assertive, cautious, or abstains</h4>
+            <div class="table-wrap">
+              <table class="data">
+                <thead><tr><th>Posture</th><th>Trigger</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="pill good">Assertive</span></td><td>High-confidence data, clear priority order, no conflicting goals.</td></tr>
+                  <tr><td><span class="pill watch">Cautious</span></td><td>Recent life-stage change, thin data history, or a stressed-state signal.</td></tr>
+                  <tr><td><span class="pill risk">Abstains</span></td><td>Confidence below threshold, or the action falls outside approval boundaries.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">Confidence &amp; explanation strategy</h4>
+          <div class="grid grid-3">
+            <div><span class="pill good">High (≥85%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Full recommendation with one-line rationale; approve in one step.</p></div>
+            <div><span class="pill watch">Medium (60–84%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">Recommendation shown with an explicit caveat on what's uncertain.</p></div>
+            <div><span class="pill risk">Low (&lt;60%)</span><p style="font-size:13px;color:var(--ink-soft);margin-top:8px;">No specific number proposed — the system explains what data would raise confidence.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Approval boundary rules</h4>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Action</th><th>AI may prepare</th><th>AI may auto-execute</th><th>Approval required</th></tr></thead>
+              <tbody>
+                <tr><td>Transfer between eligible accounts</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Recurring contribution setup / edit</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Goal contribution reallocation</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Savings rule change</td><td>Yes</td><td>No</td><td><span class="pill accent">Always</span></td></tr>
+                <tr><td>Open a new product</td><td>No</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
+                <tr><td>Execute an investment trade</td><td>Simulation only</td><td>No</td><td><span class="pill risk">Out of scope, v1</span></td></tr>
+                <tr><td>Act on incomplete / low-confidence data</td><td>No</td><td>No</td><td><span class="pill risk">Never</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">Auditability</h4>
+          <p style="font-size:13.5px;color:var(--ink-soft);max-width:70ch;">Every recommendation, its confidence score, the data snapshot behind it, and the user's
+          decision (approve / adjust / decline) are logged as one traceable record — the same record structure a compliance reviewer, a
+          support agent, and the user's own approval-history screen all read from.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 08 TRUST & GOVERNANCE ================= -->
+    <section class="section" id="trust">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">08 — Trust &amp; Governance</div>
+          <h2>Trust as architecture, not messaging</h2>
+          <p class="dek">These patterns are built into the interface itself — not stated as values in a
+          marketing page. Each one maps to a specific, always-present piece of UI.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card"><h4 class="minihead">AI disclosure</h4><p style="font-size:13px;color:var(--ink-soft);">A persistent "Recommended by Anchorline AI" mark on every AI-authored element — never blended into system copy.</p></div>
+          <div class="card"><h4 class="minihead">Explanation pattern</h4><p style="font-size:13px;color:var(--ink-soft);">What, why, data used, benefit, trade-off — the same six fields, every time, in the same order.</p></div>
+          <div class="card"><h4 class="minihead">Confidence communication</h4><p style="font-size:13px;color:var(--ink-soft);">A visible chip and, where relevant, a percentage — never confidence implied only by tone.</p></div>
+          <div class="card"><h4 class="minihead">Fairness &amp; bias awareness</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation logic reviewed across archetypes for disparate impact before each release; flagged in the research hub's stakeholder view.</p></div>
+          <div class="card"><h4 class="minihead">Privacy signalling</h4><p style="font-size:13px;color:var(--ink-soft);">"Data used" is shown at the point of every recommendation — not buried in a separate privacy centre.</p></div>
+          <div class="card"><h4 class="minihead">Human escalation</h4><p style="font-size:13px;color:var(--ink-soft);">"Talk to someone" inside every approval panel and low-confidence state, carrying full context to the agent.</p></div>
+          <div class="card"><h4 class="minihead">Customer control</h4><p style="font-size:13px;color:var(--ink-soft);">Guidance level, data inputs, and any standing rule can be paused or reversed by the user at any time.</p></div>
+          <div class="card"><h4 class="minihead">Post-action transparency</h4><p style="font-size:13px;color:var(--ink-soft);">Every approved action produces a plain-language receipt — what happened, why, and how to undo or adjust it.</p></div>
+          <div class="card"><h4 class="minihead">Audit trail</h4><p style="font-size:13px;color:var(--ink-soft);">Recommendation, confidence, data snapshot, and decision logged as one traceable record per action.</p></div>
+        </div>
+
+        <div class="subblock card">
+          <h4 class="minihead">What the product says when it's unsure</h4>
+          <p style="font-family:var(--font-display);font-size:19px;font-style:italic;color:var(--accent-ink);max-width:60ch;">
+          "We don't have enough recent data to recommend confidently yet. We're missing a clear view of your regular bills.
+          You can add them now, or hold steady — nothing needs to move today."
+          </p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">Failure handling</h4>
+          <ul class="dash">
+            <li>A failed transfer never retries silently — the user sees exactly what didn't complete and why.</li>
+            <li>If a recommendation was based on data later found to be wrong, the user is proactively told, not left to notice.</li>
+            <li>System outages fall back to the last-known-good state; no approval is ever inferred from stale data.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 09 JOURNEYS ================= -->
+    <section class="section" id="journeys">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">09 — Key Journeys</div>
+          <h2>Three journeys, optimised deliberately</h2>
+          <p class="dek">These are the only three journeys the v1 product is designed to be excellent at —
+          everything else in the IA supports them.</p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">1 · Guided setup into a smart allocation plan</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Context</h4><p>Income, balances, debts, and existing goals — pulled where possible, confirmed by the user.</p></div>
+            <div class="step"><div class="n"></div><h4>Priorities</h4><p>User ranks goals and sets time horizon and risk comfort.</p></div>
+            <div class="step"><div class="n"></div><h4>Guidance level</h4><p>Guided, Balanced, or Manual-leaning — changeable anytime.</p></div>
+            <div class="step"><div class="n"></div><h4>First plan</h4><p>A full allocation plan shown with the standard explanation anatomy.</p></div>
+            <div class="step"><div class="n"></div><h4>Approve or adjust</h4><p>Nothing activates until approved; manual edit is always available.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">2 · Weekly progress check-in and adjustment</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Status summary</h4><p>On-track / at-risk / ahead, for each goal, debt, and the buffer.</p></div>
+            <div class="step"><div class="n"></div><h4>What changed</h4><p>Spending behaviour shift explained in plain terms, not just a number.</p></div>
+            <div class="step"><div class="n"></div><h4>One next-best action</h4><p>A single recommendation, not a list — with full explanation anatomy.</p></div>
+            <div class="step"><div class="n"></div><h4>Approve, adjust, or hold</h4><p>"Holding steady" is a valid, clearly stated outcome.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="minihead">3 · Reallocation during a moment of change</h4>
+          <div class="flow">
+            <div class="step"><div class="n"></div><h4>Trigger detected</h4><p>Payday, a new expense, or a goal edited by the user.</p></div>
+            <div class="step"><div class="n"></div><h4>Re-run priority order</h4><p>Buffer → debt → goals → investment, recalculated against new context.</p></div>
+            <div class="step"><div class="n"></div><h4>Explain what changed</h4><p>Why this differs from last week's plan, in one line.</p></div>
+            <div class="step"><div class="n"></div><h4>Approve the adjustment</h4><p>Same anatomy, same standing rule — no shortcuts for "small" changes.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 10 ARCHITECTURE ================= -->
+    <section class="section" id="architecture">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">10 — Information Architecture</div>
+          <h2>One system, mapped</h2>
+          <p class="dek">How the three instruments actually connect — not as a metaphor, but as the literal
+          flow of information from evidence to language to live product.</p>
+        </div>
+
+        <div class="reldiag">
+          <div class="relnode"><b>Research Hub</b>archetypes · hypotheses · evidence</div>
+          <div class="relarrow">justifies →</div>
+          <div class="relnode"><b>Design System</b>tokens · patterns · voice</div>
+          <div class="relarrow">informs →</div>
+          <div class="relnode"><b>Solution App</b>flows · screens · platforms</div>
+        </div>
+        <p style="text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:-14px;margin-bottom:36px;">…and the Solution Application's real usage data feeds back into the Research Hub as new evidence — closing the loop.</p>
+
+        <div class="tree card">
+          <ul>
+            <li><span class="lbl"><b>Overview</b></span><span class="note">product framing, promise, the three instruments</span></li>
+            <li><span class="lbl"><b>Design System</b></span><span class="note">principles → tokens → patterns</span>
+              <ul><li>Colour, type, spacing, iconography, motion</li><li>Recommendation &amp; approval anatomy</li><li>Accessibility &amp; content rules</li></ul>
+            </li>
+            <li><span class="lbl"><b>Research Hub</b></span><span class="note">evidence → hypotheses → decisions</span>
+              <ul><li>Archetypes &amp; JTBD</li><li>Hypothesis tracker</li><li>Traceability log</li></ul>
+            </li>
+            <li><span class="lbl"><b>Solution Application</b></span><span class="note">Home · Plan · Approvals · Progress · Guidance settings</span>
+              <ul><li>Platform toggle (iOS / Web / Tablet)</li><li>Guided setup, recommendation, approval, check-in flows</li></ul>
+            </li>
+            <li><span class="lbl"><b>AI Logic</b></span><span class="note">inputs → priority order → boundaries</span></li>
+            <li><span class="lbl"><b>Trust &amp; Governance</b></span><span class="note">disclosure → explanation → escalation → audit</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 11 COMPONENTS ================= -->
+    <section class="section" id="components">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">11 — Component System</div>
+          <h2>The families that build every screen</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Family</th><th>Purpose</th><th>Key states</th><th>Governed by</th></tr></thead>
+            <tbody>
+              <tr><td>Recommendation card</td><td>Present one AI-proposed action</td><td>Default, low-confidence, approved, declined</td><td>Recommendation anatomy (§03)</td></tr>
+              <tr><td>Approval panel</td><td>Full explanation before money moves</td><td>Reviewing, confirming, confirmed, escalated</td><td>Approval anatomy (§03)</td></tr>
+              <tr><td>Status pill</td><td>Encode on-track / at-risk / ahead / confidence</td><td>Good, watch, risk, accent</td><td>Progress language (§03)</td></tr>
+              <tr><td>Stat tile</td><td>Show one figure with its label, tabular-numeral set</td><td>Default, trending up/down</td><td>Typography strategy (§03)</td></tr>
+              <tr><td>Explanation panel</td><td>Persistent "why" — data, benefit, trade-off, confidence</td><td>Inline (mobile/tablet), persistent (web)</td><td>Approval anatomy (§03)</td></tr>
+              <tr><td>Waterfall allocator</td><td>Show buffer → debt → goals → investment split</td><td>Recommended, user-adjusted</td><td>AI priority order (§07)</td></tr>
+              <tr><td>Progress trend</td><td>Real line vs. target, not a badge</td><td>On-track, at-risk, ahead</td><td>Progress language (§03)</td></tr>
+              <tr><td>Guidance-level selector</td><td>Guided / Balanced / Manual-leaning</td><td>Selected, changed-this-session</td><td>Guidance model (§07)</td></tr>
+              <tr><td>Escalation entry point</td><td>"Talk to someone," context-carrying</td><td>Default, in-progress handoff</td><td>Trust &amp; governance (§08)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 12 SCREENS ================= -->
+    <section class="section" id="screens">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">12 — Screen Inventory</div>
+          <h2>What ships in v1</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Screen</th><th>iOS</th><th>Web</th><th>Tablet</th><th>Core states covered</th></tr></thead>
+            <tbody>
+              <tr><td>Home / dashboard</td><td>✓</td><td>✓</td><td>✓</td><td>Empty, loaded, low-confidence</td></tr>
+              <tr><td>Guided setup</td><td>✓</td><td>✓</td><td>✓</td><td>In-progress, error, complete</td></tr>
+              <tr><td>Recommendation detail</td><td>✓</td><td>✓</td><td>✓</td><td>High/med/low confidence</td></tr>
+              <tr><td>Approval panel</td><td>✓ sheet</td><td>✓ modal</td><td>✓ side panel</td><td>Reviewing, confirmed, escalated</td></tr>
+              <tr><td>Allocation planner</td><td>Light</td><td>✓ full</td><td>✓ full</td><td>Default, scenario compare</td></tr>
+              <tr><td>What-if scenarios</td><td>—</td><td>✓</td><td>✓</td><td>Default, side-by-side compare</td></tr>
+              <tr><td>Weekly progress</td><td>✓</td><td>✓</td><td>✓</td><td>On-track, at-risk, ahead</td></tr>
+              <tr><td>Debt payoff plan</td><td>✓</td><td>✓</td><td>✓</td><td>Default, adjusted</td></tr>
+              <tr><td>Goal management</td><td>✓</td><td>✓</td><td>✓</td><td>Empty, active, completed</td></tr>
+              <tr><td>Investment layer intro</td><td>Preview only</td><td>✓</td><td>✓</td><td>Not-yet-eligible, eligible</td></tr>
+              <tr><td>Approval history / audit</td><td>Light</td><td>✓ full</td><td>✓ full</td><td>Default, filtered</td></tr>
+              <tr><td>Transparency / "how this works"</td><td>Link out</td><td>✓ full</td><td>✓ full</td><td>Default</td></tr>
+              <tr><td>Support / escalation</td><td>✓</td><td>✓</td><td>✓</td><td>Default, handoff-in-progress</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 13 METRICS ================= -->
+    <section class="section" id="metrics">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">13 — Metrics</div>
+          <h2>How success is actually measured</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Metric</th><th>Definition</th><th>Target signal</th><th>Source</th></tr></thead>
+            <tbody>
+              <tr><td>Trust-led engagement</td><td>Return usage correlated with approval rate, not session count alone</td><td>Rising together, not diverging</td><td>Product analytics + approval log</td></tr>
+              <tr><td>Plan acceptance rate</td><td>% of recommendations approved as-is or with minor adjustment</td><td>&gt;60% by month 3</td><td>Approval log</td></tr>
+              <tr><td>Repeat weekly check-in rate</td><td>% of users returning for the weekly progress flow</td><td>&gt;50% week-over-week</td><td>Product analytics</td></tr>
+              <tr><td>Recommendation follow-through</td><td>% of approved actions still in effect 30 days later</td><td>&gt;80%</td><td>Transaction data</td></tr>
+              <tr><td>Satisfaction / effort</td><td>Post-approval micro-survey, effort &amp; trust framing</td><td>CSAT ≥4.3/5, low-effort ≥70%</td><td>In-product survey</td></tr>
+              <tr><td>Selective product adoption</td><td>Adoption of a recommended product only after guidance history exists</td><td>Directional, not pushed</td><td>CRM + approval log</td></tr>
+              <tr><td>Escalation rate &amp; resolution</td><td>% of sessions escalating to a human, and time to resolve</td><td>Low volume, high resolution quality</td><td>Support system</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 14 RISKS ================= -->
+    <section class="section" id="risks" style="border-bottom:none;">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">14 — Risks, Gaps &amp; Validation Priorities</div>
+          <h2>What this concept doesn't yet know</h2>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Risk / gap</th><th>Why it matters</th><th>Mitigation</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td>Confidence threshold is not yet empirically calibrated</td><td>Wrong threshold either over-abstains (erodes usefulness) or under-abstains (erodes trust)</td><td>Controlled pilot with graduated thresholds, H-05</td><td><span class="pill risk">High</span></td></tr>
+              <tr><td>Re-engagement pattern for disengaged, stressed users unvalidated</td><td>The Reset archetype is highest-need and highest-churn-risk</td><td>Diary study + support transcript analysis</td><td><span class="pill risk">High</span></td></tr>
+              <tr><td>Investment-layer disclosure timing untested</td><td>Risk of reading as a sales trigger, damaging trust built on save/debt guidance</td><td>H-04 validation study before layer ships</td><td><span class="pill watch">Medium</span></td></tr>
+              <tr><td>Fairness review across archetypes not yet run on live logic</td><td>Recommendation logic could disadvantage a specific income or life-stage pattern</td><td>Formal fairness audit before GA, owned by compliance</td><td><span class="pill risk">High</span></td></tr>
+              <tr><td>Tablet split-view approval speed unmeasured</td><td>Side-by-side comparison could speed or slow comprehension vs. sequential mobile flow</td><td>Comparative usability test, both layouts</td><td><span class="pill watch">Medium</span></td></tr>
+              <tr><td>Escalation handoff context-completeness unverified end-to-end</td><td>If context doesn't reach the human agent, the trust promise breaks at the exact moment it matters most</td><td>End-to-end handoff test with support ops</td><td><span class="pill risk">High</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="fline">
+          <span>Anchorline — a retail banking AI guidance concept</span>
+          <span>Design System · Research Hub · Solution Application — one system</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.toggle button[data-plat]');
+  var views = document.querySelectorAll('[data-view]');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var plat = btn.getAttribute('data-plat');
+      buttons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      views.forEach(function(v){ v.hidden = v.getAttribute('data-view') !== plat; });
+    });
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function(s){ if (s.offsetTop <= y) current = s; });
+    links.forEach(function(a){
+      a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
