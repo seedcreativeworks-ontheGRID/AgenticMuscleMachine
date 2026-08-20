@@ -1006,6 +1006,61 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .explain .row span:last-child{ text-align:right; font-weight:500; font-variant-numeric:tabular-nums; }
 .explain p{ font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
 
+
+/* ============================================================
+   PAGED NAVIGATION
+   Each top-level section is its own page. The index rail
+   switches pages rather than scrolling one long document.
+   ============================================================ */
+main > .section{ display:none; border-bottom:none; padding:40px 0 12px; }
+main > .section.is-active{ display:block; animation:pageIn 200ms ease both; }
+@keyframes pageIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:none; } }
+.hero{ padding:52px 0 40px; }
+
+/* the rail is fixed furniture — it should fit, not scroll */
+.rail{ padding:20px 16px 16px 28px; }
+.rail-brand{ margin-bottom:16px; }
+.rail-group{ margin-top:11px; padding-top:8px; }
+.rail-group-label{ padding:0 8px 5px; font-size:9.5px; }
+.rail nav a{ padding:5px 8px; font-size:12.5px; }
+.rail-foot{ margin-top:14px; padding-top:10px; font-size:10.5px; }
+
+/* short windows: shed decoration before the nav is ever allowed to clip */
+@media (max-height:790px){
+  .rail{ padding:16px 16px 12px 28px; }
+  .rail-brand{ margin-bottom:12px; }
+  .rail-foot{ display:none; }
+  .rail-group{ margin-top:9px; padding-top:7px; }
+  .rail nav a{ padding:4px 8px; }
+}
+
+/* previous / next page */
+.pager{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  max-width:1180px; margin:0; padding:20px 72px 8px;
+}
+.pager .pg{
+  display:flex; flex-direction:column; gap:3px; padding:13px 16px;
+  border:1px solid var(--line); border-radius:12px; text-decoration:none;
+  background:var(--paper-raised); min-width:0;
+}
+.pager .pg:hover{ border-color:var(--accent); background:var(--accent-ink-soft); }
+.pager .pg.next{ text-align:right; align-items:flex-end; grid-column:2; }
+.pager .lbl{
+  font-size:10px; text-transform:uppercase; letter-spacing:.09em;
+  color:var(--ink-faint); font-weight:700;
+}
+.pager .ttl{ font-size:14px; font-weight:600; color:var(--ink); letter-spacing:-.015em; }
+footer{ padding:26px 0 72px; }
+
+@media (max-width:980px){
+  .pager{ padding:18px 18px 6px; }
+}
+@media (max-width:600px){
+  .pager{ grid-template-columns:1fr; }
+  .pager .pg.next{ grid-column:1; }
+}
+
 </style>
 </head>
 <body>
@@ -1070,13 +1125,13 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
       </div>
       <div class="rail-group">
         <div class="rail-group-label">Strategy</div>
-        <a href="#strategy"><span class="num">06</span>Product-Owner Strategy</a>
+        <a href="#strategy"><span class="num">06</span>Product Strategy</a>
         <a href="#archetypes"><span class="num">07</span>User Archetypes</a>
         <a href="#journeys"><span class="num">08</span>Key Journeys</a>
       </div>
       <div class="rail-group">
         <div class="rail-group-label">Reference</div>
-        <a href="#architecture"><span class="num">09</span>Information Architecture</a>
+        <a href="#architecture"><span class="num">09</span>Architecture</a>
         <a href="#components"><span class="num">10</span>Component System</a>
         <a href="#screens"><span class="num">11</span>Screen Inventory</a>
         <a href="#metrics"><span class="num">12</span>Metrics</a>
@@ -1115,6 +1170,27 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
           <div><dt>How you spot it</dt><dd>The bank is monochrome. Anchorline is the only colour in the app.</dd></div>
           <div><dt>Platforms</dt><dd>iOS first · Responsive web · Tablet</dd></div>
         </dl>
+
+        <div class="triad">
+          <a href="#prototype">
+            <div class="idx">01 · PRODUCT</div>
+            <h3>The Application</h3>
+            <p>Borealis, working end to end — e-Transfers, bills, registered investing, credit and mortgage, with Anchorline running through all of it.</p>
+            <div class="rel">demonstrates → the Design System</div>
+          </a>
+          <a href="#design-system">
+            <div class="idx">04 · LANGUAGE</div>
+            <h3>Design System</h3>
+            <p>The visual and verbal rules that keep the bank monochrome, the AI unmistakable, and every recommendation legible.</p>
+            <div class="rel">informs → the Application</div>
+          </a>
+          <a href="#research-hub">
+            <div class="idx">05 · EVIDENCE</div>
+            <h3>UX Research Hub</h3>
+            <p>The archetypes, hypotheses and traceable evidence that justify every product decision in the package.</p>
+            <div class="rel">justifies → the Application</div>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -2042,16 +2118,68 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 
 <script>
 (function(){
-  /* ---------- rail scrollspy ---------- */
-  var links = Array.prototype.slice.call(document.querySelectorAll('#railnav a'));
-  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
-  function onScroll(){
-    var y = window.scrollY + 120, current = sections[0];
-    sections.forEach(function(s){ if (s.offsetTop <= y) current = s; });
-    links.forEach(function(a){ a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id); });
-  }
-  document.addEventListener('scroll', onScroll, { passive:true });
-  onScroll();
+  /* ---------- documentation router: one section = one page ---------- */
+  (function(){
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pages = Array.prototype.slice.call(main.querySelectorAll(':scope > section.section'));
+    if (!pages.length) return;
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('#railnav a, #topchips a'));
+    var order = pages.map(function(p){ return p.id; });
+
+    // page titles come from the rail, so they never drift out of sync
+    var titleOf = {};
+    navLinks.forEach(function(a){
+      var id = (a.getAttribute('href') || '').slice(1);
+      if (!id || titleOf[id]) return;
+      var c = a.cloneNode(true);
+      var n = c.querySelector('.num'); if (n) n.remove();
+      titleOf[id] = c.textContent.trim();
+    });
+
+    var pager = document.createElement('nav');
+    pager.className = 'pager';
+    pager.setAttribute('aria-label', 'Page navigation');
+    var footer = main.querySelector('footer');
+    if (footer) main.insertBefore(pager, footer); else main.appendChild(pager);
+
+    function renderPager(id){
+      var i = order.indexOf(id);
+      var prev = i > 0 ? order[i-1] : null;
+      var next = (i > -1 && i < order.length - 1) ? order[i+1] : null;
+      var html = '';
+      html += prev
+        ? '<a class="pg prev" href="#'+prev+'"><span class="lbl">Previous</span><span class="ttl">'+(titleOf[prev]||prev)+'</span></a>'
+        : '<span></span>';
+      html += next
+        ? '<a class="pg next" href="#'+next+'"><span class="lbl">Next</span><span class="ttl">'+(titleOf[next]||next)+'</span></a>'
+        : '';
+      pager.innerHTML = html;
+    }
+
+    function show(id, push){
+      if (!id || order.indexOf(id) === -1) id = order[0];
+      pages.forEach(function(p){ p.classList.toggle('is-active', p.id === id); });
+      navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + id); });
+      renderPager(id);
+      window.scrollTo(0, 0);
+      var host = document.querySelector('.topchips');
+      var cur = host && host.querySelector('a.active');
+      if (cur && cur.scrollIntoView) cur.scrollIntoView({block:'nearest', inline:'center'});
+      if (push && location.hash !== '#' + id) history.pushState({page:id}, '', '#' + id);
+    }
+
+    document.addEventListener('click', function(e){
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id || order.indexOf(id) === -1) return;
+      e.preventDefault();
+      show(id, true);
+    });
+    window.addEventListener('popstate', function(){ show((location.hash || '').slice(1), false); });
+    show((location.hash || '').slice(1), false);
+  })();
 
   /* ============================================================
      BOREALIS BANK — interactive prototype
