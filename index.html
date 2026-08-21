@@ -659,6 +659,39 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
   --on-brand:#0A0A0E;
 }
 
+/* ---------- free-resize (Live Preview page only — other benches never render these elements) ---------- */
+.frame{ position:relative; }
+.resize-handle{
+  position:absolute; top:0; bottom:0; right:-15px; width:30px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:ew-resize; touch-action:none; z-index:5;
+}
+.resize-handle::before{
+  content:''; width:4px; height:44px; border-radius:3px;
+  background:var(--line-strong); transition:background .12s ease;
+}
+.resize-handle:hover::before, .resize-handle:active::before{ background:var(--accent); }
+
+.resize-bar{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin:0 0 14px; padding:10px 14px; border:1px solid var(--line);
+  border-radius:10px; background:var(--paper-raised);
+}
+.resize-bar[hidden]{ display:none; }
+.resize-bar-label{ font-size:11px; font-weight:600; color:var(--ink-soft); }
+.resize-bar input[type="range"]{ width:160px; accent-color:var(--accent); }
+.resize-bar input[type="number"]{
+  width:64px; padding:4px 6px; border:1px solid var(--line-strong); border-radius:6px;
+  background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:12.5px;
+}
+.resize-bar-unit{ font-size:11px; color:var(--ink-faint); }
+.resize-presets{ display:flex; gap:5px; flex-wrap:wrap; }
+.resize-presets button{
+  padding:4px 9px; border:1px solid var(--line); border-radius:99px; background:var(--paper);
+  color:var(--ink-soft); font-size:11px; font-family:var(--font-body); cursor:pointer;
+}
+.resize-presets button.active{ border-color:var(--accent); color:var(--accent-strong); background:var(--accent-soft); font-weight:600; }
+
 /* device sizing */
 .frame.ios{ width:var(--ios-w, 390px); transition:width 200ms ease; }
 .frame.ios .screen{ height:720px; display:flex; flex-direction:column; }
@@ -1115,27 +1148,28 @@ footer{ padding:26px 0 72px; }
       <div class="rail-group">
         <div class="rail-group-label">The product</div>
         <a href="#prototype"><span class="num">01</span>The Application</a>
-        <a href="#ai-logic"><span class="num">02</span>AI Logic Model</a>
-        <a href="#trust"><span class="num">03</span>Trust &amp; Governance</a>
+        <a href="#live-preview"><span class="num">02</span>Live Preview</a>
+        <a href="#ai-logic"><span class="num">03</span>AI Logic Model</a>
+        <a href="#trust"><span class="num">04</span>Trust &amp; Governance</a>
       </div>
       <div class="rail-group">
         <div class="rail-group-label">Foundations</div>
-        <a href="#design-system"><span class="num">04</span>Design System</a>
-        <a href="#research-hub"><span class="num">05</span>Research Hub</a>
+        <a href="#design-system"><span class="num">05</span>Design System</a>
+        <a href="#research-hub"><span class="num">06</span>Research Hub</a>
       </div>
       <div class="rail-group">
         <div class="rail-group-label">Strategy</div>
-        <a href="#strategy"><span class="num">06</span>Product Strategy</a>
-        <a href="#archetypes"><span class="num">07</span>User Archetypes</a>
-        <a href="#journeys"><span class="num">08</span>Key Journeys</a>
+        <a href="#strategy"><span class="num">07</span>Product Strategy</a>
+        <a href="#archetypes"><span class="num">08</span>User Archetypes</a>
+        <a href="#journeys"><span class="num">09</span>Key Journeys</a>
       </div>
       <div class="rail-group">
         <div class="rail-group-label">Reference</div>
-        <a href="#architecture"><span class="num">09</span>Architecture</a>
-        <a href="#components"><span class="num">10</span>Component System</a>
-        <a href="#screens"><span class="num">11</span>Screen Inventory</a>
-        <a href="#metrics"><span class="num">12</span>Metrics</a>
-        <a href="#risks"><span class="num">13</span>Risks &amp; Validation</a>
+        <a href="#architecture"><span class="num">10</span>Architecture</a>
+        <a href="#components"><span class="num">11</span>Component System</a>
+        <a href="#screens"><span class="num">12</span>Screen Inventory</a>
+        <a href="#metrics"><span class="num">13</span>Metrics</a>
+        <a href="#risks"><span class="num">14</span>Risks &amp; Validation</a>
       </div>
     </nav>
     <div class="rail-foot">Borealis Bank · Anchorline<br>Concept package v2.0</div>
@@ -1143,7 +1177,7 @@ footer{ padding:26px 0 72px; }
 
   <!-- ================= MOBILE TOP CHIPS ================= -->
   <div class="topchips" id="topchips">
-    <a href="#overview">Overview</a><a href="#prototype">The App</a><a href="#ai-logic">AI Logic</a>
+    <a href="#overview">Overview</a><a href="#prototype">The App</a><a href="#live-preview">Live Preview</a><a href="#ai-logic">AI Logic</a>
     <a href="#trust">Trust</a><a href="#design-system">Design System</a><a href="#research-hub">Research</a>
     <a href="#strategy">Strategy</a><a href="#archetypes">Archetypes</a><a href="#journeys">Journeys</a>
     <a href="#architecture">IA</a><a href="#components">Components</a><a href="#screens">Screens</a>
@@ -1217,6 +1251,7 @@ footer{ padding:26px 0 72px; }
             </div>
             <div class="bench-head-right">
               <span class="pill accent">Anchorline is the only colour in the app</span>
+              <a class="btn ghost" href="#live-preview" style="text-decoration:none;">⤢ Full responsive preview</a>
               <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
             </div>
           </div>
@@ -1310,11 +1345,84 @@ footer{ padding:26px 0 72px; }
       </div>
     </section>
 
+    <!-- ================= LIVE PREVIEW ================= -->
+    <section class="section" id="live-preview">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">02 — Live Preview</div>
+          <h2>The same app, the whole window</h2>
+          <p class="dek">This is "The Application," full-window and freed from its fixed device-frame
+          proportions. Jump between platforms, pick a named breakpoint, or drag the edge of the frame to
+          any width in between — the shared account state follows you back to the other page.</p>
+        </div>
+      </div>
+
+      <div class="wrap-full">
+        <div class="bench">
+          <div class="bench-head">
+            <div class="toggle" role="tablist" aria-label="Platform preview">
+              <button type="button" role="tab" data-plat="ios" aria-pressed="true"><svg><use href="#i-ios"/></svg>iOS</button>
+              <button type="button" role="tab" data-plat="web" aria-pressed="false"><svg><use href="#i-web"/></svg>Responsive Web</button>
+              <button type="button" role="tab" data-plat="tablet" aria-pressed="false"><svg><use href="#i-tablet"/></svg>Tablet</button>
+            </div>
+            <div class="bench-head-right">
+              <span class="pill accent">Drag the handle on the frame's edge to any width</span>
+              <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
+            </div>
+          </div>
+
+          <div class="phone-toggle" data-phone-toggle role="tablist" aria-label="Device size">
+            <span class="phone-toggle-label">Device:</span>
+            <button type="button" data-phone="360">Galaxy S23 · 360</button>
+            <button type="button" data-phone="375">iPhone SE · 375</button>
+            <button type="button" data-phone="390" aria-pressed="true">iPhone 14 · 390</button>
+            <button type="button" data-phone="430">14 Pro Max · 430</button>
+          </div>
+
+          <div class="resize-bar" data-resize-bar hidden>
+            <span class="resize-bar-label">Width</span>
+            <input type="range" data-resize-range min="860" max="1440" step="1" value="1200">
+            <input type="number" data-resize-input min="860" max="1440" step="1" value="1200" aria-label="Frame width in pixels">
+            <span class="resize-bar-unit">px</span>
+            <div class="resize-presets" role="tablist" aria-label="Width presets">
+              <button type="button" data-resize-preset="860">860</button>
+              <button type="button" data-resize-preset="1024">1024</button>
+              <button type="button" data-resize-preset="1200">1200</button>
+              <button type="button" data-resize-preset="1280">1280</button>
+              <button type="button" data-resize-preset="1440">1440</button>
+            </div>
+          </div>
+
+          <div class="bench-stage">
+            <div class="frame ios" data-view="ios">
+              <div class="screen">
+                <div class="notch"></div>
+                <div class="ios-status"><span>9:41</span><span>●●●</span></div>
+                <div data-app="ios" style="flex:1;min-height:0;display:flex;"></div>
+              </div>
+              <div class="resize-handle" data-resize-handle title="Drag to resize" aria-hidden="true"></div>
+            </div>
+
+            <div class="frame web" data-view="web" hidden>
+              <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">borealis.ca/online-banking</span></div>
+              <div class="screen"><div data-app="web" style="height:100%;"></div></div>
+              <div class="resize-handle" data-resize-handle title="Drag to resize" aria-hidden="true"></div>
+            </div>
+
+            <div class="frame tablet" data-view="tablet" hidden>
+              <div class="screen"><div data-app="tablet" style="height:100%;"></div></div>
+              <div class="resize-handle" data-resize-handle title="Drag to resize" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
 <section class="section" id="ai-logic">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">02 — AI Logic Model</div>
+          <div class="kicker">03 — AI Logic Model</div>
           <h2>A bounded decision-support system</h2>
           <p class="dek">Anchorline's AI is not described as magic — it is a responsible, explainable system with
           clear inputs, a fixed prioritisation order, explicit approval boundaries, and a defined behaviour for
@@ -1399,7 +1507,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="trust">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">03 — Trust &amp; Governance</div>
+          <div class="kicker">04 — Trust &amp; Governance</div>
           <h2>Trust as architecture, not messaging</h2>
           <p class="dek">These patterns are built into the interface itself — not stated as values in a
           marketing page. Each one maps to a specific, always-present piece of UI.</p>
@@ -1439,7 +1547,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="design-system">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">04 — Design System</div>
+          <div class="kicker">05 — Design System</div>
           <h2>An instrument, not an interface</h2>
           <p class="dek">The design language is near-monochrome and hairline-ruled: white surfaces, 1px borders instead of
           shadows, and hierarchy carried by weight and scale rather than colour. Exactly one saturated hue exists
@@ -1603,7 +1711,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="research-hub">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">05 — UX Research Hub</div>
+          <div class="kicker">06 — UX Research Hub</div>
           <h2>A command centre, not a findings deck</h2>
           <p class="dek">The hub is internal-first — built for product, design, research, and compliance
           stakeholders to trace every product decision back to evidence, and to see, at a glance, what is
@@ -1738,7 +1846,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="strategy">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">06 — Product-Owner Strategy</div>
+          <div class="kicker">07 — Product-Owner Strategy</div>
           <h2>Trust is the growth strategy</h2>
           <p class="dek">Anchorline is framed as a trust-led engagement product, not a feature. Every downstream
           decision — what the AI is allowed to do, what it must explain, what ships in v1 — traces back to this framing.</p>
@@ -1789,7 +1897,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="archetypes">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">07 — User Archetypes</div>
+          <div class="kicker">08 — User Archetypes</div>
           <h2>Five people, one trust model</h2>
           <p class="dek">Anchorline's guidance logic flexes by life stage and confidence level, but the trust
           rule never does. These five archetypes anchor every design and AI-logic decision in the rest of this package.</p>
@@ -1872,7 +1980,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="journeys">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">08 — Key Journeys</div>
+          <div class="kicker">09 — Key Journeys</div>
           <h2>Three journeys, optimised deliberately</h2>
           <p class="dek">These are the only three journeys the v1 product is designed to be excellent at —
           everything else in the IA supports them.</p>
@@ -1915,7 +2023,7 @@ footer{ padding:26px 0 72px; }
     <section class="section" id="architecture">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">09 — Information Architecture</div>
+          <div class="kicker">10 — Information Architecture</div>
           <h2>One system, mapped</h2>
           <p class="dek">How the bank's own IA is organised, and how the three parts of this package
           feed each other — not as a metaphor, but as the literal flow of information from evidence
@@ -1987,7 +2095,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="components">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">10 — Component System</div>
+          <div class="kicker">11 — Component System</div>
           <h2>The families that build every screen</h2>
         </div>
         <div class="table-wrap">
@@ -2013,7 +2121,7 @@ footer{ padding:26px 0 72px; }
     <section class="section" id="screens">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">11 — Screen Inventory</div>
+          <div class="kicker">12 — Screen Inventory</div>
           <h2>What ships in v1</h2>
           <p class="dek">Every screen below is built and interactive in the prototype unless marked as an
           entry point. Entry points render a real, labelled destination but stop short of a completing flow.</p>
@@ -2063,7 +2171,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="metrics">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">12 — Metrics</div>
+          <div class="kicker">13 — Metrics</div>
           <h2>How success is actually measured</h2>
         </div>
         <div class="table-wrap">
@@ -2086,7 +2194,7 @@ footer{ padding:26px 0 72px; }
 <section class="section" id="risks" style="border-bottom:none;">
       <div class="wrap">
         <div class="section-head">
-          <div class="kicker">13 — Risks, Gaps &amp; Validation Priorities</div>
+          <div class="kicker">14 — Risks, Gaps &amp; Validation Priorities</div>
           <h2>What this concept doesn't yet know</h2>
         </div>
         <div class="table-wrap">
@@ -3002,11 +3110,12 @@ footer{ padding:26px 0 72px; }
   }
 
   function renderIOS(){
-    var el = document.querySelector('[data-app="ios"]'); if (!el) return;
+    var els = document.querySelectorAll('[data-app="ios"]'); if (!els.length) return;
     var s = current();
-    el.innerHTML = '<div class="bk">'+iosHeader(s)
+    var html = '<div class="bk">'+iosHeader(s)
       + '<div class="bk-scroll"><div class="bk-pad">'+s.body+'</div></div>'
       + fab() + toastEl() + iosTabbar() + '</div>';
+    els.forEach(function(el){ el.innerHTML = html; });
   }
 
   var WEB_NAV = [
@@ -3050,20 +3159,21 @@ footer{ padding:26px 0 72px; }
   }
 
   function renderWeb(){
-    var el = document.querySelector('[data-app="web"]'); if (!el) return;
+    var els = document.querySelectorAll('[data-app="web"]'); if (!els.length) return;
     var s = current(), hasAside = !!s.aside;
-    el.innerHTML = '<div class="bk-web'+(hasAside?' has-aside':'')+'">'
+    var html = '<div class="bk-web'+(hasAside?' has-aside':'')+'">'
       + sideNav('bk-side')
       + '<div class="bk-main">'+topbar(s)+flowStepsBar(s)
       + '<div class="bk-scroll"><div class="bk-pad" style="padding:18px 22px 26px;">'+s.body+'</div></div></div>'
       + (hasAside ? '<div class="bk-aside">'+s.aside+'</div>' : '')
       + fab() + toastEl() + '</div>';
+    els.forEach(function(el){ el.innerHTML = html; });
   }
 
   function renderTablet(){
-    var el = document.querySelector('[data-app="tablet"]'); if (!el) return;
+    var els = document.querySelectorAll('[data-app="tablet"]'); if (!els.length) return;
     var s = current();
-    el.innerHTML = '<div class="bk-tab">'
+    var html = '<div class="bk-tab">'
       + sideNav('bk-tabnav')
       + '<div class="bk-main">'+topbar(s)+flowStepsBar(s)
       + '<div class="bk-scroll"><div class="bk-pad" style="padding:18px 22px 26px;">'
@@ -3073,6 +3183,7 @@ footer{ padding:26px 0 72px; }
           : s.body)
       + '</div></div></div>'
       + fab() + toastEl() + '</div>';
+    els.forEach(function(el){ el.innerHTML = html; });
   }
 
   function renderAll(){ renderIOS(); renderWeb(); renderTablet(); }
@@ -3169,29 +3280,103 @@ footer{ padding:26px 0 72px; }
     if (t.matches('[data-fsel]') && APP.flow){ APP.flow.data[t.getAttribute('data-fsel')] = t.value; }
   });
 
-  /* ---------- platform + device-size toggles ---------- */
-  var platButtons = document.querySelectorAll('.toggle button[data-plat]');
-  var views = document.querySelectorAll('[data-view]');
-  var phoneToggle = document.querySelector('[data-phone-toggle]');
-  platButtons.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var plat = btn.getAttribute('data-plat');
-      APP.plat = plat;
-      platButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
-      views.forEach(function(v){ v.hidden = v.getAttribute('data-view') !== plat; });
-      if (phoneToggle) phoneToggle.hidden = plat !== 'ios';
-    });
-  });
-  if (phoneToggle){
-    var iosFrame = document.querySelector('.frame.ios');
-    var phoneButtons = phoneToggle.querySelectorAll('button[data-phone]');
-    phoneButtons.forEach(function(btn){
+  /* ---------- platform + device-size toggles (scoped per bench instance) ---------- */
+  var RESIZE_RANGE = { ios:{min:320,max:480}, web:{min:860,max:1440}, tablet:{min:680,max:1200} };
+
+  function wireBench(bench){
+    var platButtons = bench.querySelectorAll('.toggle button[data-plat]');
+    var views = bench.querySelectorAll('[data-view]');
+    var phoneToggle = bench.querySelector('[data-phone-toggle]');
+    var iosFrame = bench.querySelector('.frame.ios');
+    var resizeBar = bench.querySelector('[data-resize-bar]');
+    var resizeRange = bench.querySelector('[data-resize-range]');
+    var resizeInput = bench.querySelector('[data-resize-input]');
+    var resizePresets = Array.prototype.slice.call(bench.querySelectorAll('[data-resize-preset]'));
+    var curPlat = 'ios';
+
+    function frameFor(plat){ return bench.querySelector('.frame.' + plat); }
+
+    function currentWidth(plat){
+      var f = frameFor(plat); if (!f) return 390;
+      if (plat === 'ios') return parseInt(getComputedStyle(f).width, 10) || 390;
+      return (f.style.width && parseInt(f.style.width, 10)) || Math.round(f.getBoundingClientRect().width) || 390;
+    }
+
+    function applyWidth(px){
+      var r = RESIZE_RANGE[curPlat] || RESIZE_RANGE.web;
+      px = Math.max(r.min, Math.min(r.max, Math.round(px)));
+      var f = frameFor(curPlat);
+      if (f){
+        if (curPlat === 'ios') f.style.setProperty('--ios-w', px + 'px');
+        else f.style.width = px + 'px';
+      }
+      if (resizeRange) resizeRange.value = px;
+      if (resizeInput) resizeInput.value = px;
+      resizePresets.forEach(function(b){ b.classList.toggle('active', Number(b.getAttribute('data-resize-preset')) === px); });
+      return px;
+    }
+
+    function syncResizeBar(){
+      if (!resizeBar) return;
+      resizeBar.hidden = curPlat === 'ios';
+      var r = RESIZE_RANGE[curPlat] || RESIZE_RANGE.web;
+      var w = Math.max(r.min, Math.min(r.max, currentWidth(curPlat)));
+      if (resizeRange){ resizeRange.min = r.min; resizeRange.max = r.max; resizeRange.value = w; }
+      if (resizeInput){ resizeInput.min = r.min; resizeInput.max = r.max; resizeInput.value = w; }
+      resizePresets.forEach(function(b){ b.classList.toggle('active', Number(b.getAttribute('data-resize-preset')) === w); });
+    }
+
+    platButtons.forEach(function(btn){
       btn.addEventListener('click', function(){
-        phoneButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
-        if (iosFrame) iosFrame.style.setProperty('--ios-w', btn.getAttribute('data-phone')+'px');
+        var plat = btn.getAttribute('data-plat');
+        curPlat = plat;
+        APP.plat = plat;
+        platButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
+        views.forEach(function(v){ v.hidden = v.getAttribute('data-view') !== plat; });
+        if (phoneToggle) phoneToggle.hidden = plat !== 'ios';
+        syncResizeBar();
       });
     });
+
+    if (phoneToggle){
+      var phoneButtons = phoneToggle.querySelectorAll('button[data-phone]');
+      phoneButtons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          phoneButtons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true':'false'); });
+          if (iosFrame) iosFrame.style.setProperty('--ios-w', btn.getAttribute('data-phone')+'px');
+          syncResizeBar();
+        });
+      });
+    }
+
+    if (resizeBar){
+      resizePresets.forEach(function(btn){
+        btn.addEventListener('click', function(){ applyWidth(Number(btn.getAttribute('data-resize-preset'))); });
+      });
+      if (resizeRange) resizeRange.addEventListener('input', function(){ applyWidth(Number(resizeRange.value)); });
+      if (resizeInput) resizeInput.addEventListener('change', function(){ applyWidth(Number(resizeInput.value) || 390); });
+      syncResizeBar();
+    }
+
+    bench.querySelectorAll('[data-resize-handle]').forEach(function(h){
+      var dragging = false, startX = 0, startW = 0, f = null;
+      h.addEventListener('pointerdown', function(e){
+        dragging = true; startX = e.clientX; f = frameFor(curPlat);
+        startW = currentWidth(curPlat);
+        if (f) f.style.transition = 'none';
+        h.setPointerCapture(e.pointerId);
+      });
+      h.addEventListener('pointermove', function(e){
+        if (!dragging) return;
+        applyWidth(startW + (e.clientX - startX) * 2);
+      });
+      function stop(){ dragging = false; if (f) f.style.transition = ''; }
+      h.addEventListener('pointerup', stop);
+      h.addEventListener('pointercancel', stop);
+    });
   }
+
+  document.querySelectorAll('.bench').forEach(wireBench);
 
   renderAll();
 })();
