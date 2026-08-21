@@ -710,7 +710,7 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .bk-scroll{ flex:1; min-height:0; overflow-y:auto; scrollbar-width:thin; }
 .bk-scroll::-webkit-scrollbar{ width:6px; }
 .bk-scroll::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:4px; }
-.bk-pad{ padding:16px 16px 24px; display:flex; flex-direction:column; gap:14px; }
+.bk-pad{ padding:16px 16px 28px; display:flex; flex-direction:column; gap:18px; }
 
 /* header — light, hairline-separated */
 .bk-head{ background:var(--paper-raised); color:var(--ink); padding:8px 16px 14px; flex:none; border-bottom:1px solid var(--line); }
@@ -754,17 +754,17 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 }
 
 /* cards & rows */
-.bk-card{ background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:12px; overflow:hidden; }
-.bk-card.pad{ padding:15px 16px; }
+.bk-card{ background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:16px; overflow:hidden; }
+.bk-card.pad{ padding:17px 18px; }
 .bk-row{
-  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
-  padding:13px 15px; background:none; border:none; border-bottom:1px solid var(--bk-line);
+  display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+  padding:15px 16px; background:none; border:none; border-bottom:1px solid var(--bk-line);
   cursor:pointer; font-family:var(--font-body); color:var(--ink);
 }
 .bk-row:last-child{ border-bottom:none; }
 .bk-row:hover{ background:var(--paper-sunken); }
 .bk-row .ico{
-  width:32px; height:32px; border-radius:8px; background:var(--brand-soft); color:var(--ink-soft);
+  width:34px; height:34px; border-radius:10px; background:var(--brand-soft); color:var(--ink-soft);
   display:flex; align-items:center; justify-content:center; flex:none;
 }
 .bk-row .ico svg{ width:16px; height:16px; }
@@ -779,23 +779,28 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .bk-row.pos .amt{ color:var(--status-good); }
 
 /* quick actions */
-.bk-quick{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.bk-quick{ display:grid; grid-template-columns:repeat(auto-fit,minmax(64px,1fr)); gap:8px; }
 .bk-quick button{
-  background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:10px;
-  padding:12px 6px 10px; display:flex; flex-direction:column; align-items:center; gap:7px;
+  background:var(--paper-raised); border:1px solid var(--bk-line); border-radius:14px;
+  padding:14px 6px 12px; display:flex; flex-direction:column; align-items:center; gap:8px;
   cursor:pointer; font-family:var(--font-body); font-size:10.5px; color:var(--ink-soft); font-weight:600;
 }
 .bk-quick button:hover{ background:var(--paper-sunken); color:var(--ink); }
 .bk-quick button .ico{
-  width:32px; height:32px; border-radius:8px; background:var(--brand-soft); color:var(--ink);
+  width:36px; height:36px; border-radius:11px; background:var(--brand-soft); color:var(--ink);
   display:flex; align-items:center; justify-content:center;
 }
-.bk-quick button .ico svg{ width:16px; height:16px; }
+.bk-quick button .ico svg{ width:17px; height:17px; }
+
+/* total-balance hero — unbordered, sits directly on the page, Wealthsimple-style */
+.bk-hero{ padding:6px 2px 2px; }
+.bk-hero .l{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.bk-hero .v{ font-size:40px; font-weight:700; letter-spacing:-.04em; margin-top:4px; font-variant-numeric:tabular-nums; color:var(--ink); }
 
 /* balance hero — a white card with a very large number, Mercury-style */
-.bk-balance{ background:var(--paper-raised); border:1px solid var(--line); color:var(--ink); border-radius:12px; padding:18px 19px; }
+.bk-balance{ background:var(--paper-raised); border:1px solid var(--line); color:var(--ink); border-radius:16px; padding:20px 21px; }
 .bk-balance .l{ font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
-.bk-balance .v{ font-size:32px; font-weight:600; letter-spacing:-.035em; margin-top:6px; font-variant-numeric:tabular-nums; }
+.bk-balance .v{ font-size:34px; font-weight:700; letter-spacing:-.035em; margin-top:6px; font-variant-numeric:tabular-nums; }
 .bk-balance .meta{ display:flex; gap:22px; margin-top:14px; padding-top:13px; border-top:1px solid var(--line); }
 .bk-balance .meta div{ font-size:11px; color:var(--ink-faint); }
 .bk-balance .meta b{ display:block; font-size:13px; font-weight:600; color:var(--ink); margin-top:3px; font-variant-numeric:tabular-nums; }
@@ -805,38 +810,40 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .bk-meter i{ display:block; height:100%; border-radius:99px; background:var(--ink); }
 .bk-meter.warn i{ background:var(--status-watch); }
 
-/* ============ ANCHORLINE — the only colour in the app ============ */
+/* ============ ANCHORLINE — the only colour in the app, styled like an assistant, not an alert ============ */
 .ai-module{
-  border:1px solid var(--accent); border-radius:12px; overflow:hidden;
-  background:var(--paper-raised); position:relative;
+  border:1px solid var(--accent-soft); border-radius:20px; overflow:hidden;
+  background:var(--accent-ink-soft); position:relative;
 }
 .ai-module::before{ content:""; position:absolute; inset:0 0 auto 0; height:3px; background:var(--ai-grad); }
-.ai-module .top{ display:flex; align-items:center; gap:8px; padding:14px 16px 0; }
+.ai-module .top{ display:flex; align-items:center; gap:8px; padding:16px 18px 0; }
 .ai-mark{
   display:inline-flex; align-items:center; gap:6px; font-family:var(--font-body); font-size:10.5px;
   text-transform:uppercase; letter-spacing:.07em; color:var(--accent); font-weight:700;
 }
 .ai-mark svg{ width:12px; height:12px; }
 .ai-module .count{
-  margin-left:auto; font-size:10.5px; font-weight:600; background:var(--accent-soft);
-  color:var(--accent-strong); padding:3px 8px; border-radius:6px;
+  margin-left:auto; font-size:10.5px; font-weight:600; background:var(--paper-raised);
+  color:var(--accent-strong); padding:3px 9px; border-radius:99px;
 }
-.ai-module .bd{ padding:9px 16px 15px; }
-.ai-module h5{ font-size:17.5px; font-weight:600; letter-spacing:-.022em; margin:0 0 6px; }
-.ai-module p{ font-size:13px; color:var(--ink-soft); line-height:1.55; }
-.ai-module .cta-row{ display:flex; gap:8px; margin-top:13px; flex-wrap:wrap; }
+.ai-module .bd{ padding:10px 18px 18px; }
+.ai-module h5{ font-size:19px; font-weight:600; letter-spacing:-.024em; margin:0 0 7px; }
+.ai-module p{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; }
+.ai-module .cta-row{ display:flex; gap:9px; margin-top:15px; flex-wrap:wrap; }
 .ai-module .btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.ai-module .btn:not(.primary){ background:var(--paper-raised); }
 :root[data-theme="dark"] .ai-module .btn.primary{ color:#0A0A0E; }
 
 /* inline contextual card inside product screens */
 .ai-inline{
-  border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:10px;
-  background:var(--accent-ink-soft); padding:12px 14px;
+  border:1px solid var(--accent-soft); border-left:3px solid var(--accent); border-radius:14px;
+  background:var(--accent-ink-soft); padding:14px 16px;
 }
 .ai-inline .ai-mark{ margin-bottom:6px; }
 .ai-inline p{ font-size:12.5px; color:var(--ink-soft); line-height:1.55; }
 .ai-inline .cta-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
 .ai-inline .btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.ai-inline .btn:not(.primary){ background:var(--paper-raised); }
 :root[data-theme="dark"] .ai-inline .btn.primary{ color:#0A0A0E; }
 
 /* split editor — inside the "adjust" state of .ai-module */
@@ -2593,36 +2600,26 @@ body[data-page="live-preview"] footer{ display:none; }
   var SCREENS = {};
 
   SCREENS.home = function(){
-    var chq = balOf('chq'), sav = balOf('sav');
+    var chq = balOf('chq'), sav = balOf('sav'), invest = balOf('tfsa')+balOf('rrsp')+balOf('resp');
+    var totalBalance = chq + sav + invest;
     return {
       title:'Overview',
       body:
-        aiRecommendation()
+        '<div class="bk-hero"><div class="l">Total balance</div><div class="v">'+money(totalBalance)+'</div></div>'
+        + aiRecommendation()
         + '<div class="bk-quick">'
           + '<button type="button" data-action="flow:etransfer"><span class="ico">'+ico('i-send')+'</span>Send</button>'
           + '<button type="button" data-action="flow:billpay"><span class="ico">'+ico('i-bill')+'</span>Pay bill</button>'
           + '<button type="button" data-action="flow:transfer"><span class="ico">'+ico('i-swap')+'</span>Transfer</button>'
-          + '<button type="button" data-action="go:deposit"><span class="ico">'+ico('i-deposit')+'</span>Deposit</button>'
         + '</div>'
-        + secHead('Banking','See all','go:accounts')
+        + secHead('Accounts','See all','go:accounts')
         + '<div class="bk-card">'
-          + row({icon:'i-wallet', title:ACC.chq.name, sub:'Chequing ••••'+ACC.chq.num, amount:money(chq), action:'acct:chq'})
-          + row({icon:'i-wallet', title:ACC.sav.name, sub:(bufferOnTarget()?'Buffer on target':'Buffer below target')+' · '+bufferWeeks().toFixed(1)+' weeks', amount:money(sav), action:'acct:sav'})
-        + '</div>'
-        + secHead('Credit')
-        + '<div class="bk-card">'
-          + row({icon:'i-card', title:ACC.visa.name, sub:'••••'+ACC.visa.num+' · '+money0(availCredit())+' available', amount:money(balOf('visa')), cls:'neg', action:'go:cards'})
-        + '</div>'
-        + secHead('Investments','See all','go:invest')
-        + '<div class="bk-card">'
-          + row({icon:'i-invest', title:'Investments', sub:'TFSA · RRSP · RESP', amount:money(balOf('tfsa')+balOf('rrsp')+balOf('resp')), action:'go:invest'})
-        + '</div>'
-        + secHead('Borrowing')
-        + '<div class="bk-card">'
-          + row({icon:'i-house', title:'Mortgage', sub:ACC.mtg.rate+'% fixed · renews '+ACC.mtg.renews, amount:money0(balOf('mtg')), cls:'neg', action:'go:borrow'})
+          + row({icon:'i-wallet', title:'Chequing', sub:'••••'+ACC.chq.num, amount:money(chq), action:'acct:chq'})
+          + row({icon:'i-wallet', title:'Savings', sub:bufferOnTarget()?'Buffer on target':bufferWeeks().toFixed(1)+' weeks of essentials', amount:money(sav), action:'acct:sav'})
+          + row({icon:'i-invest', title:'Investments', sub:'TFSA · RRSP · RESP', amount:money(invest), action:'go:invest'})
+          + row({icon:'i-card', title:'Cash Back Visa', sub:money0(availCredit())+' available', amount:money(balOf('visa')), cls:'neg', action:'go:cards'})
         + '</div>',
       aside:'<h5>Anchorline · why this recommendation</h5>'+explainRows()
-        + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bk-line);">Every field here is required before an approval can be requested — see the approval panel anatomy in the Design System.</p>'
     };
   };
 
