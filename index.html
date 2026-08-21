@@ -710,7 +710,7 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .bk-scroll{ flex:1; min-height:0; overflow-y:auto; scrollbar-width:thin; }
 .bk-scroll::-webkit-scrollbar{ width:6px; }
 .bk-scroll::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:4px; }
-.bk-pad{ padding:16px 16px 28px; display:flex; flex-direction:column; gap:18px; }
+.bk-pad{ padding:16px 16px 64px; display:flex; flex-direction:column; gap:18px; }
 
 /* header — light, hairline-separated */
 .bk-head{ background:var(--paper-raised); color:var(--ink); padding:8px 16px 14px; flex:none; border-bottom:1px solid var(--line); }
@@ -845,6 +845,24 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .ai-inline .btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
 .ai-inline .btn:not(.primary){ background:var(--paper-raised); }
 :root[data-theme="dark"] .ai-inline .btn.primary{ color:#0A0A0E; }
+
+/* a table paired label+prose inside a 2-column grid (e.g. AI Logic Model's
+   "Guidance vs. control" / "Assertive, cautious, abstains" cards) has no
+   numeric columns to protect — let it shrink to its ~460px column and wrap
+   the description instead of forcing the shared 560px data-table minimum,
+   which pushed it into silent horizontal overflow with no visible scrollbar cue. */
+.grid-2 table.data{ min-width:0; table-layout:fixed; width:100%; }
+.grid-2 table.data td{ overflow-wrap:break-word; }
+
+/* jump-to flow picker — a categorized shortcut into any screen or flow */
+.jumpto{
+  border:1px solid var(--line-strong); border-radius:8px; background:var(--paper-raised);
+  padding:6px 10px; font-family:var(--font-body); font-size:11.5px; font-weight:600;
+  color:var(--ink-soft); cursor:pointer; max-width:180px;
+}
+.jumpto:hover{ border-color:var(--accent); color:var(--ink); }
+.jumpto:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+.live-bench .jumpto{ margin:0; }
 
 /* split editor — inside the "adjust" state of .ai-module */
 .split-editor{ display:flex; flex-direction:column; gap:8px; margin:10px 0 12px; }
@@ -1345,6 +1363,30 @@ body[data-page="live-preview"] footer{ display:none; }
               <button type="button" role="tab" data-plat="web" aria-pressed="false"><svg><use href="#i-web"/></svg>Responsive Web</button>
               <button type="button" role="tab" data-plat="tablet" aria-pressed="false"><svg><use href="#i-tablet"/></svg>Tablet</button>
             </div>
+            <select class="jumpto" data-jumpto aria-label="Jump to a screen or flow">
+              <option value="" selected disabled>Jump to…</option>
+              <optgroup label="Core screens">
+                <option value="go:home">Home</option>
+                <option value="go:accounts">Accounts</option>
+                <option value="go:cards">Cards</option>
+                <option value="go:invest">Investments</option>
+                <option value="go:borrow">Borrow</option>
+                <option value="go:activity">Activity</option>
+                <option value="go:more">More</option>
+              </optgroup>
+              <optgroup label="Money movement">
+                <option value="flow:etransfer">Send an e-Transfer</option>
+                <option value="flow:billpay">Pay a bill</option>
+                <option value="flow:transfer">Transfer between accounts</option>
+                <option value="flow:contribute">Contribute (TFSA/RRSP/RESP)</option>
+                <option value="flow:cardpay">Pay your Visa</option>
+              </optgroup>
+              <optgroup label="Anchorline">
+                <option value="go:ai">Anchorline hub</option>
+                <option value="go:aiplan">Allocation plan</option>
+                <option value="go:aiprogress">Weekly progress</option>
+              </optgroup>
+            </select>
             <div class="bench-head-right">
               <span class="pill accent">Anchorline is the only colour in the app</span>
               <button type="button" class="btn ghost" data-tour-start>▶ Take the tour</button>
@@ -1469,6 +1511,30 @@ body[data-page="live-preview"] footer{ display:none; }
               <button type="button" data-resize-preset="1440">1440</button>
             </div>
           </div>
+          <select class="jumpto" data-jumpto aria-label="Jump to a screen or flow">
+            <option value="" selected disabled>Jump to…</option>
+            <optgroup label="Core screens">
+              <option value="go:home">Home</option>
+              <option value="go:accounts">Accounts</option>
+              <option value="go:cards">Cards</option>
+              <option value="go:invest">Investments</option>
+              <option value="go:borrow">Borrow</option>
+              <option value="go:activity">Activity</option>
+              <option value="go:more">More</option>
+            </optgroup>
+            <optgroup label="Money movement">
+              <option value="flow:etransfer">Send an e-Transfer</option>
+              <option value="flow:billpay">Pay a bill</option>
+              <option value="flow:transfer">Transfer between accounts</option>
+              <option value="flow:contribute">Contribute (TFSA/RRSP/RESP)</option>
+              <option value="flow:cardpay">Pay your Visa</option>
+            </optgroup>
+            <optgroup label="Anchorline">
+              <option value="go:ai">Anchorline hub</option>
+              <option value="go:aiplan">Allocation plan</option>
+              <option value="go:aiprogress">Weekly progress</option>
+            </optgroup>
+          </select>
           <div class="bench-head-right">
             <button type="button" class="btn ghost small" data-tour-start>▶ Tour</button>
             <button type="button" class="btn ghost small" data-action="reset-demo">↺ Reset</button>
@@ -3547,6 +3613,14 @@ body[data-page="live-preview"] footer{ display:none; }
         var iosBtn = bench.querySelector('.toggle button[data-plat="ios"]');
         if (iosBtn && iosBtn.getAttribute('aria-pressed') !== 'true') iosBtn.click();
         startTour(bench);
+      });
+    }
+
+    var jumpto = bench.querySelector('[data-jumpto]');
+    if (jumpto){
+      jumpto.addEventListener('change', function(){
+        if (jumpto.value) handle(jumpto.value);
+        jumpto.value = '';
       });
     }
   }
