@@ -839,6 +839,56 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .ai-inline .btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
 :root[data-theme="dark"] .ai-inline .btn.primary{ color:#0A0A0E; }
 
+/* split editor — inside the "adjust" state of .ai-module */
+.split-editor{ display:flex; flex-direction:column; gap:8px; margin:10px 0 12px; }
+.split-line{ display:grid; grid-template-columns:1fr 96px 28px; gap:7px; align-items:center; }
+.split-line .bk-select{ padding:8px 10px; font-size:12.5px; }
+.split-amt{
+  display:flex; align-items:center; gap:2px; border:1px solid var(--line-strong); border-radius:9px;
+  background:var(--paper-raised); padding:0 8px;
+}
+.split-amt span{ font-size:12.5px; color:var(--ink-faint); }
+.split-amt input{
+  border:none; background:none; width:100%; padding:8px 2px; font-family:var(--font-body);
+  font-size:13px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums;
+}
+.split-amt input:focus{ outline:none; }
+.split-amt:focus-within{ outline:2px solid var(--accent); outline-offset:1px; }
+.split-remove{
+  width:28px; height:28px; border-radius:7px; border:1px solid var(--line); background:var(--paper-raised);
+  color:var(--ink-faint); font-size:15px; line-height:1; cursor:pointer;
+}
+.split-remove:hover{ border-color:var(--status-risk); color:var(--status-risk); }
+.split-editor > .btn{ align-self:flex-start; }
+.split-total{
+  display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft);
+  padding:9px 0; border-top:1px dashed var(--line);
+}
+.split-total span:last-child{ font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
+.split-total.over span:last-child{ color:var(--status-risk); }
+.split-warn{ font-size:11.5px; color:var(--status-risk); margin-top:-2px; }
+.split-warn[hidden]{ display:none; }
+
+/* guided tour — spotlight + tooltip overlay, driven per bench */
+.tour-backdrop{ position:fixed; inset:0; z-index:9997; background:rgba(10,10,14,.6); }
+.tour-highlight{
+  position:fixed; z-index:9998; border-radius:12px; pointer-events:none;
+  box-shadow:0 0 0 4px var(--accent), 0 0 0 6000px rgba(10,10,14,.6);
+}
+.tour-card{
+  position:fixed; z-index:9999; width:300px; max-width:calc(100vw - 32px);
+  background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
+  box-shadow:0 24px 60px -24px rgba(0,0,0,.5); padding:18px 20px;
+}
+.tour-card.centered{ top:50%; left:50%; transform:translate(-50%,-50%); }
+.tour-step{ font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:7px; }
+.tour-card h4{ font-family:var(--font-display); font-size:16px; font-weight:600; letter-spacing:-.017em; margin:0 0 8px; color:var(--ink); }
+.tour-card p{ font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 15px; }
+.tour-actions{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.tour-nav{ display:flex; gap:8px; margin-left:auto; }
+.tour-skip{ background:none; border:none; color:var(--ink-faint); font-size:11.5px; font-family:var(--font-body); cursor:pointer; padding:4px 0; }
+.tour-skip:hover{ color:var(--ink-soft); text-decoration:underline; }
+
 /* floating button — present on every screen */
 .ai-fab{
   position:absolute; right:16px; bottom:78px; z-index:6;
@@ -929,9 +979,13 @@ table.data thead th{ letter-spacing:.06em; font-size:10px; }
 .bk-aside .row span:last-child{ text-align:right; font-weight:500; font-variant-numeric:tabular-nums; }
 .bk-aside p{ font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
 
+/* the device frame's own rendered width decides the column split, not the
+   browser viewport — a 390px phone frame stays single-column even inside a
+   wide desktop window, instead of squeezing two columns until text overlaps. */
+.frame .screen{ container-type:inline-size; }
 .bk-cols{ display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
 .bk-cols > *{ min-width:0; }
-@media (max-width:900px){ .bk-cols{ grid-template-columns:1fr; } }
+@container (max-width:600px){ .bk-cols{ grid-template-columns:1fr; } }
 
 /* ---------- tablet shell ---------- */
 .bk-tab{ display:grid; grid-template-columns:280px 1fr; height:100%; min-height:0; }
@@ -1251,6 +1305,7 @@ footer{ padding:26px 0 72px; }
             </div>
             <div class="bench-head-right">
               <span class="pill accent">Anchorline is the only colour in the app</span>
+              <button type="button" class="btn ghost" data-tour-start>▶ Take the tour</button>
               <a class="btn ghost" href="#live-preview" style="text-decoration:none;">⤢ Full responsive preview</a>
               <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
             </div>
@@ -1367,6 +1422,7 @@ footer{ padding:26px 0 72px; }
             </div>
             <div class="bench-head-right">
               <span class="pill accent">Drag the handle on the frame's edge to any width</span>
+              <button type="button" class="btn ghost" data-tour-start>▶ Take the tour</button>
               <button type="button" class="btn ghost" data-action="reset-demo">↺ Reset scenario</button>
             </div>
           </div>
@@ -2332,17 +2388,18 @@ footer{ padding:26px 0 72px; }
     { label:'Petro-Canada',                  amount:-71.40,  when:'Aug 13',    cat:'Fuel' }
   ];
 
-  var SPLITS = {
-    recommended:{ label:'Recommended split', visa:260, buffer:140, note:'Balances faster debt payoff with getting the buffer back on target.' },
-    even:       { label:'Even split',        visa:200, buffer:200, note:'Buffer recovers faster; the Visa payoff slows slightly.' },
-    alldebt:    { label:'All to the Visa',   visa:400, buffer:0,   note:'Fastest payoff, but the buffer stays below target this month.' }
-  };
-  var SPLIT_ORDER = ['recommended','even','alldebt'];
+  /* Anchorline's own starting recommendation, and the universe of accounts
+     it's allowed to route a split to. chq is always the source, never a target. */
+  var RECOMMENDED_SPLIT = [ { acct:'visa', amt:260 }, { acct:'sav', amt:140 } ];
+  var SPLIT_UNIVERSE = ['visa','sav','tfsa','rrsp','resp'];
+
+  function freshSplit(){ return RECOMMENDED_SPLIT.map(function(l){ return { acct:l.acct, amt:l.amt }; }); }
 
   var APP = {
     plat:'ios', screen:'home', stack:[], sel:null,
     flow:null, txns:[], toast:null,
-    aiDecision:null, aiSplit:'recommended', aiDraft:null, aiAdjust:false,
+    aiDecision:null, split:freshSplit(), splitDraft:null, aiAdjust:false,
+    eligibleAccounts:SPLIT_UNIVERSE.slice(),
     escalated:false, interacted:false, approvedAt:null
   };
 
@@ -2371,6 +2428,29 @@ footer{ padding:26px 0 72px; }
   function aiPending(){ return APP.aiDecision === null ? 1 : 0; }
   function approvedTime(){ return APP.approvedAt ? APP.approvedAt.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'}) : 'Just now'; }
 
+  /* ---------- the split: which accounts, how much, tied to real balances ---------- */
+  function splitAmt(acctId, list){
+    var l = (list || APP.split).filter(function(x){ return x.acct === acctId; })[0];
+    return l ? l.amt : 0;
+  }
+  function splitTotal(list){ return (list || APP.split).reduce(function(s,l){ return s+(Number(l.amt)||0); }, 0); }
+  function recommendedTotal(){ return splitTotal(RECOMMENDED_SPLIT); }
+  function splitPhrase(acctId){
+    if (acctId === 'sav') return 'savings';
+    if (acctId === 'visa') return 'the Visa';
+    if (acctId === 'tfsa') return 'the TFSA';
+    if (acctId === 'rrsp') return 'the RRSP';
+    if (acctId === 'resp') return 'the RESP';
+    return ACC[acctId] ? ACC[acctId].name : acctId;
+  }
+  function splitSummaryText(list){
+    var lines = (list || APP.split).filter(function(l){ return l.amt > 0; });
+    if (!lines.length) return 'Nothing this week';
+    var parts = lines.map(function(l){ return money0(l.amt) + ' to ' + splitPhrase(l.acct); });
+    return 'Move ' + (parts.length === 1 ? parts[0] : parts.slice(0,-1).join(', ') + ', ' + parts[parts.length-1]);
+  }
+  function splitOverBudget(list){ return splitTotal(list) > balOf('chq'); }
+
   /* ---------- Anchorline shared pieces ---------- */
   function aiMark(text){ return '<span class="ai-mark">'+ico('i-anchor')+(text||'Anchorline')+'</span>'; }
 
@@ -2380,25 +2460,43 @@ footer{ padding:26px 0 72px; }
   }
 
   function explainRows(){
-    var s = SPLITS[APP.aiSplit];
     return [
-      ['What','Move '+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings'],
+      ['What',splitSummaryText()],
       ['Why','The Visa is your most expensive debt at 22.9%'],
-      ['Data used','Balances, APRs, payroll pattern, buffer target'],
-      ['Expected benefit','About $47 less interest over the payoff'],
       ['Trade-off','Trip fund pace slows slightly this month'],
-      ['Confidence','92% confidence'],
-      ['Editable later','Yes — anytime in Plan']
+      ['Confidence','92% confidence']
     ].map(function(r){ return '<div class="row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('');
+  }
+
+  /* ---------- the split editor: add/remove lines, tie each to an account, edit the amount ---------- */
+  function splitEditor(){
+    var draft = APP.splitDraft || [];
+    var used = draft.map(function(l){ return l.acct; });
+    var canAdd = SPLIT_UNIVERSE.some(function(id){ return APP.eligibleAccounts.indexOf(id) > -1 && used.indexOf(id) === -1; });
+    var total = splitTotal(draft), over = splitOverBudget(draft);
+
+    var lines = draft.map(function(l, i){
+      var opts = SPLIT_UNIVERSE.filter(function(id){ return APP.eligibleAccounts.indexOf(id) > -1 && (id === l.acct || used.indexOf(id) === -1); })
+        .map(function(id){ return '<option value="'+id+'"'+(id===l.acct?' selected':'')+'>'+ACC[id].name+'</option>'; }).join('');
+      return '<div class="split-line">'
+        + '<select class="bk-select" data-split-acct="'+i+'">'+opts+'</select>'
+        + '<div class="split-amt"><span>$</span><input class="bk-input" type="number" min="0" step="10" inputmode="decimal" data-split-amt="'+i+'" value="'+(l.amt||0)+'"></div>'
+        + '<button type="button" class="split-remove" data-action="ai:removeline:'+i+'" aria-label="Remove this line">×</button>'
+        + '</div>';
+    }).join('');
+
+    return '<div class="split-editor">' + lines
+      + (canAdd ? '<button type="button" class="btn small ghost" data-action="ai:addline">+ Add an account</button>' : '')
+      + '</div>'
+      + '<div class="split-total'+(over?' over':'')+'"><span>Allocated</span><span data-split-total>'+money0(total)+' of '+money0(recommendedTotal())+' recommended</span></div>'
+      + '<div class="split-warn" data-split-warn'+(over?'':' hidden')+'>This is more than your chequing balance can cover.</div>';
   }
 
   /* The main recommendation card. Rendered on Home, in the Anchorline hub, and inline. */
   function aiRecommendation(compact){
-    var s = SPLITS[APP.aiSplit];
-
     if (APP.aiDecision === 'approved'){
       return '<div class="ai-module"><div class="top">'+aiMark('Anchorline · approved')+'</div><div class="bd">'
-        + '<h5>'+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings</h5>'
+        + '<h5>'+splitSummaryText()+'</h5>'
         + '<p>Done at '+approvedTime()+' · reference TXN-48213. '
         + (bufferOnTarget() ? 'Your buffer is back on target.' : 'Your buffer is still a little short of target.')
         + ' You can undo or change this anytime.</p>'
@@ -2417,22 +2515,20 @@ footer{ padding:26px 0 72px; }
     }
 
     if (APP.aiAdjust){
-      var draft = APP.aiDraft || APP.aiSplit;
+      var total = splitTotal(APP.splitDraft), over = splitOverBudget(APP.splitDraft);
+      var confirmOk = total > 0 && !over;
       return '<div class="ai-module"><div class="top">'+aiMark('Anchorline · adjust the split')+'</div><div class="bd">'
-        + '<div class="chip-select">' + SPLIT_ORDER.map(function(id){
-            var o = SPLITS[id];
-            return '<button type="button" class="chip'+(id===draft?' active':'')+'" data-action="ai:pick:'+id+'">'
-              + '<div class="top">'+o.label+'<span>'+money0(o.visa)+' → Visa · '+money0(o.buffer)+' → savings</span></div>'
-              + '<div class="note">'+o.note+'</div></button>';
-          }).join('') + '</div>'
-        + '<div class="cta-row"><button type="button" class="btn primary" data-action="ai:confirm">Use this split</button>'
+        + splitEditor()
+        + '<div class="cta-row">'
+        + '<button type="button" class="btn'+(confirmOk?' primary':'')+'" data-action="ai:confirm"'+(confirmOk?'':' disabled style="opacity:.45;cursor:not-allowed;"')+'>Use this split</button>'
+        + '<button type="button" class="btn" data-action="ai:resetsplit">Reset to recommended</button>'
         + '<button type="button" class="btn" data-action="ai:cancel">Cancel</button></div>'
         + '</div></div>';
     }
 
     var pulse = APP.interacted ? '' : ' pulse-cta';
     return '<div class="ai-module"><div class="top">'+aiMark()+'<span class="count">1 to review</span></div><div class="bd">'
-      + '<h5>Move '+money0(s.visa)+' to the Visa, '+money0(s.buffer)+' to savings</h5>'
+      + '<h5>'+splitSummaryText()+'</h5>'
       + '<p>Your pay landed today. The Visa is your most expensive debt at 22.9% — paying it now saves about $47 in interest over the payoff, and the rest gets your buffer back on target.</p>'
       + '<div style="margin-top:9px;"><span class="pill good">92% confidence</span></div>'
       + '<div class="cta-row"><button type="button" class="btn primary'+pulse+'" data-action="ai:approve">Approve</button>'
@@ -2500,14 +2596,12 @@ footer{ padding:26px 0 72px; }
         + '</div>'
         + secHead('Investments','See all','go:invest')
         + '<div class="bk-card">'
-          + row({icon:'i-invest', title:'TFSA', sub:money0(ACC.tfsa.room)+' contribution room left', amount:money(balOf('tfsa')), action:'acct:tfsa'})
-          + row({icon:'i-invest', title:'RRSP', sub:money0(ACC.rrsp.room)+' contribution room left', amount:money(balOf('rrsp')), action:'acct:rrsp'})
+          + row({icon:'i-invest', title:'Investments', sub:'TFSA · RRSP · RESP', amount:money(balOf('tfsa')+balOf('rrsp')+balOf('resp')), action:'go:invest'})
         + '</div>'
         + secHead('Borrowing')
         + '<div class="bk-card">'
           + row({icon:'i-house', title:'Mortgage', sub:ACC.mtg.rate+'% fixed · renews '+ACC.mtg.renews, amount:money0(balOf('mtg')), cls:'neg', action:'go:borrow'})
-        + '</div>'
-        + cdicNote(),
+        + '</div>',
       aside:'<h5>Anchorline · why this recommendation</h5>'+explainRows()
         + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bk-line);">Every field here is required before an approval can be requested — see the approval panel anatomy in the Design System.</p>'
     };
@@ -2577,7 +2671,7 @@ footer{ padding:26px 0 72px; }
               + '<button type="button" data-action="flow:billpay"><span class="ico">'+ico('i-bill')+'</span>Pay bill</button>'
               + '<button type="button" data-action="flow:transfer"><span class="ico">'+ico('i-swap')+'</span>Transfer</button>'
               + '<button type="button" data-action="go:statements"><span class="ico">'+ico('i-doc')+'</span>Statements</button></div>')
-        + (a.id==='sav' && !bufferOnTarget() ? aiInline('Approving this week\'s recommendation would move '+money0(SPLITS[APP.aiSplit].buffer)+' here and bring the buffer back on target.','<button type="button" class="btn small primary" data-action="ai:approve">Approve</button><button type="button" class="btn small" data-action="go:ai">See why</button>') : '')
+        + (a.id==='sav' && !bufferOnTarget() && splitAmt('sav')>0 ? aiInline('Approving this week\'s recommendation would move '+money0(splitAmt('sav'))+' here and bring the buffer back on target.','<button type="button" class="btn small primary" data-action="ai:approve">Approve</button><button type="button" class="btn small" data-action="go:ai">See why</button>') : '')
         + (a.kind==='reg' ? aiInline('Anchorline holds investing back until your buffer and high-interest debt are both on track. You\'re one approval away from clearing that gate.') : '')
         + secHead('Recent activity','See all','go:activity')
         + '<div class="bk-card">'+activityRows(5)+'</div>'
@@ -2612,17 +2706,16 @@ footer{ padding:26px 0 72px; }
         + row({icon:'i-swap', title:'Between my accounts', sub:'Instant, no fee', action:'flow:transfer'})
         + row({icon:'i-deposit', title:'Deposit a cheque', sub:'Take a photo of the front and back', action:'go:deposit'})
         + '</div>'
-        + aiInline('Anchorline has already prepared this week\'s transfer — '+money0(SPLITS[APP.aiSplit].visa)+' to the Visa and '+money0(SPLITS[APP.aiSplit].buffer)+' to savings — but it won\'t move anything until you approve it.',
+        + (splitTotal()>0 ? aiInline('Anchorline has already prepared this week\'s transfer — '+splitSummaryText().replace('Move ','')+' — but it won\'t move anything until you approve it.',
             APP.aiDecision===null
               ? '<button type="button" class="btn small primary" data-action="ai:approve">Approve</button><button type="button" class="btn small" data-action="go:ai">See why</button>'
-              : '<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>')
+              : '<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>') : '')
         + secHead('Recent activity','See all','go:activity')
         + '<div class="bk-card">'+activityRows(5)+'</div>'
     };
   };
 
   SCREENS.ai = function(){
-    var s = SPLITS[APP.aiSplit];
     return {
       title:'Anchorline', back:'home',
       body:
@@ -2631,22 +2724,22 @@ footer{ padding:26px 0 72px; }
         + row({icon:'i-plan', title:'Your allocation plan', sub:'Buffer → debt → goals → investing', action:'go:aiplan'})
         + row({icon:'i-progress', title:'Weekly progress', sub:'Where each goal stands this week', action:'go:aiprogress'})
         + '</div>'
-        + '<div class="bk-card pad"><h4 class="minihead" style="margin-bottom:9px;">How Anchorline decides</h4>'
-        + '<ul class="dash" style="font-size:12.5px;">'
-        + '<li><b>Protect the buffer</b> — a minimum cushion is defended before anything else is proposed.</li>'
-        + '<li><b>Then the most expensive debt</b> — your Visa at 22.9% outranks any savings goal.</li>'
-        + '<li><b>Then your goals, in your order</b> — you set the priority, not the model.</li>'
-        + '<li><b>Investing last</b> — it stays locked until the first two are stable.</li>'
-        + '</ul></div>'
         + secHead('Decision history')
         + '<div class="bk-card">'
         + (APP.aiDecision==='approved'
-            ? row({title:'Payday reallocation approved', sub:approvedTime()+' · '+money0(s.visa)+' Visa, '+money0(s.buffer)+' savings', chev:false, amount:'<span class="pill good">Approved</span>'})
+            ? row({title:'Payday reallocation approved', sub:approvedTime()+' · '+splitSummaryText().replace('Move ',''), chev:false, amount:'<span class="pill good">Approved</span>'})
             : APP.aiDecision==='dismissed'
             ? row({title:'Payday reallocation held', sub:'You chose to hold steady this week', chev:false, amount:'<span class="pill watch">No action</span>'})
             : row({title:'Payday reallocation', sub:'Waiting on your approval', chev:false, amount:'<span class="pill accent">Pending</span>'}))
-        + row({title:'Buffer target reviewed', sub:'Aug 12 · no action needed', chev:false, amount:'<span class="pill good">Held</span>'})
-        + '</div>',
+        + '</div>'
+        + secHead('Split destinations')
+        + '<div class="bk-card">'
+        + SPLIT_UNIVERSE.map(function(id){
+            var on = APP.eligibleAccounts.indexOf(id) > -1;
+            return row({ icon:(id==='visa'?'i-card':'i-invest'), title:ACC[id].name, sub:on?'Eligible for the weekly split':'Not included', chev:false, amount:'<span class="pill'+(on?' good':'')+'">'+(on?'On':'Off')+'</span>', action:'elig:'+id });
+          }).join('')
+        + '</div>'
+        + '<div class="bk-fine">Choose which accounts Anchorline can route this week\'s split to. Chequing is always the source.</div>',
       aside:'<h5>Anchorline · why this recommendation</h5>'+explainRows()
         + '<p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bk-line);">Anchorline prepares and explains. It cannot move money, open a product, or place a trade without an explicit approval from you.</p>'
     };
@@ -2744,9 +2837,9 @@ footer{ padding:26px 0 72px; }
         + '<div style="font-size:11.5px;color:var(--ink-faint);margin-top:11px;">Paying only the minimum keeps this balance for years at '+ACC.visa.apr+'%.</div></div>'
         + '</div>'
         + '<button type="button" class="btn brand block" data-action="flow:cardpay">Make a payment</button>'
-        + (owing>0 ? aiInline('Paying '+money0(SPLITS[APP.aiSplit].visa)+' toward this card now saves about $47 in interest over the payoff — the single highest-return move available to you this week.',
+        + (owing>0 && splitAmt('visa')>0 ? aiInline('Paying '+money0(splitAmt('visa'))+' toward this card now saves about $47 in interest over the payoff — the single highest-return move available to you this week.',
             APP.aiDecision===null
-              ? '<button type="button" class="btn small primary" data-action="ai:approve">Approve '+money0(SPLITS[APP.aiSplit].visa)+'</button><button type="button" class="btn small" data-action="go:ai">See why</button>'
+              ? '<button type="button" class="btn small primary" data-action="ai:approve">Approve '+money0(splitAmt('visa'))+'</button><button type="button" class="btn small" data-action="go:ai">See why</button>'
               : '<button type="button" class="btn small" data-action="go:ai">Open Anchorline</button>') : '')
         + '<div class="bk-card">'
         + row({icon:'i-gift', title:'Cash back earned', sub:'This year', amount:'$214.88', action:'go:rewards'})
@@ -2793,7 +2886,7 @@ footer{ padding:26px 0 72px; }
         + row({title:'Credit utilisation', sub:money0(Math.abs(balOf('visa')))+' of '+money0(ACC.visa.limit)+' used', chev:false, amount:'<span class="pill '+(Math.abs(balOf('visa'))/ACC.visa.limit>0.3?'watch':'good')+'">'+Math.round(Math.abs(balOf('visa'))/ACC.visa.limit*100)+'%</span>'})
         + row({title:'Credit age', sub:'Average 7 years 4 months', chev:false, amount:'<span class="pill good">Strong</span>'})
         + '</div>'
-        + aiInline('Utilisation is the lever you can move fastest. Paying '+money0(SPLITS[APP.aiSplit].visa)+' to the Visa would take you from '+Math.round(Math.abs(balOf('visa'))/ACC.visa.limit*100)+'% to '+Math.round((Math.abs(balOf('visa'))-SPLITS[APP.aiSplit].visa)/ACC.visa.limit*100)+'% utilisation, which typically helps this score.')
+        + (splitAmt('visa')>0 ? aiInline('Utilisation is the lever you can move fastest. Paying '+money0(splitAmt('visa'))+' to the Visa would take you from '+Math.round(Math.abs(balOf('visa'))/ACC.visa.limit*100)+'% to '+Math.round((Math.abs(balOf('visa'))-splitAmt('visa'))/ACC.visa.limit*100)+'% utilisation, which typically helps this score.') : '')
         + '<div class="bk-fine">Checking your score here is a soft inquiry and does not affect it. Provided by TransUnion Canada.</div>'
     };
   };
@@ -2815,7 +2908,6 @@ footer{ padding:26px 0 72px; }
         + row({icon:'i-gear',     title:'Settings',                  sub:'Profile, limits and preferences', action:'go:settings'})
         + '</div>'
         + aiInline('Anchorline\'s guidance level lives in Settings. Whatever you choose there, the approval rule never changes — nothing moves without you.')
-        + cdicNote()
     };
   };
 
@@ -2857,7 +2949,7 @@ footer{ padding:26px 0 72px; }
 
   function startFlow(type){
     var d = { amount:null, from:'chq', to:null, msg:'' };
-    if (type === 'cardpay'){ d.to = 'visa'; d.amount = SPLITS[APP.aiSplit].visa; }
+    if (type === 'cardpay'){ d.to = 'visa'; d.amount = splitAmt('visa') || ACC.visa.min; }
     if (type === 'transfer'){ d.to = 'sav'; }
     if (type === 'contribute'){ d.to = (APP.sel && ACC[APP.sel] && ACC[APP.sel].kind==='reg') ? APP.sel : null; }
     APP.flow = { type:type, step:0, data:d };
@@ -2988,12 +3080,15 @@ footer{ padding:26px 0 72px; }
     }
 
     if (f.type === 'cardpay'){
-      var owing = Math.abs(balOf('visa'));
+      var owing = Math.abs(balOf('visa')), visaSplit = splitAmt('visa');
+      var presets = [{l:'Minimum '+money0(ACC.visa.min),v:ACC.visa.min}];
+      if (visaSplit > 0) presets.push({l:'Anchorline '+money0(visaSplit),v:visaSplit});
+      presets.push({l:'Full '+money0(owing),v:owing});
       if (f.step === 0) return {
         sub:'Paying the Borealis Cash Back Visa',
-        body:amountBlock([{l:'Minimum '+money0(ACC.visa.min),v:ACC.visa.min},{l:'Anchorline '+money0(SPLITS[APP.aiSplit].visa),v:SPLITS[APP.aiSplit].visa},{l:'Full '+money0(owing),v:owing}])
+        body:amountBlock(presets)
           + '<div class="bk-field"><label>From</label><select class="bk-select" data-fsel="from">'+acctOptions(d.from)+'</select></div>'
-          + aiInline('Anchorline recommends '+money0(SPLITS[APP.aiSplit].visa)+' here. Paying only the '+money0(ACC.visa.min)+' minimum keeps this balance alive for years at '+ACC.visa.apr+'%.','')
+          + (visaSplit > 0 ? aiInline('Anchorline recommends '+money0(visaSplit)+' here. Paying only the '+money0(ACC.visa.min)+' minimum keeps this balance alive for years at '+ACC.visa.apr+'%.','') : '')
       };
       if (f.step === 1) return {
         sub:'Check the details',
@@ -3197,11 +3292,16 @@ footer{ padding:26px 0 72px; }
     setTimeout(function(){ APP.toast = null; renderAll(); }, 2600);
   }
 
+  function splitLineLabel(acctId){
+    if (acctId === 'visa') return 'Visa payment';
+    if (acctId === 'sav') return 'buffer top-up';
+    return ACC[acctId].name + ' contribution';
+  }
   function applyAI(){
-    var s = SPLITS[APP.aiSplit];
     APP.txns = APP.txns.filter(function(t){ return t.src !== 'ai'; });
-    if (s.visa)   APP.txns.push({ from:'chq', to:'visa', amount:s.visa,   label:'Anchorline — Visa payment',  src:'ai' });
-    if (s.buffer) APP.txns.push({ from:'chq', to:'sav',  amount:s.buffer, label:'Anchorline — buffer top-up', src:'ai' });
+    APP.split.forEach(function(l){
+      if (l.amt > 0) APP.txns.push({ from:'chq', to:l.acct, amount:l.amt, label:'Anchorline — '+splitLineLabel(l.acct), src:'ai' });
+    });
   }
 
   function handle(action){
@@ -3233,13 +3333,36 @@ footer{ padding:26px 0 72px; }
       APP.flow.step++; renderAll(); return;
     }
 
+    if (verb === 'elig'){
+      var id = p[1], i = APP.eligibleAccounts.indexOf(id);
+      if (i > -1) APP.eligibleAccounts.splice(i,1); else APP.eligibleAccounts.push(id);
+      var drop = function(l){ return l.acct !== id || APP.eligibleAccounts.indexOf(id) > -1; };
+      APP.split = APP.split.filter(drop);
+      if (APP.splitDraft) APP.splitDraft = APP.splitDraft.filter(drop);
+      renderAll(); return;
+    }
+
     if (verb === 'ai'){
       var what = p[1];
-      if (what === 'approve'){ APP.aiDecision='approved'; APP.approvedAt=new Date(); APP.aiAdjust=false; applyAI(); showToast('Approved — '+money0(SPLITS[APP.aiSplit].visa+SPLITS[APP.aiSplit].buffer)+' moved'); return; }
-      if (what === 'adjust'){ APP.aiAdjust = true; APP.aiDraft = APP.aiSplit; renderAll(); return; }
-      if (what === 'pick'){ APP.aiDraft = p[2]; renderAll(); return; }
-      if (what === 'confirm'){ APP.aiSplit = APP.aiDraft || APP.aiSplit; APP.aiAdjust=false; renderAll(); return; }
-      if (what === 'cancel'){ APP.aiAdjust=false; renderAll(); return; }
+      if (what === 'approve'){ APP.aiDecision='approved'; APP.approvedAt=new Date(); APP.aiAdjust=false; applyAI(); showToast('Approved — '+money0(splitTotal())+' moved'); return; }
+      if (what === 'adjust'){ APP.aiAdjust = true; APP.splitDraft = APP.split.map(function(l){ return {acct:l.acct, amt:l.amt}; }); renderAll(); return; }
+      if (what === 'addline'){
+        var used = APP.splitDraft.map(function(l){ return l.acct; });
+        var free = SPLIT_UNIVERSE.filter(function(id){ return APP.eligibleAccounts.indexOf(id)>-1 && used.indexOf(id)===-1; });
+        if (free.length) APP.splitDraft.push({ acct:free[0], amt:0 });
+        renderAll(); return;
+      }
+      if (what === 'removeline'){ APP.splitDraft.splice(Number(p[2]),1); renderAll(); return; }
+      if (what === 'resetsplit'){ APP.splitDraft = freshSplit(); renderAll(); return; }
+      if (what === 'confirm'){
+        var t = splitTotal(APP.splitDraft);
+        if (t > 0 && !splitOverBudget(APP.splitDraft)){
+          APP.split = APP.splitDraft.filter(function(l){ return l.amt > 0; });
+          APP.aiAdjust = false; APP.splitDraft = null;
+        }
+        renderAll(); return;
+      }
+      if (what === 'cancel'){ APP.aiAdjust=false; APP.splitDraft=null; renderAll(); return; }
       if (what === 'notnow'){ APP.aiDecision='dismissed'; renderAll(); return; }
       if (what === 'reconsider'){ APP.aiDecision=null; renderAll(); return; }
       if (what === 'undo'){ APP.aiDecision=null; APP.approvedAt=null; APP.txns = APP.txns.filter(function(t){ return t.src!=='ai'; }); showToast('Reverted'); return; }
@@ -3248,7 +3371,8 @@ footer{ padding:26px 0 72px; }
 
     if (verb === 'reset-demo'){
       APP.screen='home'; APP.stack=[]; APP.sel=null; APP.flow=null; APP.txns=[]; APP.toast=null;
-      APP.aiDecision=null; APP.aiSplit='recommended'; APP.aiDraft=null; APP.aiAdjust=false;
+      APP.aiDecision=null; APP.split=freshSplit(); APP.splitDraft=null; APP.aiAdjust=false;
+      APP.eligibleAccounts=SPLIT_UNIVERSE.slice();
       APP.escalated=false; APP.interacted=false; APP.approvedAt=null;
       renderAll(); return;
     }
@@ -3262,6 +3386,21 @@ footer{ padding:26px 0 72px; }
   });
 
   /* live inputs — update state without re-rendering, so focus is never lost */
+  function syncSplitTotals(){
+    var total = splitTotal(APP.splitDraft), over = splitOverBudget(APP.splitDraft);
+    document.querySelectorAll('[data-split-total]').forEach(function(el){
+      el.textContent = money0(total) + ' of ' + money0(recommendedTotal()) + ' recommended';
+      el.closest('.split-total').classList.toggle('over', over);
+    });
+    document.querySelectorAll('[data-split-warn]').forEach(function(el){ el.hidden = !over; });
+    document.querySelectorAll('[data-action="ai:confirm"]').forEach(function(btn){
+      var ok = total > 0 && !over;
+      btn.disabled = !ok;
+      btn.classList.toggle('primary', ok);
+      btn.style.opacity = ok ? '' : '.45';
+      btn.style.cursor  = ok ? '' : 'not-allowed';
+    });
+  }
   document.addEventListener('input', function(e){
     var t = e.target;
     if (t.matches('[data-famt]') && APP.flow){
@@ -3274,10 +3413,21 @@ footer{ padding:26px 0 72px; }
         btn.style.cursor  = ok ? '' : 'not-allowed';
       });
     }
+    if (t.matches('[data-split-amt]') && APP.splitDraft){
+      var idx = Number(t.getAttribute('data-split-amt'));
+      var line = APP.splitDraft[idx];
+      if (line){ line.amt = t.value === '' ? 0 : Math.max(0, Number(t.value.replace(/[^0-9.]/g,'')) || 0); }
+      syncSplitTotals();
+    }
   });
   document.addEventListener('change', function(e){
     var t = e.target;
     if (t.matches('[data-fsel]') && APP.flow){ APP.flow.data[t.getAttribute('data-fsel')] = t.value; }
+    if (t.matches('[data-split-acct]') && APP.splitDraft){
+      var idx = Number(t.getAttribute('data-split-acct'));
+      if (APP.splitDraft[idx]) APP.splitDraft[idx].acct = t.value;
+      renderAll();
+    }
   });
 
   /* ---------- platform + device-size toggles (scoped per bench instance) ---------- */
@@ -3374,9 +3524,143 @@ footer{ padding:26px 0 72px; }
       h.addEventListener('pointerup', stop);
       h.addEventListener('pointercancel', stop);
     });
+
+    var tourBtn = bench.querySelector('[data-tour-start]');
+    if (tourBtn){
+      tourBtn.addEventListener('click', function(){
+        var iosBtn = bench.querySelector('.toggle button[data-plat="ios"]');
+        if (iosBtn && iosBtn.getAttribute('aria-pressed') !== 'true') iosBtn.click();
+        startTour(bench);
+      });
+    }
   }
 
   document.querySelectorAll('.bench').forEach(wireBench);
+
+  /* ============================================================
+     GUIDED TOUR — walks a first-time user through Anchorline
+     end to end, driving the real app rather than describing it.
+     ============================================================ */
+  var TOUR_STEPS = [
+    { title:'Welcome to Anchorline',
+      body:'This is the agentic guidance layer built into Borealis. Let\'s walk through what it does, end to end — a few clicks, using the real app.' },
+
+    { before:function(){ handle('reset-demo'); },
+      target:'.ai-module', title:'It starts with a specific recommendation',
+      body:'Anchorline doesn\'t just say "review your finances." It proposes an exact move, in dollars, based on your real balances and due dates.' },
+
+    { target:'.ai-module .cta-row',
+      title:'Nothing moves without you', body:'Approve, adjust, or say not now — Anchorline prepares the move and explains it, but it never sends money on its own.' },
+
+    { before:function(){ handle('ai:adjust'); },
+      target:'.split-editor', title:'Tie it to your own accounts',
+      body:'Add or remove lines, retarget each one to a different account, and edit the exact amount — the split is yours to shape, not just pick from a list.' },
+
+    { target:'.split-total',
+      title:'Guardrails as you go', body:'The running total updates live, and Anchorline warns you before you allocate more than you actually have available.' },
+
+    { before:function(){ handle('ai:cancel'); handle('ai:approve'); },
+      target:'.ai-module', title:'One tap, and it\'s done',
+      body:'Approving moves the money immediately and gives you a plain-language receipt — with an Undo that actually works.' },
+
+    { before:function(){ handle('go:cards'); },
+      target:'.ai-inline', title:'It shows up next to the money it\'s talking about',
+      body:'Anchorline isn\'t a separate app-within-an-app. Contextual cards like this one appear right inside Accounts, Cards, and Investments.' },
+
+    { before:function(){ handle('back'); },
+      target:'.bk-tabbar .ai', title:'Always one tap away',
+      body:'The violet centre tab follows you to every screen in the bank, with a badge whenever something is waiting on your decision.' },
+
+    { before:function(){ handle('go:aiprogress'); },
+      target:'.bk-card', title:'And you can see it working',
+      body:'Every decision — approved or held — rolls up into a weekly view of your buffer, debt payoff, and goals.' },
+
+    { before:function(){ handle('go:home'); },
+      title:'That\'s Anchorline, start to finish',
+      body:'Recommend, explain, approve or adjust, and track the outcome — the same loop everywhere it appears. Explore the rest of the app whenever you\'re ready.' }
+  ];
+
+  var tourState = null;
+
+  function tourEl(tag, cls){ var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+
+  function endTour(){
+    if (!tourState) return;
+    [tourState.backdrop, tourState.highlight, tourState.card].forEach(function(el){ if (el && el.parentNode) el.parentNode.removeChild(el); });
+    document.removeEventListener('keydown', tourState.onKey);
+    tourState = null;
+  }
+
+  function positionTourCard(target){
+    var card = tourState.card, margin = 16;
+    var cw = 300, ch = card.offsetHeight || 180;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    if (!target){ card.classList.add('centered'); card.style.top = ''; card.style.left = ''; return; }
+    card.classList.remove('centered');
+    var r = target.getBoundingClientRect();
+    var top = r.bottom + 14, left = r.left;
+    if (top + ch > vh - margin) top = Math.max(margin, r.top - ch - 14);
+    if (left + cw > vw - margin) left = vw - cw - margin;
+    if (left < margin) left = margin;
+    card.style.top = top + 'px';
+    card.style.left = left + 'px';
+  }
+
+  function renderTourStep(){
+    var i = tourState.i, step = TOUR_STEPS[i], bench = tourState.bench;
+    if (step.before) step.before();
+    renderAll();
+
+    var target = step.target ? bench.querySelector(step.target) : null;
+    if (target && target.scrollIntoView) target.scrollIntoView({ block:'center', behavior:'auto' });
+
+    if (target){
+      var r = target.getBoundingClientRect(), pad = 6;
+      tourState.highlight.style.top = (r.top - pad) + 'px';
+      tourState.highlight.style.left = (r.left - pad) + 'px';
+      tourState.highlight.style.width = (r.width + pad*2) + 'px';
+      tourState.highlight.style.height = (r.height + pad*2) + 'px';
+      tourState.highlight.style.display = 'block';
+    } else {
+      tourState.highlight.style.display = 'none';
+    }
+
+    var last = i === TOUR_STEPS.length - 1;
+    tourState.card.innerHTML =
+      '<div class="tour-step">Step ' + (i+1) + ' of ' + TOUR_STEPS.length + '</div>'
+      + '<h4>' + step.title + '</h4>'
+      + '<p>' + step.body + '</p>'
+      + '<div class="tour-actions">'
+      + (i > 0 ? '<button type="button" class="btn small" data-tour="prev">Back</button>' : '<span></span>')
+      + '<div class="tour-nav">'
+      + '<button type="button" class="tour-skip" data-tour="skip">Skip tour</button>'
+      + '<button type="button" class="btn small primary" data-tour="next">' + (last ? 'Done' : 'Next') + '</button>'
+      + '</div></div>';
+
+    positionTourCard(target);
+
+    tourState.card.querySelector('[data-tour="next"]').addEventListener('click', function(){
+      if (last) endTour(); else { tourState.i++; renderTourStep(); }
+    });
+    var prevBtn = tourState.card.querySelector('[data-tour="prev"]');
+    if (prevBtn) prevBtn.addEventListener('click', function(){ tourState.i--; renderTourStep(); });
+    tourState.card.querySelector('[data-tour="skip"]').addEventListener('click', endTour);
+  }
+
+  function startTour(bench){
+    endTour();
+    var backdrop = tourEl('div', 'tour-backdrop');
+    var highlight = tourEl('div', 'tour-highlight');
+    var card = tourEl('div', 'tour-card');
+    document.body.appendChild(backdrop);
+    document.body.appendChild(highlight);
+    document.body.appendChild(card);
+    backdrop.addEventListener('click', endTour);
+    var onKey = function(e){ if (e.key === 'Escape') endTour(); };
+    document.addEventListener('keydown', onKey);
+    tourState = { bench:bench, backdrop:backdrop, highlight:highlight, card:card, i:0, onKey:onKey };
+    renderTourStep();
+  }
 
   renderAll();
 })();
